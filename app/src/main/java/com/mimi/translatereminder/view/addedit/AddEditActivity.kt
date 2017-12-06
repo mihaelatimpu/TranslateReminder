@@ -8,6 +8,7 @@ import com.mimi.translatereminder.R
 import com.mimi.translatereminder.base.BaseActivity
 import com.mimi.translatereminder.repository.TranslationRepository
 import com.mimi.translatereminder.utils.replaceFragmentInActivity
+import com.mimi.translatereminder.view.main.MainActivity
 import org.koin.android.ext.android.inject
 
 /**
@@ -21,6 +22,10 @@ class AddEditActivity : BaseActivity(), AddEditContract.Activity {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_edit)
+        init()
+    }
+
+    private fun init() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setTitle(R.string.add_translation)
         fragment.presenter.activity = this
@@ -29,6 +34,12 @@ class AddEditActivity : BaseActivity(), AddEditContract.Activity {
                 ?: fragment.also {
             replaceFragmentInActivity(it, R.id.contentFrame)
         }
+
+    }
+
+    override fun refreshTitle(title: Int) {
+        supportActionBar?.setTitle(title)
+
     }
 
     override fun returnToPreviousActivity() {

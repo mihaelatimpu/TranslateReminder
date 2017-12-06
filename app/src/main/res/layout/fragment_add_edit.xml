@@ -22,7 +22,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/german_word"
-            android:inputType="textCapCharacters|textCapWords"
             android:singleLine="true" />
     </android.support.design.widget.TextInputLayout>
 
@@ -43,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/entity"
-            android:inputType="textCapCharacters|textCapWords"
+            android:inputType="none"
             android:singleLine="true" />
     </android.support.design.widget.TextInputLayout>
 

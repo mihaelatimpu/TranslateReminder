@@ -25,7 +25,8 @@ import org.koin.android.ext.android.inject
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener,
         MainContract.Activity {
     companion object {
-        val ADD_ACTIVITY_CODE = 3424
+        val ADD_EDIT_ACTIVITY_CODE = 3424
+        val ITEM_ID = "itemId"
     }
 
     private val aboutFragment by inject<AboutFragment>()
@@ -61,7 +62,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun startAddActivity() {
-        startActivityForResult(Intent(this, AddEditActivity::class.java), ADD_ACTIVITY_CODE)
+        startActivityForResult(Intent(this, AddEditActivity::class.java), ADD_EDIT_ACTIVITY_CODE)
+    }
+
+    override fun startEditActivity(id: Int) {
+        val intent = Intent(this, AddEditActivity::class.java)
+        intent.putExtra(ITEM_ID, id)
+        startActivityForResult(intent, ADD_EDIT_ACTIVITY_CODE)
+
     }
 
     override fun showConfirmDialog(title: Int, message: Int, onConfirm: () -> Unit) {
@@ -70,7 +78,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ADD_ACTIVITY_CODE) {
+        if (requestCode == ADD_EDIT_ACTIVITY_CODE) {
             if (resultCode == Activity.RESULT_OK)
                 presenter.onReturnedFromActivity()
         }

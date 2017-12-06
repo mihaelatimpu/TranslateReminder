@@ -17,6 +17,7 @@ interface MainContract {
         fun getRepository(): TranslationRepository
         fun startAddActivity()
         fun showConfirmDialog(title: Int, message: Int, onConfirm: () -> Unit)
+        fun startEditActivity(id:Int)
     }
 
     interface Presenter : BasePresenter<Activity> {

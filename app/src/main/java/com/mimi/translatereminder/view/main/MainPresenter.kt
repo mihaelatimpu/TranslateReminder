@@ -22,7 +22,7 @@ class MainPresenter(
     }
 
     override fun editItem(item: Entity) {
-
+        view.startEditActivity(item.id)
     }
 
     override fun deleteItem(item: Entity) {

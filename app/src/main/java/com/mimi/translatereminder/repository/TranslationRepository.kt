@@ -13,10 +13,17 @@ class TranslationRepository(private val db: TranslationDao) {
         db.insertAll(entity)
     }
 
+    fun saveEntity(entity: Entity) {
+        db.updateEntity(entity)
+    }
+
+    fun selectItemById(id: Int) = db.selectItemById(id).firstOrNull()
+
     fun deleteAll() {
         db.deleteAll()
     }
-    fun delete(item:Entity){
+
+    fun delete(item: Entity) {
         db.delete(item)
     }
 

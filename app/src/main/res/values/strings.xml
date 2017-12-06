@@ -30,4 +30,6 @@
     <string name="action_delete_all">Delete all</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="you_cannot_restore_data">Once deleted, you cannot restore the data</string>
+    <string name="save">Save</string>
+    <string name="edit_item">Edit entity</string>
 </resources>
