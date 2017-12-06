@@ -22,5 +22,6 @@ interface AddEditContract{
     }
     interface Activity{
         fun getRepository():TranslationRepository
+        fun returnToPreviousActivity()
     }
 }

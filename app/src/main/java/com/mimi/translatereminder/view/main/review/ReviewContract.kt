@@ -15,6 +15,9 @@ interface ReviewContract {
     }
 
     interface Presenter : MainContract.FragmentPresenter<View>{
+        var mainPresenter: MainContract.Presenter
         fun refreshItems(items: List<Entity>)
+        fun editItem(id:Entity)
+        fun deleteItem(id:Entity)
     }
 }

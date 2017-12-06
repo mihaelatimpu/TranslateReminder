@@ -1,6 +1,7 @@
 package com.mimi.translatereminder.view.main
 
 import com.mimi.translatereminder.R
+import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.utils.FileUtil
 import com.mimi.translatereminder.utils.json.ImportUtil
 import com.mimi.translatereminder.view.main.favourites.FavouritesContract
@@ -16,6 +17,28 @@ class MainPresenter(
         val reviewPresenter: ReviewContract.Presenter,
         val favouritesPresenter: FavouritesContract.Presenter
 ) : MainContract.Presenter {
+    init {
+        reviewPresenter.mainPresenter = this
+    }
+
+    override fun editItem(item: Entity) {
+
+    }
+
+    override fun deleteItem(item: Entity) {
+        view.showConfirmDialog(R.string.are_you_sure, R.string.you_cannot_restore_data) {
+            view.showLoadingDialog()
+            doAsync(exceptionHandler) {
+                view.getRepository().delete(item)
+                onComplete {
+                    view.hideLoadingDialog()
+                    view.toast("Deleted")
+                    reloadData()
+                }
+            }
+        }
+    }
+
     lateinit override var view: MainContract.Activity
 
     val exceptionHandler: (Throwable) -> Unit = {
@@ -32,6 +55,30 @@ class MainPresenter(
     override fun onOptionItemSelected(selectionId: Int) {
         when (selectionId) {
             R.id.action_import -> importData()
+            R.id.action_delete_all -> deleteAllData()
+        }
+    }
+
+    override fun onPlusButtonClicked() {
+        view.startAddActivity()
+    }
+
+    override fun onReturnedFromActivity() {
+        reloadData()
+    }
+
+    private fun deleteAllData() {
+        view.showConfirmDialog(R.string.are_you_sure, R.string.you_cannot_restore_data) {
+
+            view.showLoadingDialog()
+            doAsync(exceptionHandler) {
+                view.getRepository().deleteAll()
+                onComplete {
+                    view.hideLoadingDialog()
+                    view.toast("Deleted:")
+                    reloadData()
+                }
+            }
         }
     }
 

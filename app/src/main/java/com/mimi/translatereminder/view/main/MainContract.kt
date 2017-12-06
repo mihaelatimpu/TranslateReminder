@@ -12,14 +12,20 @@ import com.mimi.translatereminder.repository.TranslationRepository
  */
 interface MainContract {
     interface Activity : BaseView<Presenter> {
-        fun showFragment(id:Int)
-        fun getContext():Context
+        fun showFragment(id: Int)
+        fun getContext(): Context
         fun getRepository(): TranslationRepository
+        fun startAddActivity()
+        fun showConfirmDialog(title: Int, message: Int, onConfirm: () -> Unit)
     }
 
     interface Presenter : BasePresenter<Activity> {
-        fun onOptionItemSelected(selectionId:Int)
-        fun onNavigationItemSelected(selectionId:Int)
+        fun onOptionItemSelected(selectionId: Int)
+        fun onNavigationItemSelected(selectionId: Int)
+        fun onPlusButtonClicked()
+        fun onReturnedFromActivity()
+        fun editItem(item: Entity)
+        fun deleteItem(item: Entity)
     }
 
     interface FragmentPresenter<T> : BasePresenter<T>

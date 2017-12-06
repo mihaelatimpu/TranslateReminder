@@ -1,5 +1,7 @@
 package com.mimi.translatereminder.view.main
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -10,6 +12,7 @@ import com.mimi.translatereminder.R
 import com.mimi.translatereminder.base.BaseActivity
 import com.mimi.translatereminder.base.BaseFragment
 import com.mimi.translatereminder.utils.replaceFragmentInActivity
+import com.mimi.translatereminder.view.addedit.AddEditActivity
 import com.mimi.translatereminder.view.main.about.AboutFragment
 import com.mimi.translatereminder.view.main.contact.ContactFragment
 import com.mimi.translatereminder.view.main.favourites.FavouritesFragment
@@ -21,6 +24,9 @@ import org.koin.android.ext.android.inject
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener,
         MainContract.Activity {
+    companion object {
+        val ADD_ACTIVITY_CODE = 3424
+    }
 
     private val aboutFragment by inject<AboutFragment>()
     private val contactFragment by inject<ContactFragment>()
@@ -33,25 +39,46 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        init()
+    }
+
+    override fun init() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
         val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+                this, drawer_layout, toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close)
+
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
-        init()
-    }
-    override fun init() {
+        fab.setOnClickListener { presenter.onPlusButtonClicked() }
         initPresenters()
         presenter.start()
     }
 
+    override fun startAddActivity() {
+        startActivityForResult(Intent(this, AddEditActivity::class.java), ADD_ACTIVITY_CODE)
+    }
+
+    override fun showConfirmDialog(title: Int, message: Int, onConfirm: () -> Unit) {
+        showConfirmDialog(getString(title), getString(message), onConfirm)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ADD_ACTIVITY_CODE) {
+            if (resultCode == Activity.RESULT_OK)
+                presenter.onReturnedFromActivity()
+        }
+    }
+
     override fun getContext() = this
 
-    private fun initPresenters(){
+    private fun initPresenters() {
         presenter.view = this
         aboutFragment.presenter.view = aboutFragment
         contactFragment.presenter.view = contactFragment

@@ -24,4 +24,10 @@
     <string name="entities_title">Current words</string>
     <string name="others">Others</string>
     <string name="click_for_more_options">More options</string>
+    <string name="search_hint">Type to filter items..</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="action_delete_all">Delete all</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="you_cannot_restore_data">Once deleted, you cannot restore the data</string>
 </resources>

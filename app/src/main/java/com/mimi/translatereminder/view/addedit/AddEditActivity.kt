@@ -1,5 +1,6 @@
 package com.mimi.translatereminder.view.addedit
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.mimi.translatereminder.MainApplication
@@ -28,5 +29,10 @@ class AddEditActivity : BaseActivity(), AddEditContract.Activity {
                 ?: fragment.also {
             replaceFragmentInActivity(it, R.id.contentFrame)
         }
+    }
+
+    override fun returnToPreviousActivity() {
+        setResult(Activity.RESULT_OK)
+        finish()
     }
 }

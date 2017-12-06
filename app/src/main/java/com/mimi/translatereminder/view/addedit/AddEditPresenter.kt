@@ -48,14 +48,12 @@ class AddEditPresenter : AddEditContract.Presenter {
             }
             onComplete {
                 view.hideLoadingDialog()
-                if(preExistingWord == null){
-                    view.clearText()
-                    view.toast("So far: $wordsCounter")
-                } else {
-                    if(preExistingWord.germanWord == entity.germanWord)
+                when{
+                    (preExistingWord == null) -> activity.returnToPreviousActivity()
+                    preExistingWord.germanWord == entity.germanWord ->
                         view.showGermanError(R.string.german_word_already_added)
-                     if(preExistingWord.translation == entity.translation)
-                         view.showTranslationError(R.string.translation_already_added)
+                    preExistingWord.translation == entity.translation ->
+                        view.showGermanError(R.string.translation_already_added)
                 }
             }
         }

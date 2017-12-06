@@ -6,7 +6,11 @@ import android.widget.Toast
 import com.mimi.translatereminder.MainApplication
 import com.mimi.translatereminder.R
 import com.mimi.translatereminder.repository.TranslationRepository
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.noButton
 import org.jetbrains.anko.progressDialog
+import org.jetbrains.anko.support.v4.alert
+import org.jetbrains.anko.yesButton
 
 /**
  * Created by Mimi on 06/12/2017.
@@ -29,10 +33,12 @@ abstract class BaseActivity : AppCompatActivity() {
     fun hideLoadingDialog() {
         loadingDialog.dismiss()
     }
-/*
-    public final fun toast(message: String) {
-        toast.setText(message)
-        toast.show()
-    }*/
+
+     fun showConfirmDialog(title: String, message: String, onConfirm: () -> Unit) {
+        alert(title = title, message = message) {
+            yesButton { onConfirm() }
+            noButton { }
+        }.show()
+    }
 
 }

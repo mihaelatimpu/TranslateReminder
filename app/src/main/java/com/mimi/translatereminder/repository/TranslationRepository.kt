@@ -16,6 +16,9 @@ class TranslationRepository(private val db: TranslationDao) {
     fun deleteAll() {
         db.deleteAll()
     }
+    fun delete(item:Entity){
+        db.delete(item)
+    }
 
     fun findEntityByGermanWord(germanVersion: String)
             = db.getEntitiesByGermanVersion(germanVersion)

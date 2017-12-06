@@ -60,6 +60,7 @@ class ViewModule : AndroidModule() {
 /**
  * Module constants
  */
+
 object Context {
     val Main = "Main"
     val TranslationDetail = "TranslationDetail"
