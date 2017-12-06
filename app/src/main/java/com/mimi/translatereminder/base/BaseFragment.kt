@@ -8,7 +8,7 @@ import org.koin.android.contextaware.ContextAwareFragment
  * Created by Mimi on 08/11/2017.
  *
  */
-abstract class BaseFragment : ContextAwareFragment(){
+abstract class BaseFragment : ContextAwareFragment() {
     private val loadingDialog by lazy {
         progressDialog(R.string.loading_data, R.string.please_wait)
     }
@@ -19,6 +19,13 @@ abstract class BaseFragment : ContextAwareFragment(){
 
     fun hideLoadingDialog() {
         loadingDialog.dismiss()
+    }
+
+    abstract fun startPresenter()
+
+    override fun onResume() {
+        super.onResume()
+        startPresenter()
     }
 
 

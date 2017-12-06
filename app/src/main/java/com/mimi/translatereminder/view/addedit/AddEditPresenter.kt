@@ -1,7 +1,7 @@
 package com.mimi.translatereminder.view.addedit
 
 import com.mimi.translatereminder.R
-import com.mimi.translatereminder.dto.Translation
+import com.mimi.translatereminder.dto.Entity
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
 
@@ -28,23 +28,35 @@ class AddEditPresenter : AddEditContract.Presenter {
             view.showTranslationError(R.string.empty_text)
             return
         }
-        addTranslation(Translation(germanWord = german, translation = translation))
+        addTranslation(Entity(germanWord = german, translation = translation))
     }
 
-    private fun addTranslation(translation: Translation) {
+    private fun addTranslation(entity: Entity) {
         view.showLoadingDialog()
         doAsync(exceptionHandler = {
             it.printStackTrace()
             view.hideLoadingDialog()
             view.toast(it.message ?: "Unknown error")
         }) {
-            activity.getRepository().addTranslation(translation)
-            val itemsSoFar = activity.getRepository().getAll()
-            wordsCounter = itemsSoFar.size
+            val repo = activity.getRepository()
+            val preExistingWord = repo.findEntityByGermanWord(entity.germanWord).firstOrNull() ?:
+                    repo.findEntityByTranslation(entity.translation).firstOrNull()
+            if (preExistingWord == null) {
+                repo.addEntity(entity)
+                val itemsSoFar = repo.getAll()
+                wordsCounter = itemsSoFar.size
+            }
             onComplete {
                 view.hideLoadingDialog()
-                view.clearText()
-                view.toast("So far: $wordsCounter")
+                if(preExistingWord == null){
+                    view.clearText()
+                    view.toast("So far: $wordsCounter")
+                } else {
+                    if(preExistingWord.germanWord == entity.germanWord)
+                        view.showGermanError(R.string.german_word_already_added)
+                     if(preExistingWord.translation == entity.translation)
+                         view.showTranslationError(R.string.translation_already_added)
+                }
             }
         }
 

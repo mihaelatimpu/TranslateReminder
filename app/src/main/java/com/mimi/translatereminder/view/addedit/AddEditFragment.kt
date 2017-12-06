@@ -59,8 +59,7 @@ class AddEditFragment : BaseFragment(), AddEditContract.View {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun startPresenter() {
         presenter.start()
     }
 

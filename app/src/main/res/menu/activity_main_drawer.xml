@@ -5,7 +5,7 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/word_review"
+            android:id="@+id/nav_review"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/menu_word_review" />
         <item
@@ -14,14 +14,14 @@
             android:title="@string/menu_favourites" />
     </group>
 
-    <item>
+    <item android:title="@string/others">
         <menu>
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_menu_manage"
-                android:title="@string/action_settings" />
+                android:title="@string/nav_settings" />
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_about"
                 android:icon="@drawable/ic_menu_share"
                 android:title="@string/about_app" />
             <item

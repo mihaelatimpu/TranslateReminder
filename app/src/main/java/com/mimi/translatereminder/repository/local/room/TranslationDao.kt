@@ -4,7 +4,7 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
-import com.mimi.translatereminder.dto.Translation
+import com.mimi.translatereminder.dto.Entity
 
 /**
  * Created by Mimi on 05/12/2017.
@@ -12,12 +12,25 @@ import com.mimi.translatereminder.dto.Translation
  */
 @Dao
 interface TranslationDao {
-    @Insert
-    fun insertAll(vararg translations:Translation)
+    companion object {
+        const val TABLE = "entity"
+    }
 
-    @Query("SELECT * from translation")
-    fun selectAll():List<Translation>
+    @Insert
+    fun insertAll(vararg entities: Entity)
+
+    @Query("SELECT * from $TABLE")
+    fun selectAll(): List<Entity>
+
+    @Query("SELECT * from $TABLE WHERE germanWord=:german")
+    fun getEntitiesByGermanVersion(german: String): List<Entity>
+
+    @Query("SELECT * from $TABLE WHERE translation=:translation")
+    fun getEntityByTranslation(translation: String): List<Entity>
 
     @Delete
-    fun deleteAll(vararg translations:Translation)
+    fun delete(vararg entities: Entity)
+
+    @Query("DELETE FROM $TABLE")
+    fun deleteAll()
 }

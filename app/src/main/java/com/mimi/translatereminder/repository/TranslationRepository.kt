@@ -1,6 +1,6 @@
 package com.mimi.translatereminder.repository
 
-import com.mimi.translatereminder.dto.Translation
+import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.repository.local.room.TranslationDao
 
 /**
@@ -9,9 +9,19 @@ import com.mimi.translatereminder.repository.local.room.TranslationDao
  */
 class TranslationRepository(private val db: TranslationDao) {
 
-    fun addTranslation(translation: Translation) {
-        db.insertAll(translation)
+    fun addEntity(entity: Entity) {
+        db.insertAll(entity)
     }
+
+    fun deleteAll() {
+        db.deleteAll()
+    }
+
+    fun findEntityByGermanWord(germanVersion: String)
+            = db.getEntitiesByGermanVersion(germanVersion)
+
+    fun findEntityByTranslation(translation: String)
+            = db.getEntityByTranslation(translation)
 
     fun getAll() = db.selectAll()
 }
