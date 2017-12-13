@@ -41,6 +41,9 @@ interface TranslationDao {
     @Query("SELECT * from $TABLE WHERE state=:state ORDER BY dateAdded LIMIT :limit")
     fun getEntityByState(state:Int, limit:Int): List<Entity>
 
+    @Query("SELECT * FROM $TABLE WHERE id IN (SELECT id FROM $TABLE WHERE id<>:excludeId ORDER BY RANDOM() LIMIT :limit)")
+    fun getRandomItems(excludeId:Int, limit:Int):List<Entity>
+
     @Delete
     fun delete(vararg entities: Entity)
 

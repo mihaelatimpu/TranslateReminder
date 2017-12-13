@@ -1,4 +1,4 @@
-package com.mimi.translatereminder.view.learning.fragments.typing
+package com.mimi.translatereminder.view.learning.fragments.hint
 
 import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.view.learning.LearningContract
@@ -10,8 +10,8 @@ import org.jetbrains.anko.onComplete
  *
  */
 
-class TypingPresenter(override var view: TypingContract.View,
-                      private val masterPresenter: LearningContract.Presenter) : TypingContract.Presenter {
+class SecondPresenter(override var view: SecondContract.View,
+                      private val masterPresenter: LearningContract.Presenter) : SecondContract.Presenter {
     private val exceptionHandler: (Throwable) -> Unit = {
         it.printStackTrace()
         view.hideLoadingDialog()
@@ -30,6 +30,7 @@ class TypingPresenter(override var view: TypingContract.View,
             onComplete {
                 view.hideLoadingDialog()
                 if (entity != null) {
+                    view.setHint(entity!!.germanWord)
                     view.refreshText(entity!!.translation)
                 }
             }

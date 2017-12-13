@@ -5,7 +5,6 @@ package com.mimi.translatereminder.base
  *
  */
 interface BasePresenter<T>{
-
     var view: T
     fun start()
 }

@@ -1,4 +1,4 @@
-package com.mimi.translatereminder.view.learning.fragments.typing
+package com.mimi.translatereminder.view.learning.fragments.hint
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,10 +17,11 @@ import org.jetbrains.anko.support.v4.alert
  * Created by Mimi on 13/12/2017.
  *
  */
-class TypingFragment : BaseFragment(), TypingContract.View {
 
-    override val presenter: TypingContract.Presenter by lazy {
-        TypingPresenter(this, (activity as LearningActivity).presenter)
+class SecondFragment : BaseFragment(), SecondContract.View {
+
+    override val presenter: SecondContract.Presenter by lazy {
+        SecondPresenter(this, (activity as LearningActivity).presenter)
     }
 
 
@@ -43,20 +44,23 @@ class TypingFragment : BaseFragment(), TypingContract.View {
         title.text = translation
     }
 
+    override fun setHint(hint: String) {
+        subtitle.hint = hint
+    }
+
     override fun init() {
         val id = arguments.getInt(Progress.ENTITY_ID, 0)
         if (id != 0)
             presenter.setEntityId(id)
         fab.setOnClickListener { presenter.onAnswered(subtitle.text.toString()) }
         subtitle.setOnKeyListener { _, keyCode, _ ->
-            if(keyCode == EditorInfo.IME_ACTION_DONE)
+            if (keyCode == EditorInfo.IME_ACTION_DONE)
                 fab.callOnClick()
             true
         }
     }
 
-    override fun showIncorrectDialog(translation: String, answer: String,
-                                     correctAnswer: String, onComplete: () -> Unit) {
+    override fun showIncorrectDialog(translation: String, answer: String, correctAnswer: String, onComplete: () -> Unit) {
         val message = getString(R.string.incorrect_answer_message, answer, correctAnswer)
         alert(title=getString(R.string.incorrect_answer_title), message = message){
             positiveButton(getString(R.string.ok)){onComplete()}

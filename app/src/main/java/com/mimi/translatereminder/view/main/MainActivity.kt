@@ -17,6 +17,7 @@ import com.mimi.translatereminder.base.BaseActivity
 import com.mimi.translatereminder.base.BaseFragment
 import com.mimi.translatereminder.utils.replaceFragmentInActivity
 import com.mimi.translatereminder.view.addedit.AddEditActivity
+import com.mimi.translatereminder.view.learning.LearningActivity
 import com.mimi.translatereminder.view.main.about.AboutFragment
 import com.mimi.translatereminder.view.main.contact.ContactFragment
 import com.mimi.translatereminder.view.main.learning.LearningFragment
@@ -90,6 +91,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             else -> throw UnsupportedOperationException("Unknown id: $id")
         }
         replaceFragmentInActivity(fragment, R.id.contentFrame)
+    }
+
+    override fun startLearningActivity() {
+        startActivityForResult(Intent(this, LearningActivity::class.java), 43)
+
     }
 
     override fun startAddActivity() {

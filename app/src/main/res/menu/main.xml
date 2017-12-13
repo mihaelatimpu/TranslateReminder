@@ -16,4 +16,9 @@
         android:orderInCategory="100"
         android:title="@string/action_delete_all"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_learn_new-words"
+        android:orderInCategory="100"
+        android:title="@string/learn_new_words"
+        app:showAsAction="never" />
 </menu>

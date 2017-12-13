@@ -44,4 +44,9 @@
     <string name="title_activity_learning">LearningActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="type_german">German Text</string>
+    <string name="incorrect_answer_title">This is not correct</string>
+    <string name="incorrect_answer_message">You answered: \"%1$s\". \n Correct answer was: \"%2$s\"</string>
+    <string name="ok">OK</string>
+    <string name="learn_new_words">Learn new words</string>
 </resources>

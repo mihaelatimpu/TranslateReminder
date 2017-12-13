@@ -1,4 +1,4 @@
-package com.mimi.translatereminder.view.learning.fragments.typing
+package com.mimi.translatereminder.view.learning.fragments.choose
 
 import com.mimi.translatereminder.base.BasePresenter
 import com.mimi.translatereminder.base.BaseView
@@ -8,11 +8,10 @@ import com.mimi.translatereminder.view.learning.LearningContract
  * Created by Mimi on 13/12/2017.
  *
  */
-interface TypingContract {
+interface ChooseContract {
     interface View : BaseView<Presenter> {
-        fun refreshText(translation: String)
-        fun showIncorrectDialog(translation: String, answer: String,
-                                correctAnswer: String, onComplete: () -> Unit)
+        fun refreshText(translation: String, options:List<String>)
+        fun changeBackground(green:Boolean, text:String)
     }
 
     interface Presenter : BasePresenter<View>, LearningContract.FragmentPresenter {

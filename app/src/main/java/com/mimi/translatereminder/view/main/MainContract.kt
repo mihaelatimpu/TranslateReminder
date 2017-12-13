@@ -23,6 +23,7 @@ interface MainContract {
         fun checkForPermission(permission: String, @StringRes title:Int,
                                @StringRes description:Int, onPermissionResult:(Boolean)->Unit)
         fun toast(@StringRes text:Int)
+        fun startLearningActivity()
     }
 
     interface Presenter : BasePresenter<Activity> {

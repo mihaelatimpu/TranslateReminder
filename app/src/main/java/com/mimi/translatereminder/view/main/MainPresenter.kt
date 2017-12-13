@@ -59,6 +59,7 @@ class MainPresenter(
             R.id.action_import -> importData()
             R.id.action_export -> exportData()
             R.id.action_delete_all -> deleteAllData()
+            R.id.action_learn_new_words -> view.startLearningActivity()
         }
     }
 

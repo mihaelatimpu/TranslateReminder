@@ -22,6 +22,10 @@ class TranslationRepository(private val db: TranslationDao) {
 
     fun selectItemById(id: Int) = db.selectItemById(id).firstOrNull()
 
+    fun getRandomItems(excludeId: Int, count: Int): List<Entity> {
+        return db.getRandomItems(excludeId = excludeId, limit = count)
+    }
+
     fun deleteAll() {
         db.deleteAll()
     }
