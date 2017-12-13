@@ -1,4 +1,4 @@
-package com.mimi.translatereminder.view.main.review
+package com.mimi.translatereminder.view.main.edit
 
 import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.view.main.MainContract
@@ -10,9 +10,9 @@ import com.mimi.translatereminder.view.main.MainContract
  */
 
 
-class ReviewPresenter : ReviewContract.Presenter {
+class EditPresenter : EditContract.Presenter {
     lateinit override var mainPresenter: MainContract.Presenter
-    override lateinit var view: ReviewContract.View
+    override lateinit var view: EditContract.View
 
     override fun editItem(id: Entity) {
         mainPresenter.editItem(id)

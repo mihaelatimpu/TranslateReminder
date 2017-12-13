@@ -1,4 +1,4 @@
-package com.mimi.translatereminder.view.main.review.adapter
+package com.mimi.translatereminder.view.main.edit.adapter
 
 import android.content.Context
 import android.support.v7.widget.PopupMenu

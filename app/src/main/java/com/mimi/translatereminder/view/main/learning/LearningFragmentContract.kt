@@ -1,4 +1,4 @@
-package com.mimi.translatereminder.view.main.favourites
+package com.mimi.translatereminder.view.main.learning
 
 import com.mimi.translatereminder.base.BaseView
 import com.mimi.translatereminder.view.main.MainContract
@@ -8,7 +8,7 @@ import com.mimi.translatereminder.view.main.MainContract
  *
  */
 
-interface FavouritesContract {
+interface LearningFragmentContract {
     interface View : BaseView<Presenter>
     interface Presenter : MainContract.FragmentPresenter<View>
 }

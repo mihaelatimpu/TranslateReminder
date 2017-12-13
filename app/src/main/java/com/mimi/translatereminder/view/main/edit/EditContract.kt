@@ -1,4 +1,4 @@
-package com.mimi.translatereminder.view.main.review
+package com.mimi.translatereminder.view.main.edit
 
 import com.mimi.translatereminder.base.BaseView
 import com.mimi.translatereminder.dto.Entity
@@ -9,7 +9,7 @@ import com.mimi.translatereminder.view.main.MainContract
  *
  */
 
-interface ReviewContract {
+interface EditContract {
     interface View : BaseView<Presenter> {
         fun refreshItems(items: List<Entity>)
     }

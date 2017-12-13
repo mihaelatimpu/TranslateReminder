@@ -12,10 +12,10 @@ import org.jetbrains.anko.onComplete
 class AddEditPresenter : AddEditContract.Presenter {
     override lateinit var view: AddEditContract.View
     override lateinit var activity: AddEditContract.Activity
-    var wordsCounter: Int = 0
-    var editedItem: Entity? = null
+    private var wordsCounter: Int = 0
+    private var editedItem: Entity? = null
 
-    val exceptionHandler: (Throwable) -> Unit = {
+    private val exceptionHandler: (Throwable) -> Unit = {
         it.printStackTrace()
         view.hideLoadingDialog()
         view.toast(it.message ?: "Unknown error")

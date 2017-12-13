@@ -1,4 +1,4 @@
-package com.mimi.translatereminder.view.main.favourites
+package com.mimi.translatereminder.view.main.learning
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,10 +14,10 @@ import org.koin.android.ext.android.inject
  *
  */
 
-class FavouritesFragment : BaseFragment(), FavouritesContract.View {
+class LearningFragment : BaseFragment(), LearningFragmentContract.View {
     override val contextName = Context.Main
 
-    override val presenter: FavouritesContract.Presenter by inject()
+    override val presenter: LearningFragmentContract.Presenter by inject()
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? =

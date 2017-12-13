@@ -38,6 +38,9 @@ interface TranslationDao {
     @Query("SELECT * from $TABLE WHERE translation=:translation")
     fun getEntityByTranslation(translation: String): List<Entity>
 
+    @Query("SELECT * from $TABLE WHERE state=:state ORDER BY dateAdded LIMIT :limit")
+    fun getEntityByState(state:Int, limit:Int): List<Entity>
+
     @Delete
     fun delete(vararg entities: Entity)
 

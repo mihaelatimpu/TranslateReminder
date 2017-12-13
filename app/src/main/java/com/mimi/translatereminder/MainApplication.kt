@@ -19,7 +19,9 @@ class MainApplication : Application(){
         super.onCreate()
 
         val database = Room.databaseBuilder(this,
-                Database::class.java, "translation_db").build()
+                Database::class.java, "translation_db")
+                .addMigrations(Database.MIGRATION_1_2)
+                .build()
         translationDao = database.translationDao()
         // Start Koin
         startAndroidContext(this, appModules())
