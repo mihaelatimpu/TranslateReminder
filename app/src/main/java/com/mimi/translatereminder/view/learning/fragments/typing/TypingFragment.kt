@@ -48,11 +48,6 @@ class TypingFragment : BaseFragment(), TypingContract.View {
         if (id != 0)
             presenter.setEntityId(id)
         fab.setOnClickListener { presenter.onAnswered(subtitle.text.toString()) }
-        subtitle.setOnKeyListener { _, keyCode, _ ->
-            if(keyCode == EditorInfo.IME_ACTION_DONE)
-                fab.callOnClick()
-            true
-        }
     }
 
     override fun showIncorrectDialog(translation: String, answer: String,

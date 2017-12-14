@@ -1,5 +1,6 @@
 package com.mimi.translatereminder.view.main.edit
 
+import com.mimi.translatereminder.base.BasePresenter
 import com.mimi.translatereminder.base.BaseView
 import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.view.main.MainContract
@@ -11,13 +12,12 @@ import com.mimi.translatereminder.view.main.MainContract
 
 interface EditContract {
     interface View : BaseView<Presenter> {
+        fun isVisible():Boolean
         fun refreshItems(items: List<Entity>)
     }
 
-    interface Presenter : MainContract.FragmentPresenter<View>{
-        var mainPresenter: MainContract.Presenter
-        fun refreshItems(items: List<Entity>)
-        fun editItem(id:Entity)
-        fun deleteItem(id:Entity)
+    interface Presenter : MainContract.FragmentPresenter, BasePresenter<View> {
+        fun showDetailsDialog(entityId: Int)
+        fun onAddButtonClicked()
     }
 }

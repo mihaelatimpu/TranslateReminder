@@ -1,11 +1,11 @@
 package com.mimi.translatereminder.utils
 
-import com.mimi.translatereminder.view.addedit.AddEditContract
-import com.mimi.translatereminder.view.addedit.AddEditFragment
-import com.mimi.translatereminder.view.addedit.AddEditPresenter
 import com.mimi.translatereminder.utils.Context.AddEditTranslation
 import com.mimi.translatereminder.utils.Context.Learning
 import com.mimi.translatereminder.utils.Context.Main
+import com.mimi.translatereminder.view.addedit.AddEditContract
+import com.mimi.translatereminder.view.addedit.AddEditFragment
+import com.mimi.translatereminder.view.addedit.AddEditPresenter
 import com.mimi.translatereminder.view.learning.LearningContract
 import com.mimi.translatereminder.view.learning.LearningPresenter
 import com.mimi.translatereminder.view.main.MainContract
@@ -16,9 +16,6 @@ import com.mimi.translatereminder.view.main.about.AboutPresenter
 import com.mimi.translatereminder.view.main.contact.ContactContract
 import com.mimi.translatereminder.view.main.contact.ContactFragment
 import com.mimi.translatereminder.view.main.contact.ContactPresenter
-import com.mimi.translatereminder.view.main.learning.LearningFragmentContract
-import com.mimi.translatereminder.view.main.learning.LearningFragment
-import com.mimi.translatereminder.view.main.learning.LearningFragmentPresenter
 import com.mimi.translatereminder.view.main.edit.EditContract
 import com.mimi.translatereminder.view.main.edit.EditFragment
 import com.mimi.translatereminder.view.main.edit.EditPresenter
@@ -46,8 +43,6 @@ class ViewModule : AndroidModule() {
             provide { ContactFragment() } bind ContactContract.View::class
             provide { ContactPresenter() } bind ContactContract.Presenter::class
 
-            provide { LearningFragment() } bind LearningFragmentContract.View::class
-            provide { LearningFragmentPresenter() } bind LearningFragmentContract.Presenter::class
 
             provide { EditFragment() } bind EditContract.View::class
             provide { EditPresenter() } bind EditContract.Presenter::class
@@ -55,7 +50,7 @@ class ViewModule : AndroidModule() {
             provide { SettingsFragment() } bind SettingsContract.View::class
             provide { SettingsPresenter() } bind SettingsContract.Presenter::class
 
-            provide { MainPresenter(get(),get()) } bind MainContract.Presenter::class
+            provide { MainPresenter() } bind MainContract.Presenter::class
         }
         context(Learning){
             provide { LearningPresenter() } bind LearningContract.Presenter::class

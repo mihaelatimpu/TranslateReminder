@@ -42,11 +42,31 @@
     <string name="please_grant_permission">The app requires storage permission in order to save the exported data.</string>
 
     <string name="title_activity_learning">LearningActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="type_german">German Text</string>
     <string name="incorrect_answer_title">This is not correct</string>
     <string name="incorrect_answer_message">You answered: \"%1$s\". \n Correct answer was: \"%2$s\"</string>
     <string name="ok">OK</string>
     <string name="learn_new_words">Learn new words</string>
+    <string name="menu_review">Review</string>
+    <string name="menu_mistakes">Wrong</string>
+    <string name="mistake">Wrong</string>
+    <string name="item_details">Item details</string>
+    <string name="translation">Translation</string>
+    <string name="state">State</string>
+    <string name="date_added">Added: %s</string>
+    <string name="next_review">Next review: %s</string>
+    <string name="review_count">%d reviews</string>
+    <string name="accuracy">Accuracy %d \%%</string>
+    <string name="unknown">Unknown</string>
+    <string name="less_then_a_minute_ago">less than a minute ago</string>
+    <string name="then_than_an_hour_ago">less than an hour ago</string>
+    <string name="today">today</string>
+    <string name="more_than_a_month_ago">more than a month ago</string>
+    <string name="in_a_minute">in less than a minute</string>
+    <string name="in_less_then_an_hour">in less then an hour</string>
+    <string name="in_a_month">in a month</string>
+    <string name="tomorrow">tomorrow</string>
+    <string name="in_number_days">in %d days</string>
+    <string name="yesterday">yesterday</string>
+    <string name="number_days_ago">%d days ago</string>
 </resources>

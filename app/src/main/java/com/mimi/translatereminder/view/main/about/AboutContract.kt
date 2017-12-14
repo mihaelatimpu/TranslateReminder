@@ -9,6 +9,8 @@ import com.mimi.translatereminder.view.main.MainContract
  *
  */
 interface AboutContract {
-    interface View : BaseView<Presenter>
-    interface Presenter : MainContract.FragmentPresenter<View>
+    interface View : BaseView<Presenter>{
+        fun isVisible():Boolean
+    }
+    interface Presenter : MainContract.FragmentPresenter, BasePresenter<View>
 }

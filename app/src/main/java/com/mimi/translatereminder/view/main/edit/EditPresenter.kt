@@ -2,6 +2,8 @@ package com.mimi.translatereminder.view.main.edit
 
 import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.view.main.MainContract
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.onComplete
 
 
 /**
@@ -11,23 +13,42 @@ import com.mimi.translatereminder.view.main.MainContract
 
 
 class EditPresenter : EditContract.Presenter {
+
     lateinit override var mainPresenter: MainContract.Presenter
     override lateinit var view: EditContract.View
 
-    override fun editItem(id: Entity) {
-        mainPresenter.editItem(id)
+    private val exceptionHandler: (Throwable) -> Unit = {
+        it.printStackTrace()
+        view.hideLoadingDialog()
+        view.toast(it.message ?: "Unknown error")
     }
 
-    override fun deleteItem(id: Entity) {
-        mainPresenter.deleteItem(id)
+    override fun isVisible() = view.isVisible()
+
+    override fun showDetailsDialog(entityId: Int) {
+        mainPresenter.showDetailsDialog(entityId)
     }
 
 
     override fun start() {
         view.init()
+        reloadData()
     }
 
-    override fun refreshItems(items: List<Entity>) {
-        view.refreshItems(items)
+    override fun reloadData() {
+        if (!view.isVisible())
+            return
+        view.showLoadingDialog()
+        doAsync(exceptionHandler) {
+            val items = mainPresenter.getRepository().getAll()
+            onComplete {
+                view.hideLoadingDialog()
+                view.refreshItems(items)
+            }
+        }
+    }
+
+    override fun onAddButtonClicked() {
+        mainPresenter.onAddButtonClicked()
     }
 }

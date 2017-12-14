@@ -5,8 +5,6 @@ import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.utils.FileUtil
 import com.mimi.translatereminder.utils.json.ExportUtil
 import com.mimi.translatereminder.utils.json.ImportUtil
-import com.mimi.translatereminder.view.main.learning.LearningFragmentContract
-import com.mimi.translatereminder.view.main.edit.EditContract
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
 
@@ -14,10 +12,8 @@ import org.jetbrains.anko.onComplete
  * Created by Mimi on 06/12/2017.
  *
  */
-class MainPresenter(
-        private val editPresenter: EditContract.Presenter,
-        val learningFragmentPresenter: LearningFragmentContract.Presenter
-) : MainContract.Presenter {
+class MainPresenter : MainContract.Presenter {
+    override var fragments: List<MainContract.FragmentPresenter> = listOf()
 
     lateinit override var view: MainContract.Activity
 
@@ -28,30 +24,39 @@ class MainPresenter(
     }
 
     override fun start() {
-        view.showFragment(R.id.nav_review)
-        reloadData()
+        fragments.forEach {
+            it.mainPresenter = this
+        }
+        view.showFragment(R.id.nav_learning)
     }
 
-    init {
-        editPresenter.mainPresenter = this
-    }
 
     override fun editItem(item: Entity) {
         view.startEditActivity(item.id)
     }
 
+    override fun reviewItem(item: Entity) {
+        view.toast("Not Yet...")
+    }
+
+    override fun getRepository() = view.getRepository()
+
     override fun deleteItem(item: Entity) {
-        view.showConfirmDialog(R.string.are_you_sure, R.string.you_cannot_restore_data) {
+        view.showConfirmDialog(R.string.are_you_sure,
+                R.string.you_cannot_restore_data) {
             view.showLoadingDialog()
             doAsync(exceptionHandler) {
                 view.getRepository().delete(item)
                 onComplete {
                     view.hideLoadingDialog()
-                    view.toast("Deleted")
                     reloadData()
                 }
             }
         }
+    }
+
+    override fun showDetailsDialog(entityId: Int) {
+        view.showDetailsDialog(entityId)
     }
 
     override fun onOptionItemSelected(selectionId: Int) {
@@ -59,11 +64,15 @@ class MainPresenter(
             R.id.action_import -> importData()
             R.id.action_export -> exportData()
             R.id.action_delete_all -> deleteAllData()
-            R.id.action_learn_new_words -> view.startLearningActivity()
+            R.id.action_learn_new_words -> startLearning()
         }
     }
 
-    override fun onPlusButtonClicked() {
+    override fun startLearning() {
+        view.startLearningActivity()
+    }
+
+    override fun onAddButtonClicked() {
         view.startAddActivity()
     }
 
@@ -73,7 +82,6 @@ class MainPresenter(
 
     private fun deleteAllData() {
         view.showConfirmDialog(R.string.are_you_sure, R.string.you_cannot_restore_data) {
-
             view.showLoadingDialog()
             doAsync(exceptionHandler) {
                 view.getRepository().deleteAll()
@@ -88,7 +96,8 @@ class MainPresenter(
 
     private fun exportData() {
         view.checkForPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                title = R.string.missing_permission, description = R.string.please_grant_permission) {
+                title = R.string.missing_permission,
+                description = R.string.please_grant_permission) {
             if (!it)
                 return@checkForPermission
             view.showLoadingDialog()
@@ -98,7 +107,7 @@ class MainPresenter(
                 onComplete {
                     view.hideLoadingDialog()
                     view.toast(R.string.exported)
-                    view.toast(exportedFile?:"")
+                    view.toast(exportedFile ?: "")
                 }
             }
         }
@@ -120,19 +129,15 @@ class MainPresenter(
     }
 
     private fun reloadData() {
-        view.showLoadingDialog()
-        doAsync(exceptionHandler) {
-            val items = view.getRepository().getAll()
-            onComplete {
-                view.hideLoadingDialog()
-                editPresenter.refreshItems(items)
-            }
+        fragments.forEach {
+            if(it.isVisible())
+                it.reloadData()
         }
-
     }
 
     override fun onNavigationItemSelected(selectionId: Int) {
         view.showFragment(selectionId)
+       // reloadData()
     }
 
 }

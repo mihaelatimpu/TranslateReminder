@@ -10,7 +10,7 @@ import com.mimi.translatereminder.repository.local.sharedprefs.SharedPreferences
  *
  */
 class TranslationRepository(private val db: TranslationDao) {
-    val sharedPrefs = SharedPreferencesUtil()
+    private val sharedPrefs = SharedPreferencesUtil()
 
     fun addEntity(entity: Entity) {
         db.insertAll(entity)
@@ -24,6 +24,18 @@ class TranslationRepository(private val db: TranslationDao) {
 
     fun getRandomItems(excludeId: Int, count: Int): List<Entity> {
         return db.getRandomItems(excludeId = excludeId, limit = count)
+    }
+
+    fun getLearningItems(count: Int): List<Entity> {
+        return db.getLearningItems(limit = count)
+    }
+
+    fun getReviewItems(count: Int): List<Entity> {
+        return db.getReviewItems(limit = count)
+    }
+
+    fun getMistakenItems(count: Int): List<Entity> {
+        return db.getMistakenItems(limit = count)
     }
 
     fun deleteAll() {
@@ -44,19 +56,7 @@ class TranslationRepository(private val db: TranslationDao) {
 
     fun retrieveLearningItems(context: Context): List<Entity> {
         val count = sharedPrefs.getLearningItemsPerSession(context)
-        val states = listOf(Entity.STATE_LEARNING_4, Entity.STATE_LEARNING_3,
-                Entity.STATE_LEARNING_2, Entity.STATE_LEARNING_1)
-        return retrieveItems(states, count)
+        return getLearningItems(count)
 
-    }
-
-    private fun retrieveItems(states: List<Int>, limit: Int): List<Entity> {
-        val list = ArrayList<Entity>()
-        states.forEach {
-            if (list.size >= limit)
-                return list
-            list.addAll(db.getEntityByState(it, limit - list.size))
-        }
-        return list
     }
 }

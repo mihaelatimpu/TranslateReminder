@@ -22,6 +22,7 @@ import com.mimi.translatereminder.view.main.about.AboutFragment
 import com.mimi.translatereminder.view.main.contact.ContactFragment
 import com.mimi.translatereminder.view.main.learning.LearningFragment
 import com.mimi.translatereminder.view.main.edit.EditFragment
+import com.mimi.translatereminder.view.main.learning.LearningFragmentPresenter
 import com.mimi.translatereminder.view.main.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -37,10 +38,18 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val REQUESTING_PERMISSION = 4545
     }
 
+    private val learningFragment by lazy {
+        createLearningFragment(LearningFragmentPresenter.TYPE_LEARNING)
+    }
+    private val reviewFragment by lazy {
+        createLearningFragment(LearningFragmentPresenter.TYPE_REVIEW)
+    }
+    private val mistakesFragment by lazy {
+        createLearningFragment(LearningFragmentPresenter.TYPE_MISTAKES)
+    }
     private val aboutFragment by inject<AboutFragment>()
     private val contactFragment by inject<ContactFragment>()
-    private val favouritesFragment by inject<LearningFragment>()
-    private val reviewFragment by inject<EditFragment>()
+    private val editFragment by inject<EditFragment>()
     private val settingsFragment by inject<SettingsFragment>()
 
     override fun getContext() = this
@@ -48,6 +57,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override val presenter: MainContract.Presenter by inject()
     private var onPermissionResult: (Boolean) -> Unit = {}
+
+    private fun createLearningFragment(type: Int): LearningFragment {
+        val fragment = LearningFragment()
+        fragment.presenter.type = type
+        return fragment
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,30 +83,67 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
-        fab.setOnClickListener { presenter.onPlusButtonClicked() }
         initPresenters()
         presenter.start()
     }
 
     private fun initPresenters() {
         presenter.view = this
+        learningFragment.presenter.view = learningFragment
+        reviewFragment.presenter.view = reviewFragment
+        mistakesFragment.presenter.view = mistakesFragment
         aboutFragment.presenter.view = aboutFragment
         contactFragment.presenter.view = contactFragment
-        favouritesFragment.presenter.view = favouritesFragment
-        reviewFragment.presenter.view = reviewFragment
+        editFragment.presenter.view = editFragment
         settingsFragment.presenter.view = settingsFragment
+        presenter.fragments = listOf(
+                learningFragment.presenter,
+                reviewFragment.presenter,
+                mistakesFragment.presenter,
+                aboutFragment.presenter,
+                contactFragment.presenter,
+                editFragment.presenter,
+                settingsFragment.presenter
+        )
     }
 
     override fun showFragment(id: Int) {
-        val fragment: BaseFragment = when (id) {
-            R.id.nav_review -> reviewFragment
-            R.id.nav_learning -> favouritesFragment
-            R.id.nav_settings -> settingsFragment
-            R.id.nav_about -> aboutFragment
-            R.id.nav_contact_developer -> contactFragment
+        val fragment: BaseFragment
+        val titleId: Int
+        when (id) {
+            R.id.nav_learning -> {
+                fragment = learningFragment
+                titleId = R.string.menu_learning
+            }
+            R.id.nav_review -> {
+                fragment = reviewFragment
+                titleId = R.string.menu_review
+            }
+            R.id.nav_mistakes -> {
+                fragment = mistakesFragment
+                titleId = R.string.menu_mistakes
+            }
+            R.id.nav_edit -> {
+                fragment = editFragment
+                titleId = R.string.edit
+            }
+            R.id.nav_settings -> {
+                fragment = settingsFragment
+                titleId = R.string.nav_settings
+            }
+            R.id.nav_about -> {
+                fragment = aboutFragment
+                titleId = R.string.about_app
+            }
+            R.id.nav_contact_developer -> {
+                fragment = contactFragment
+                titleId = R.string.contact_developer
+            }
             else -> throw UnsupportedOperationException("Unknown id: $id")
         }
         replaceFragmentInActivity(fragment, R.id.contentFrame)
+        supportActionBar?.title = getString(titleId)
+
     }
 
     override fun startLearningActivity() {
@@ -107,6 +160,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         intent.putExtra(ITEM_ID, id)
         startActivityForResult(intent, ADD_EDIT_ACTIVITY_CODE)
 
+    }
+
+    override fun showDetailsDialog(entityId: Int) {
+        val dialog = DetailsDialog.createDialog(entityId = entityId,
+                onEdit = {presenter.editItem(it)},
+                onDelete = {presenter.deleteItem(it)},
+                onReview = {presenter.reviewItem(it)},
+                translationRepository = getRepository())
+        dialog.show(fragmentManager,"")
     }
 
 

@@ -19,21 +19,31 @@ interface MainContract {
         fun getRepository(): TranslationRepository
         fun startAddActivity()
         fun showConfirmDialog(title: Int, message: Int, onConfirm: () -> Unit)
-        fun startEditActivity(id:Int)
-        fun checkForPermission(permission: String, @StringRes title:Int,
-                               @StringRes description:Int, onPermissionResult:(Boolean)->Unit)
-        fun toast(@StringRes text:Int)
+        fun startEditActivity(id: Int)
+        fun checkForPermission(permission: String, @StringRes title: Int,
+                               @StringRes description: Int, onPermissionResult: (Boolean) -> Unit)
+        fun showDetailsDialog(entityId: Int)
+        fun toast(@StringRes text: Int)
         fun startLearningActivity()
     }
 
     interface Presenter : BasePresenter<Activity> {
+        var fragments: List<FragmentPresenter>
         fun onOptionItemSelected(selectionId: Int)
         fun onNavigationItemSelected(selectionId: Int)
-        fun onPlusButtonClicked()
+        fun getRepository(): TranslationRepository
+        fun onAddButtonClicked()
         fun onReturnedFromActivity()
         fun editItem(item: Entity)
         fun deleteItem(item: Entity)
+        fun reviewItem(item: Entity)
+        fun showDetailsDialog(entityId: Int)
+        fun startLearning()
     }
 
-    interface FragmentPresenter<T> : BasePresenter<T>
+    interface FragmentPresenter {
+        var mainPresenter: MainContract.Presenter
+        fun isVisible(): Boolean
+        fun reloadData()
+    }
 }

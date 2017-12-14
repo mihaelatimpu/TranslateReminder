@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@drawable/learning_item_bg"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:textSize="20sp" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="bottom">
+
+        <View
+            android:id="@+id/progress_4"
+            android:layout_width="@dimen/progress_width"
+            android:layout_height="@dimen/progress_height_4"
+            android:layout_margin="1dp"
+            android:background="@color/colorPrimary" />
+
+        <View
+            android:id="@+id/progress_3"
+            android:layout_width="@dimen/progress_width"
+            android:layout_height="@dimen/progress_height_3"
+            android:layout_margin="1dp"
+            android:background="@color/colorPrimary" />
+
+        <View
+            android:id="@+id/progress_2"
+            android:layout_width="@dimen/progress_width"
+            android:layout_height="@dimen/progress_height_2"
+            android:layout_margin="1dp"
+            android:background="@color/colorPrimary" />
+
+        <View
+            android:id="@+id/progress_1"
+            android:layout_width="@dimen/progress_width"
+            android:layout_height="@dimen/progress_height_1"
+            android:layout_margin="1dp"
+            android:background="@color/colorPrimary" />
+    </LinearLayout>
+</LinearLayout>

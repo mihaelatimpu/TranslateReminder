@@ -11,7 +11,7 @@ import java.util.*
 class StateUtil {
     fun increaseState(entity: Entity): Entity {
         val calendar = Calendar.getInstance()
-        if (entity.state == Entity.WRONG) {
+        if (entity.state == Entity.STATE_MISTAKE) {
             if (entity.stateBeforeBeingWrong < Entity.STATE_REVIEW_4)
                 entity.stateBeforeBeingWrong++
         }
@@ -36,9 +36,9 @@ class StateUtil {
     }
 
     fun setWrong(entity: Entity): Entity {
-        if (entity.state != Entity.WRONG) {
+        if (entity.state != Entity.STATE_MISTAKE) {
             entity.stateBeforeBeingWrong = entity.state
-            entity.state = Entity.WRONG
+            entity.state = Entity.STATE_MISTAKE
         }
         return entity
     }

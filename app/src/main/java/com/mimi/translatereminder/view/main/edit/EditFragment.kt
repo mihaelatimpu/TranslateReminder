@@ -10,8 +10,8 @@ import com.mimi.translatereminder.R
 import com.mimi.translatereminder.base.BaseFragment
 import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.utils.Context
-import com.mimi.translatereminder.view.main.edit.adapter.TranslationsAdapter
-import kotlinx.android.synthetic.main.fragment_review.*
+import com.mimi.translatereminder.view.main.ItemsAdapter
+import kotlinx.android.synthetic.main.fragment_edit.*
 import org.koin.android.ext.android.inject
 
 /**
@@ -24,13 +24,15 @@ class EditFragment : BaseFragment(), EditContract.View {
 
     override val presenter: EditContract.Presenter by inject()
     val adapter by lazy {
-        TranslationsAdapter(context, { presenter.editItem(it) },
-                { presenter.deleteItem(it) })
+        ItemsAdapter(context = activity,
+                onClick = { presenter.showDetailsDialog(it.id) },
+                createHolder = { EditViewHolder(it) },
+                resourceId = R.layout.item_translation)
     }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_review, container, false)
+            inflater.inflate(R.layout.fragment_edit, container, false)
 
     override fun init() {
         lstEntities.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -46,14 +48,18 @@ class EditFragment : BaseFragment(), EditContract.View {
             }
 
         })
+        fab.setOnClickListener { presenter.onAddButtonClicked() }
     }
 
     override fun refreshItems(items: List<Entity>) {
-        adapter.refreshTranslations(items)
-        adapter.filter.filter(searchView.query)
+        adapter.refreshItems(items)
+        if (searchView != null)
+            adapter.filter.filter(searchView.query)
     }
 
     override fun toast(text: String) {
+        toast.setText(text)
+        toast.show()
     }
 
     override fun startPresenter() {

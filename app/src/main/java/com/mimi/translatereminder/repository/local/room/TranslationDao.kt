@@ -41,8 +41,29 @@ interface TranslationDao {
     @Query("SELECT * from $TABLE WHERE state=:state ORDER BY dateAdded LIMIT :limit")
     fun getEntityByState(state:Int, limit:Int): List<Entity>
 
-    @Query("SELECT * FROM $TABLE WHERE id IN (SELECT id FROM $TABLE WHERE id<>:excludeId ORDER BY RANDOM() LIMIT :limit)")
+    @Query("SELECT * FROM $TABLE " +
+            "WHERE id<>:excludeId " +
+            "ORDER BY state DESC, dateAdded ASC " +
+            "LIMIT :limit")
     fun getRandomItems(excludeId:Int, limit:Int):List<Entity>
+
+    @Query("SELECT * FROM $TABLE " +
+            "WHERE state <= ${Entity.STATE_LEARNING_4} " +
+            "ORDER BY state DESC, dateAdded ASC " +
+            "LIMIT :limit")
+    fun getLearningItems(limit:Int):List<Entity>
+
+    @Query("SELECT * FROM $TABLE " +
+            "WHERE state > ${Entity.STATE_LEARNING_4} AND state < ${Entity.STATE_MISTAKE} " +
+            "ORDER BY state ASC, nextReview ASC " +
+            "LIMIT :limit")
+    fun getReviewItems(limit:Int):List<Entity>
+
+    @Query("SELECT * FROM $TABLE " +
+            "WHERE state = ${Entity.STATE_MISTAKE} " +
+            "ORDER BY nextReview ASC " +
+            "LIMIT :limit")
+    fun getMistakenItems(limit:Int):List<Entity>
 
     @Delete
     fun delete(vararg entities: Entity)
