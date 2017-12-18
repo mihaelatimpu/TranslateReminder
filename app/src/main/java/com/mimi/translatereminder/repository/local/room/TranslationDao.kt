@@ -1,12 +1,7 @@
 package com.mimi.translatereminder.repository.local.room
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import com.mimi.translatereminder.dto.Entity
-import android.arch.persistence.room.Update
-
 
 
 /**
@@ -17,6 +12,13 @@ import android.arch.persistence.room.Update
 interface TranslationDao {
     companion object {
         const val TABLE = "entity"
+        const val id = "id"
+        const val state = "state"
+        const val germanWord = "germanWord"
+        const val translation = "translation"
+        const val dateAdded = "dateAdded"
+        const val nextReview = "nextReview"
+        const val stateBeforeBeingWrong = "stateBeforeBeingWrong"
     }
 
     @Insert
@@ -29,39 +31,42 @@ interface TranslationDao {
     @Query("SELECT * from $TABLE")
     fun selectAll(): List<Entity>
 
-    @Query("SELECT * from $TABLE WHERE id=:id")
+    @Query("SELECT * from $TABLE WHERE $id=:id")
     fun selectItemById(id:Int): List<Entity>
 
-    @Query("SELECT * from $TABLE WHERE germanWord=:german")
+    @Query("SELECT * from $TABLE WHERE $germanWord=:german")
     fun getEntitiesByGermanVersion(german: String): List<Entity>
 
-    @Query("SELECT * from $TABLE WHERE translation=:translation")
+    @Query("SELECT * from $TABLE WHERE $translation=:translation")
     fun getEntityByTranslation(translation: String): List<Entity>
 
-    @Query("SELECT * from $TABLE WHERE state=:state ORDER BY dateAdded LIMIT :limit")
+    @Query("SELECT * from $TABLE WHERE $state=:state ORDER BY $dateAdded LIMIT :limit")
     fun getEntityByState(state:Int, limit:Int): List<Entity>
 
     @Query("SELECT * FROM $TABLE " +
-            "WHERE id<>:excludeId " +
-            "ORDER BY state DESC, dateAdded ASC " +
+            "WHERE $id<>:excludeId " +
+            "ORDER BY $state DESC, $dateAdded ASC " +
             "LIMIT :limit")
     fun getRandomItems(excludeId:Int, limit:Int):List<Entity>
 
     @Query("SELECT * FROM $TABLE " +
-            "WHERE state <= ${Entity.STATE_LEARNING_4} " +
-            "ORDER BY state DESC, dateAdded ASC " +
+            "WHERE $state >= ${Entity.firstLearningState} " +
+            "AND $state <= ${Entity.lastLearningState} " +
+            "ORDER BY $state DESC, $dateAdded ASC " +
             "LIMIT :limit")
     fun getLearningItems(limit:Int):List<Entity>
 
     @Query("SELECT * FROM $TABLE " +
-            "WHERE state > ${Entity.STATE_LEARNING_4} AND state < ${Entity.STATE_MISTAKE} " +
-            "ORDER BY state ASC, nextReview ASC " +
+            "WHERE $state >= ${Entity.firstReviewState} " +
+            "AND $state <= ${Entity.lastReviewState} " +
+            "ORDER BY $state ASC, $nextReview ASC " +
             "LIMIT :limit")
     fun getReviewItems(limit:Int):List<Entity>
 
     @Query("SELECT * FROM $TABLE " +
-            "WHERE state = ${Entity.STATE_MISTAKE} " +
-            "ORDER BY nextReview ASC " +
+            "WHERE $state >= ${Entity.firstMistakeState} " +
+            "AND $state <= ${Entity.lastMistakeState} " +
+            "ORDER BY $state DESC, $nextReview ASC " +
             "LIMIT :limit")
     fun getMistakenItems(limit:Int):List<Entity>
 

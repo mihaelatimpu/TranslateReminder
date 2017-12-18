@@ -15,7 +15,14 @@ import java.util.*
 class LearningFragmentsGenerator {
     fun start(entities: List<Entity>): List<Progress> {
         val fragments = ArrayList<Progress>()
-        entities.forEach { fragments.addAll(getFragments(it, it.state)) }
+        entities.forEach {
+            if (it.isLearning())
+                fragments.addAll(getLearningFragments(it, it.state))
+            if (it.isWrong())
+                fragments.addAll(getWrongFragments(it, it.state))
+            if (it.isReviewing())
+                fragments.addAll(getReviewFragments(it, it.state))
+        }
         return decideFragmentOrder(fragments)
     }
 
@@ -33,15 +40,15 @@ class LearningFragmentsGenerator {
         return addedItems
     }
 
-    private fun isValid(progress: Progress, alreadyAdded: List<Progress>, remainingItems:List<Progress>): Boolean {
-        if(alreadyAdded.any { it.entityId == progress.entityId && it.state > progress.state })
+    private fun isValid(progress: Progress, alreadyAdded: List<Progress>, remainingItems: List<Progress>): Boolean {
+        if (alreadyAdded.any { it.entityId == progress.entityId && it.state > progress.state })
             return false
-        if(remainingItems.any { it.entityId == progress.entityId && it.state < progress.state })
+        if (remainingItems.any { it.entityId == progress.entityId && it.state < progress.state })
             return false
         return true
     }
 
-    private fun getFragments(entity: Entity, state: Int): List<Progress> {
+    private fun getLearningFragments(entity: Entity, state: Int): List<Progress> {
         val types = ArrayList<Progress>()
         val type = when (state) {
             Entity.STATE_LEARNING_1 -> TYPE_PRESENT
@@ -52,10 +59,39 @@ class LearningFragmentsGenerator {
         }
         types.add(Progress(type = type,
                 state = state, entityId = entity.id))
-        if (state < Entity.STATE_LEARNING_4)
-            types.addAll(getFragments(entity, state + 1))
-
+        if (Entity.isLearningState(state + 1))
+            types.addAll(getLearningFragments(entity, state + 1))
         return types
     }
+
+    private fun getReviewFragments(entity: Entity, state: Int): List<Progress> {
+        val types = ArrayList<Progress>()
+        val type = getRandomReviewFragment()
+        types.add(Progress(type = type,
+                state = state, entityId = entity.id))
+        if (Entity.isReviewingState(state + 1))
+            types.addAll(getReviewFragments(entity, state + 1))
+        return types
+    }
+
+    private fun getWrongFragments(entity: Entity, state: Int): List<Progress> {
+        val types = ArrayList<Progress>()
+        val type = if(entity.state == Entity.firstMistakeState)
+            TYPE_PRESENT else getRandomReviewFragment()
+        types.add(Progress(type = type,
+                state = state, entityId = entity.id))
+        if (Entity.isWrongState(state + 1))
+            types.addAll(getWrongFragments(entity, state + 1))
+        return types
+    }
+
+    private fun getRandomReviewFragment(): Int {
+        return getRandomFragmentType(listOf(TYPE_CHOOSE, TYPE_TYPING))
+    }
+
+    private fun getRandomFragmentType(types: List<Int>): Int {
+        return types[Random().nextInt(types.size)]
+    }
+
 
 }

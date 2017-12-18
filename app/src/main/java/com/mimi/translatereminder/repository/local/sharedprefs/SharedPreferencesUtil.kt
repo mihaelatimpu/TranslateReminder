@@ -11,6 +11,7 @@ class SharedPreferencesUtil{
         private val PREF_FILENAME = "settingsPreferences"
         private val LEARNING_ITEMS_PER_SESSION = "learningItemsPerSession"
         private val REVIEW_ITEMS_PER_SESSION = "reviewItemsPerSession"
+        private val WRONG_ITEMS_PER_SESSION = "wrongItemsPerSession"
     }
     fun getLearningItemsPerSession(context: Context):Int{
         val prefs = context.getSharedPreferences(PREF_FILENAME, 0)
@@ -19,6 +20,10 @@ class SharedPreferencesUtil{
     fun getReviewItemsPerSession(context: Context):Int{
         val prefs = context.getSharedPreferences(PREF_FILENAME, 0)
         return prefs.getInt(REVIEW_ITEMS_PER_SESSION, 15)
+    }
+    fun getWrongItemsPerSession(context: Context):Int{
+        val prefs = context.getSharedPreferences(PREF_FILENAME, 0)
+        return prefs.getInt(WRONG_ITEMS_PER_SESSION, 3)
     }
     fun setLearningItemsPerSession(context: Context, items:Int){
         val prefs = context.getSharedPreferences(PREF_FILENAME, 0)
@@ -30,6 +35,12 @@ class SharedPreferencesUtil{
         val prefs = context.getSharedPreferences(PREF_FILENAME, 0)
         val editor = prefs.edit()
         editor.putInt(REVIEW_ITEMS_PER_SESSION, items)
+        editor.apply()
+    }
+    fun setWrongItemsPerSession(context: Context, items:Int){
+        val prefs = context.getSharedPreferences(PREF_FILENAME, 0)
+        val editor = prefs.edit()
+        editor.putInt(WRONG_ITEMS_PER_SESSION, items)
         editor.apply()
     }
 

@@ -60,7 +60,8 @@ open class ItemsAdapter<T : ItemsAdapter.BaseHolder>(val context: Context,
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             filteredItems.clear()
-            filteredItems.addAll(results?.values as List<Entity>)
+            if (results?.values != null)
+                filteredItems.addAll(results.values as List<Entity>)
             notifyDataSetChanged()
         }
 

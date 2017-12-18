@@ -6,7 +6,6 @@ import com.mimi.translatereminder.base.BasePresenter
 import com.mimi.translatereminder.base.BaseView
 import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.repository.TranslationRepository
-import java.io.File
 
 /**
  * Created by Mimi on 06/12/2017.
@@ -22,9 +21,10 @@ interface MainContract {
         fun startEditActivity(id: Int)
         fun checkForPermission(permission: String, @StringRes title: Int,
                                @StringRes description: Int, onPermissionResult: (Boolean) -> Unit)
+
         fun showDetailsDialog(entityId: Int)
         fun toast(@StringRes text: Int)
-        fun startLearningActivity()
+        fun startLearningActivity(type:Int, reviewId:Int? = null)
     }
 
     interface Presenter : BasePresenter<Activity> {
@@ -38,7 +38,9 @@ interface MainContract {
         fun deleteItem(item: Entity)
         fun reviewItem(item: Entity)
         fun showDetailsDialog(entityId: Int)
-        fun startLearning()
+        fun learnNewWords()
+        fun reviewWrongItems()
+        fun reviewItems()
     }
 
     interface FragmentPresenter {

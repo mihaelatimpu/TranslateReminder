@@ -34,6 +34,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         MainContract.Activity {
     companion object {
         val ADD_EDIT_ACTIVITY_CODE = 3424
+        val LEARNING_ACTIVITY_CODE = 766
         val ITEM_ID = "itemId"
         val REQUESTING_PERMISSION = 4545
     }
@@ -146,9 +147,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     }
 
-    override fun startLearningActivity() {
-        startActivityForResult(Intent(this, LearningActivity::class.java), 43)
-
+    override fun startLearningActivity(type: Int, reviewId: Int?) {
+        startActivityForResult(LearningActivity.startActivityIntent(this, type, reviewId)
+                , LEARNING_ACTIVITY_CODE)
     }
 
     override fun startAddActivity() {
@@ -164,11 +165,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun showDetailsDialog(entityId: Int) {
         val dialog = DetailsDialog.createDialog(entityId = entityId,
-                onEdit = {presenter.editItem(it)},
-                onDelete = {presenter.deleteItem(it)},
-                onReview = {presenter.reviewItem(it)},
+                onEdit = { presenter.editItem(it) },
+                onDelete = { presenter.deleteItem(it) },
+                onReview = { presenter.reviewItem(it) },
                 translationRepository = getRepository())
-        dialog.show(fragmentManager,"")
+        dialog.show(fragmentManager, "")
     }
 
 
@@ -232,6 +233,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             return
         when (requestCode) {
             ADD_EDIT_ACTIVITY_CODE -> presenter.onReturnedFromActivity()
+            LEARNING_ACTIVITY_CODE -> presenter.onReturnedFromActivity()
             REQUESTING_PERMISSION -> onPermissionResult(true)
         }
     }

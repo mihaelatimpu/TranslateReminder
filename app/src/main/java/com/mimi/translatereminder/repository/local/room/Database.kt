@@ -13,14 +13,14 @@ import java.util.*
  *
  */
 
-@Database(entities = arrayOf(Entity::class), version = 3)
+@Database(entities = [(Entity::class)], version = 4)
 abstract class Database : RoomDatabase() {
     companion object {
         val MIGRATION_1_2: Migration = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL(
                         "ALTER TABLE '${TranslationDao.TABLE}' ADD COLUMN 'state' " +
-                                "INTEGER NOT NULL DEFAULT ${Entity.STATE_LEARNING_1}")
+                                "INTEGER NOT NULL DEFAULT ${Entity.firstLearningState}")
             }
         }
         val MIGRATION_2_3: Migration = object : Migration(2, 3) {
@@ -30,8 +30,21 @@ abstract class Database : RoomDatabase() {
                                 "INTEGER NOT NULL DEFAULT ${Calendar.getInstance().timeInMillis}")
                 database.execSQL(
                         "ALTER TABLE '${TranslationDao.TABLE}' ADD COLUMN 'stateBeforeBeingWrong' " +
-                                "INTEGER NOT NULL DEFAULT ${Entity.STATE_LEARNING_1}")
+                                "INTEGER NOT NULL DEFAULT ${Entity.firstLearningState}")
             }
+        }
+        val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                replace(database, 5, Entity.firstReviewState)
+                replace(database, 9, Entity.firstMistakeState)
+            }
+        }
+
+        private fun replace(database: SupportSQLiteDatabase, what: Int, with: Int) {
+            database.execSQL(
+                    "UPDATE ${TranslationDao.TABLE} SET ${TranslationDao.state} = $with " +
+                            "WHERE ${TranslationDao.state} = $what")
+
         }
     }
 

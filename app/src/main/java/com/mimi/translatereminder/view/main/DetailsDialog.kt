@@ -91,10 +91,11 @@ class DetailsDialog : DialogFragment() {
             germanTerm.text = germanWord
             translationText.text = translation
             stateText.text = getString(
-                    when (state) {
-                        in Entity.STATE_LEARNING_1..Entity.STATE_LEARNING_4 -> R.string.menu_learning
-                        in Entity.STATE_REVIEW_1..Entity.STATE_REVIEW_4 -> R.string.menu_review
-                        Entity.STATE_MISTAKE -> R.string.mistake
+                    when  {
+
+                        isLearning() -> R.string.menu_learning
+                        isReviewing() -> R.string.menu_review
+                        isWrong() -> R.string.mistake
                         else -> R.string.unknown
                     }
             )

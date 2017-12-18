@@ -57,6 +57,15 @@ class TranslationRepository(private val db: TranslationDao) {
     fun retrieveLearningItems(context: Context): List<Entity> {
         val count = sharedPrefs.getLearningItemsPerSession(context)
         return getLearningItems(count)
+    }
 
+    fun retrieveWrongItems(context: Context): List<Entity> {
+        val count = sharedPrefs.getWrongItemsPerSession(context)
+        return getMistakenItems(count)
+    }
+
+    fun retrieveReviewItems(context: Context): List<Entity> {
+        val count = sharedPrefs.getReviewItemsPerSession(context)
+        return getReviewItems(count)
     }
 }

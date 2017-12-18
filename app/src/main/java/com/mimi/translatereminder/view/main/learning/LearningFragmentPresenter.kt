@@ -35,6 +35,7 @@ class LearningFragmentPresenter : LearningFragmentContract.Presenter {
         view.init()
         reloadData()
     }
+
     override fun showDetailsDialog(entityId: Int) {
         mainPresenter.showDetailsDialog(entityId)
     }
@@ -58,7 +59,11 @@ class LearningFragmentPresenter : LearningFragmentContract.Presenter {
     }
 
     override fun startLearning() {
-        mainPresenter.startLearning()
+        when (type) {
+            TYPE_LEARNING -> mainPresenter.learnNewWords()
+            TYPE_MISTAKES -> mainPresenter.reviewWrongItems()
+            TYPE_REVIEW -> mainPresenter.reviewItems()
+        }
     }
 
 }

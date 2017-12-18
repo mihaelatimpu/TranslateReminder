@@ -5,6 +5,9 @@ import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.utils.FileUtil
 import com.mimi.translatereminder.utils.json.ExportUtil
 import com.mimi.translatereminder.utils.json.ImportUtil
+import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_LEARN_NEW_WORDS
+import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_REVIEW_ITEMS
+import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_REVIEW_WRONG_WORDS
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
 
@@ -36,7 +39,7 @@ class MainPresenter : MainContract.Presenter {
     }
 
     override fun reviewItem(item: Entity) {
-        view.toast("Not Yet...")
+        view.startLearningActivity(TYPE_REVIEW_ITEMS, item.id)
     }
 
     override fun getRepository() = view.getRepository()
@@ -64,12 +67,21 @@ class MainPresenter : MainContract.Presenter {
             R.id.action_import -> importData()
             R.id.action_export -> exportData()
             R.id.action_delete_all -> deleteAllData()
-            R.id.action_learn_new_words -> startLearning()
+            R.id.action_learn_new_words -> learnNewWords()
         }
     }
 
-    override fun startLearning() {
-        view.startLearningActivity()
+    override fun learnNewWords() {
+        view.startLearningActivity(type = TYPE_LEARN_NEW_WORDS)
+    }
+
+    override fun reviewItems() {
+        view.startLearningActivity(type = TYPE_REVIEW_ITEMS)
+    }
+
+    override fun reviewWrongItems() {
+        view.startLearningActivity(type = TYPE_REVIEW_WRONG_WORDS)
+
     }
 
     override fun onAddButtonClicked() {
@@ -130,14 +142,14 @@ class MainPresenter : MainContract.Presenter {
 
     private fun reloadData() {
         fragments.forEach {
-            if(it.isVisible())
+            if (it.isVisible())
                 it.reloadData()
         }
     }
 
     override fun onNavigationItemSelected(selectionId: Int) {
         view.showFragment(selectionId)
-       // reloadData()
+        // reloadData()
     }
 
 }

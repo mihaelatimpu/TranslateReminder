@@ -1,8 +1,12 @@
 package com.mimi.translatereminder.view.learning
 
+import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.dto.Progress
 import com.mimi.translatereminder.utils.LearningFragmentsGenerator
 import com.mimi.translatereminder.utils.StateUtil
+import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_LEARN_NEW_WORDS
+import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_REVIEW_ITEMS
+import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_REVIEW_WRONG_WORDS
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
 import org.jetbrains.anko.runOnUiThread
@@ -13,6 +17,8 @@ import org.jetbrains.anko.runOnUiThread
  */
 class LearningPresenter : LearningContract.Presenter {
     override lateinit var view: LearningContract.Activity
+    override var type: Int = TYPE_LEARN_NEW_WORDS
+    override var itemId: Int? = null
     private val fragmentGen = LearningFragmentsGenerator()
     private val fragments = ArrayList<Progress>()
     private val stateUtil = StateUtil()
@@ -32,7 +38,7 @@ class LearningPresenter : LearningContract.Presenter {
     private fun reloadItems() {
         view.showLoadingDialog()
         doAsync(exceptionHandler) {
-            val items = view.getRepository().retrieveLearningItems(view.getContext())
+            val items = retrieveItems()
             fragments.clear()
             fragments.addAll(fragmentGen.start(items))
             onComplete {
@@ -40,6 +46,22 @@ class LearningPresenter : LearningContract.Presenter {
                 view.setFragments(items = fragments)
                 view.moveToFragment(0)
             }
+        }
+    }
+
+    private fun retrieveItems(): List<Entity> {
+        val repo = view.getRepository()
+        val itemId = itemId
+        if (itemId != null && itemId != 0) {
+            val item = repo.selectItemById(itemId)
+            if (item != null)
+                return listOf(item)
+        }
+        return when (type) {
+            TYPE_LEARN_NEW_WORDS -> repo.retrieveLearningItems(view.getContext())
+            TYPE_REVIEW_ITEMS -> repo.retrieveReviewItems(view.getContext())
+            TYPE_REVIEW_WRONG_WORDS -> repo.retrieveWrongItems(view.getContext())
+            else -> listOf()
         }
     }
 
