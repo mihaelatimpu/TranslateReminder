@@ -52,9 +52,9 @@
     <string name="mistake">Wrong</string>
     <string name="item_details">Item details</string>
     <string name="translation">Translation</string>
-    <string name="state">State</string>
-    <string name="date_added">Added: %s</string>
-    <string name="next_review">Next review: %s</string>
+    <string name="state">State:</string>
+    <string name="date_added">Added:</string>
+    <string name="next_review">Next review:</string>
     <string name="review_count">%d reviews</string>
     <string name="accuracy">Accuracy %d \%%</string>
     <string name="unknown">Unknown</string>
@@ -69,4 +69,7 @@
     <string name="in_number_days">in %d days</string>
     <string name="yesterday">yesterday</string>
     <string name="number_days_ago">%d days ago</string>
+    <string name="choose_the_right_german_form">Choose the right german form</string>
+    <string name="translate_this_text">Translate this text</string>
+    <string name="group_the_items_together">Group the translation with the german version</string>
 </resources>

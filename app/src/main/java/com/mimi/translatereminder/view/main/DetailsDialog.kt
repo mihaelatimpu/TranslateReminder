@@ -88,8 +88,8 @@ class DetailsDialog : DialogFragment() {
 
     private fun initView() {
         with(entity!!) {
-            germanTerm.text = germanWord
-            translationText.text = translation
+            title.text = germanWord
+            subtitle.text = translation
             stateText.text = getString(
                     when  {
 
@@ -99,8 +99,8 @@ class DetailsDialog : DialogFragment() {
                         else -> R.string.unknown
                     }
             )
-            dateAddedText.text = getString(R.string.date_added, timeUtils.getTime(dateAdded,activity))
-            reviewDate.text = getString(R.string.next_review, timeUtils.getTime(nextReview,activity))
+            dateAddedText.text = timeUtils.getTime(dateAdded,activity)
+            reviewDate.text = timeUtils.getTime(nextReview,activity)
             reviewCountText.text = getString(R.string.review_count, reviewCount)
             accuracy.text = getString(R.string.accuracy, getAccuracy())
         }

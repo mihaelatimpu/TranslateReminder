@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import com.mimi.translatereminder.R
 import com.mimi.translatereminder.base.BaseFragment
 import com.mimi.translatereminder.dto.Progress
@@ -20,7 +19,8 @@ import org.jetbrains.anko.support.v4.alert
 class TypingFragment : BaseFragment(), TypingContract.View {
 
     override val presenter: TypingContract.Presenter by lazy {
-        TypingPresenter(this, (activity as LearningActivity).presenter)
+        val type = arguments.getInt(Progress.TYPE)
+        TypingPresenter(this, (activity as LearningActivity).presenter, type = type)
     }
 
 
@@ -39,15 +39,19 @@ class TypingFragment : BaseFragment(), TypingContract.View {
         presenter.start()
     }
 
-    override fun refreshText(translation: String) {
-        title.text = translation
+    override fun refreshWord(translation: String) {
+        subtitle.text = translation
+    }
+
+    override fun setHint(hint: String) {
+        answer.hint = hint
     }
 
     override fun init() {
         val id = arguments.getInt(Progress.ENTITY_ID, 0)
         if (id != 0)
             presenter.setEntityId(id)
-        fab.setOnClickListener { presenter.onAnswered(subtitle.text.toString()) }
+        fab.setOnClickListener { presenter.onAnswered(answer.text.toString()) }
     }
 
     override fun showIncorrectDialog(translation: String, answer: String,

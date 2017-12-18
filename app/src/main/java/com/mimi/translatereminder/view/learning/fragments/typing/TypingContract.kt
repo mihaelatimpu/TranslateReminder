@@ -10,12 +10,14 @@ import com.mimi.translatereminder.view.learning.LearningContract
  */
 interface TypingContract {
     interface View : BaseView<Presenter> {
-        fun refreshText(translation: String)
+        fun refreshWord(translation: String)
+        fun setHint(hint: String)
         fun showIncorrectDialog(translation: String, answer: String,
                                 correctAnswer: String, onComplete: () -> Unit)
     }
 
     interface Presenter : BasePresenter<View>, LearningContract.FragmentPresenter {
+        val type:Int
         fun setEntityId(id:Int)
         fun onAnswered(answer: String)
     }

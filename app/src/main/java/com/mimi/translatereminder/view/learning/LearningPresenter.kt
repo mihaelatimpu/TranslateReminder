@@ -65,17 +65,19 @@ class LearningPresenter : LearningContract.Presenter {
         }
     }
 
-    override fun onFragmentResult(addedScore: Int, entityId: Int, correct: Boolean) {
+    override fun onFragmentResult(addedScore: Int, entityId: Int?, correct: Boolean) {
         view.getContext().runOnUiThread {
             view.showLoadingDialog()
             doAsync(exceptionHandler) {
-                val item = view.getRepository().selectItemById(entityId)
-                if (item != null) {
-                    if (correct)
-                        stateUtil.increaseState(item)
-                    else
-                        stateUtil.setWrong(item)
-                    view.getRepository().saveEntity(item)
+                if (entityId != null) {
+                    val item = view.getRepository().selectItemById(entityId)
+                    if (item != null) {
+                        if (correct)
+                            stateUtil.increaseState(item)
+                        else
+                            stateUtil.setWrong(item)
+                        view.getRepository().saveEntity(item)
+                    }
                 }
                 onComplete {
                     view.hideLoadingDialog()

@@ -16,7 +16,7 @@ class LearningViewHolder(itemView: View) : ItemsAdapter.BaseHolder(itemView) {
         with(itemView){
             val progress = listOf(progress_1,progress_2,progress_3,progress_4)
             with(entity){
-                title.text = germanWord
+                subtitle.text = germanWord
                 if(isLearning()){
                     for(i in 0..3){
                         progress[i].setBackgroundColor(

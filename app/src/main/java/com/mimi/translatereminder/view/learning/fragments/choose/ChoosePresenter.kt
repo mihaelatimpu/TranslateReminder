@@ -1,6 +1,7 @@
 package com.mimi.translatereminder.view.learning.fragments.choose
 
 import com.mimi.translatereminder.dto.Entity
+import com.mimi.translatereminder.dto.Progress
 import com.mimi.translatereminder.view.learning.LearningContract
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
@@ -13,7 +14,7 @@ import kotlin.concurrent.schedule
  */
 
 class ChoosePresenter(override var view: ChooseContract.View,
-                      private val masterPresenter: LearningContract.Presenter) : ChooseContract.Presenter {
+                      private val masterPresenter: LearningContract.Presenter, override var type: Int) : ChooseContract.Presenter {
     private val exceptionHandler: (Throwable) -> Unit = {
         it.printStackTrace()
         view.hideLoadingDialog()
@@ -34,11 +35,18 @@ class ChoosePresenter(override var view: ChooseContract.View,
             onComplete {
                 entity = myEntity
                 view.hideLoadingDialog()
-                view.refreshText(myEntity.translation,
-                        listOf(myEntity.germanWord,
-                                otherTexts[0].germanWord,
-                                otherTexts[1].germanWord,
-                                otherTexts[2].germanWord))
+                if (type == Progress.TYPE_CHOOSE_GERMAN)
+                    view.refreshText(myEntity.translation,
+                            listOf(myEntity.germanWord,
+                                    otherTexts[0].germanWord,
+                                    otherTexts[1].germanWord,
+                                    otherTexts[2].germanWord))
+                else
+                    view.refreshText(myEntity.germanWord,
+                            listOf(myEntity.translation,
+                                    otherTexts[0].translation,
+                                    otherTexts[1].translation,
+                                    otherTexts[2].translation))
             }
         }
     }
@@ -46,9 +54,12 @@ class ChoosePresenter(override var view: ChooseContract.View,
     override fun onAnswered(answer: String) {
         if (entity == null)
             return
-        val correct = answer.toLowerCase() == entity!!.germanWord.toLowerCase()
+        val entity = entity!!
+        val correctAnswer = if (type == Progress.TYPE_CHOOSE_GERMAN)
+            entity.germanWord else entity.translation
+        val correct = answer.toLowerCase() == correctAnswer.toLowerCase()
         view.changeBackground(correct, answer)
-        view.changeBackground(true, entity!!.germanWord)
+        view.changeBackground(true, entity.germanWord)
         Timer("").schedule(500) {
             saveAndMoveOn(correct)
         }

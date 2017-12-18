@@ -8,6 +8,7 @@ import android.widget.Button
 import com.mimi.translatereminder.R
 import com.mimi.translatereminder.base.BaseFragment
 import com.mimi.translatereminder.dto.Progress
+import com.mimi.translatereminder.dto.Progress.Companion.TYPE
 import com.mimi.translatereminder.utils.Context
 import com.mimi.translatereminder.view.learning.LearningActivity
 import kotlinx.android.synthetic.main.fragment_choose.*
@@ -21,8 +22,10 @@ import kotlin.collections.ArrayList
 class ChooseFragment : BaseFragment(), ChooseContract.View {
 
     override val presenter: ChooseContract.Presenter by lazy {
-        ChoosePresenter(this, (activity as LearningActivity).presenter)
+        val type = arguments.getInt(TYPE)
+        ChoosePresenter(this, (activity as LearningActivity).presenter, type = type)
     }
+
     private val optionButtons by lazy { listOf(option1, option2, option3, option4) }
 
 
@@ -54,7 +57,7 @@ class ChooseFragment : BaseFragment(), ChooseContract.View {
     }
 
     override fun refreshText(translation: String, options: List<String>) {
-        title.text = translation
+        subtitle.text = translation
         var array = ArrayList<String>(options)
         optionButtons.forEach {
             array = setText(it, array)
@@ -63,9 +66,9 @@ class ChooseFragment : BaseFragment(), ChooseContract.View {
 
     override fun changeBackground(green: Boolean, text: String) {
         optionButtons.forEach {
-            if(it.text == text){
-                val color = if(green) R.color.green
-                    else R.color.red
+            if (it.text == text) {
+                val color = if (green) R.color.green
+                else R.color.red
                 it.setBackgroundResource(color)
             }
         }

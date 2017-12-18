@@ -28,7 +28,7 @@ interface LearningContract {
     interface Presenter : BasePresenter<Activity> {
         var type: Int
         var itemId: Int?
-        fun onFragmentResult(addedScore: Int = 0, entityId: Int, correct: Boolean = true)
+        fun onFragmentResult(addedScore: Int = 0, entityId: Int? = null, correct: Boolean = true)
         fun getRepository(): TranslationRepository
     }
 

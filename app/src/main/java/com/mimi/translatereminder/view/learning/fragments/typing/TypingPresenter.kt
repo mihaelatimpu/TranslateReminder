@@ -1,6 +1,7 @@
 package com.mimi.translatereminder.view.learning.fragments.typing
 
 import com.mimi.translatereminder.dto.Entity
+import com.mimi.translatereminder.dto.Progress
 import com.mimi.translatereminder.view.learning.LearningContract
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
@@ -11,7 +12,7 @@ import org.jetbrains.anko.onComplete
  */
 
 class TypingPresenter(override var view: TypingContract.View,
-                      private val masterPresenter: LearningContract.Presenter) : TypingContract.Presenter {
+                      private val masterPresenter: LearningContract.Presenter, override val type: Int) : TypingContract.Presenter {
     private val exceptionHandler: (Throwable) -> Unit = {
         it.printStackTrace()
         view.hideLoadingDialog()
@@ -30,20 +31,22 @@ class TypingPresenter(override var view: TypingContract.View,
             onComplete {
                 view.hideLoadingDialog()
                 if (entity != null) {
-                    view.refreshText(entity!!.translation)
+                    if (type == Progress.TYPE_HINT)
+                        view.setHint(hint = entity!!.germanWord)
+                    view.refreshWord(entity!!.translation)
                 }
             }
         }
     }
 
     override fun onAnswered(answer: String) {
-        val myEntity = entity?:return
+        val myEntity = entity ?: return
         if (answer.toLowerCase() == myEntity.germanWord.toLowerCase())
             masterPresenter.onFragmentResult(addedScore = 20, entityId = myEntity.id, correct = true)
         else
             view.showIncorrectDialog(translation = myEntity.translation,
-                    answer = answer, correctAnswer = myEntity.germanWord){
-                masterPresenter.onFragmentResult( entityId = myEntity.id, correct = false)
+                    answer = answer, correctAnswer = myEntity.germanWord) {
+                masterPresenter.onFragmentResult(entityId = myEntity.id, correct = false)
             }
     }
 

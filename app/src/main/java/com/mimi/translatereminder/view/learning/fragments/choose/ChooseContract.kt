@@ -15,6 +15,7 @@ interface ChooseContract {
     }
 
     interface Presenter : BasePresenter<View>, LearningContract.FragmentPresenter {
+        var type:Int
         fun setEntityId(id:Int)
         fun onAnswered(answer: String)
     }

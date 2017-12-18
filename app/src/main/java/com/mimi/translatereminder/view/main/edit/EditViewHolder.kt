@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.item_translation.view.*
  */
 class EditViewHolder(itemView: View) : ItemsAdapter.BaseHolder(itemView) {
     override fun bind(entity: Entity, onClick: (Entity) -> Unit) {
-        itemView.title.text = entity.germanWord
+        itemView.subtitle.text = entity.germanWord
         itemView.subtitle.text = entity.translation
         itemView.setOnClickListener { onClick(entity) }
     }

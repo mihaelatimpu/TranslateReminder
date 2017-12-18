@@ -6,8 +6,8 @@
 
     <color name="black_overlay">#66000000</color>
     <color name="white">#FFFFFF</color>
-    <color name="green">#165006</color>
-    <color name="red">#811212</color>
+    <color name="green">#41bf00</color>
+    <color name="red">#a10000</color>
     <color name="option_button_bg">#00ffffff</color>
     <color name="grey" >#8f8f8f</color>
     <color name="grey_light" >#e2e2e2</color>

@@ -2,7 +2,8 @@ package com.mimi.translatereminder.utils
 
 import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.dto.Progress
-import com.mimi.translatereminder.dto.Progress.Companion.TYPE_CHOOSE
+import com.mimi.translatereminder.dto.Progress.Companion.TYPE_CHOOSE_GERMAN
+import com.mimi.translatereminder.dto.Progress.Companion.TYPE_CHOOSE_TRANSLATION
 import com.mimi.translatereminder.dto.Progress.Companion.TYPE_HINT
 import com.mimi.translatereminder.dto.Progress.Companion.TYPE_PRESENT
 import com.mimi.translatereminder.dto.Progress.Companion.TYPE_TYPING
@@ -23,6 +24,9 @@ class LearningFragmentsGenerator {
             if (it.isReviewing())
                 fragments.addAll(getReviewFragments(it, it.state))
         }
+        if (entities.all { it.isReviewing() })
+            fragments.add(Progress(type = Progress.TYPE_GROUP, ids = entities.map { it.id },
+                    state = Entity.firstReviewState, entityId = 0))
         return decideFragmentOrder(fragments)
     }
 
@@ -52,7 +56,7 @@ class LearningFragmentsGenerator {
         val types = ArrayList<Progress>()
         val type = when (state) {
             Entity.STATE_LEARNING_1 -> TYPE_PRESENT
-            Entity.STATE_LEARNING_2 -> TYPE_CHOOSE
+            Entity.STATE_LEARNING_2 -> TYPE_CHOOSE_GERMAN
             Entity.STATE_LEARNING_3 -> TYPE_HINT
             Entity.STATE_LEARNING_4 -> TYPE_TYPING
             else -> throw UnsupportedOperationException("Unknown type: $state")
@@ -76,7 +80,7 @@ class LearningFragmentsGenerator {
 
     private fun getWrongFragments(entity: Entity, state: Int): List<Progress> {
         val types = ArrayList<Progress>()
-        val type = if(entity.state == Entity.firstMistakeState)
+        val type = if (state == Entity.firstMistakeState)
             TYPE_PRESENT else getRandomReviewFragment()
         types.add(Progress(type = type,
                 state = state, entityId = entity.id))
@@ -86,7 +90,7 @@ class LearningFragmentsGenerator {
     }
 
     private fun getRandomReviewFragment(): Int {
-        return getRandomFragmentType(listOf(TYPE_CHOOSE, TYPE_TYPING))
+        return getRandomFragmentType(listOf(TYPE_CHOOSE_GERMAN, TYPE_CHOOSE_TRANSLATION, TYPE_TYPING))
     }
 
     private fun getRandomFragmentType(types: List<Int>): Int {
