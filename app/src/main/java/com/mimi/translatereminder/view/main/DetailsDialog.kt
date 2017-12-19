@@ -55,7 +55,6 @@ class DetailsDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-
         return dialog
     }
 
@@ -101,8 +100,6 @@ class DetailsDialog : DialogFragment() {
             )
             dateAddedText.text = timeUtils.getTime(dateAdded,activity)
             reviewDate.text = timeUtils.getTime(nextReview,activity)
-            reviewCountText.text = getString(R.string.review_count, reviewCount)
-            accuracy.text = getString(R.string.accuracy, getAccuracy())
         }
         editButton.setOnClickListener {
             dismiss()
@@ -116,13 +113,6 @@ class DetailsDialog : DialogFragment() {
             dismiss()
             onReview(entity!!)
         }
-    }
-    private fun getAccuracy():Int{
-        val entity = entity!!
-        return if(entity.mistakesCount == 0 || entity.reviewCount == 0)
-            100
-        else
-            (entity.mistakesCount / entity.reviewCount)*100
     }
 
 }

@@ -8,6 +8,7 @@ import com.mimi.translatereminder.dto.Progress.Companion.TYPE_HINT
 import com.mimi.translatereminder.dto.Progress.Companion.TYPE_PRESENT
 import com.mimi.translatereminder.dto.Progress.Companion.TYPE_TYPING
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by Mimi on 13/12/2017.
@@ -20,7 +21,7 @@ class LearningFragmentsGenerator {
             if (it.isLearning())
                 fragments.addAll(getLearningFragments(it, it.state))
             if (it.isWrong())
-                fragments.addAll(getWrongFragments(it, it.state))
+                fragments.addAll(getWrongFragments(it))
             if (it.isReviewing())
                 fragments.addAll(getReviewFragments(it, it.state))
         }
@@ -68,29 +69,30 @@ class LearningFragmentsGenerator {
         return types
     }
 
-    private fun getReviewFragments(entity: Entity, state: Int): List<Progress> {
+    fun getReviewFragments(entity: Entity, state: Int): List<Progress> {
         val types = ArrayList<Progress>()
-        val type = getRandomReviewFragment()
+        val type = getRandomFragmentType(getRandomReviewFragment())
         types.add(Progress(type = type,
                 state = state, entityId = entity.id))
-        if (Entity.isReviewingState(state + 1))
-            types.addAll(getReviewFragments(entity, state + 1))
         return types
     }
 
-    private fun getWrongFragments(entity: Entity, state: Int): List<Progress> {
+    fun getWrongFragments(entity: Entity): List<Progress> {
         val types = ArrayList<Progress>()
-        val type = if (state == Entity.firstMistakeState)
-            TYPE_PRESENT else getRandomReviewFragment()
-        types.add(Progress(type = type,
-                state = state, entityId = entity.id))
-        if (Entity.isWrongState(state + 1))
-            types.addAll(getWrongFragments(entity, state + 1))
+        types.add(Progress(type = TYPE_PRESENT,
+                state = Entity.firstMistakeState, entityId = entity.id))
+        val fragmentTypes = getRandomReviewFragment()
+        for (i in Entity.firstMistakeState + 1..Entity.lastMistakeState) {
+            val type = getRandomFragmentType(fragmentTypes)
+            types.add(Progress(type = type,
+                    state = i, entityId = entity.id))
+            fragmentTypes.remove(type)
+        }
         return types
     }
 
-    private fun getRandomReviewFragment(): Int {
-        return getRandomFragmentType(listOf(TYPE_CHOOSE_GERMAN, TYPE_CHOOSE_TRANSLATION, TYPE_TYPING))
+    private fun getRandomReviewFragment(): ArrayList<Int> {
+        return arrayListOf(TYPE_CHOOSE_GERMAN, TYPE_CHOOSE_TRANSLATION, TYPE_TYPING)
     }
 
     private fun getRandomFragmentType(types: List<Int>): Int {

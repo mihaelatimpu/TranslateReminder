@@ -12,8 +12,8 @@ import org.koin.android.ext.android.startAndroidContext
  *
  */
 
-class MainApplication : Application(){
-    lateinit var translationDao:TranslationDao
+class MainApplication : Application() {
+    lateinit var translationDao: TranslationDao
 
     override fun onCreate() {
         super.onCreate()

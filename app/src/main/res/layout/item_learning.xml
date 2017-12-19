@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
@@ -7,18 +8,32 @@
     android:gravity="center">
 
     <TextView
-        android:id="@+id/subtitle"
-        android:layout_width="0dp"
+        android:id="@+id/translationTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:layout_weight="1"
-        android:textSize="20sp" />
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        tools:text="das Kummern" />
+
+    <TextView
+        android:id="@+id/reviewTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAlignment="viewEnd"
+        tools:text="in 10 days"
+        android:padding="5dp"
+        android:gravity="end" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:gravity="bottom">
+        android:gravity="bottom"
+        android:id="@+id/progressLayout"
+        android:visibility="gone">
 
         <View
             android:id="@+id/progress_4"

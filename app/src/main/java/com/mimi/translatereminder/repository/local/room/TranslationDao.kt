@@ -2,6 +2,7 @@ package com.mimi.translatereminder.repository.local.room
 
 import android.arch.persistence.room.*
 import com.mimi.translatereminder.dto.Entity
+import java.util.*
 
 
 /**
@@ -28,7 +29,8 @@ interface TranslationDao {
     fun updateEntity(vararg entity: Entity)
 
 
-    @Query("SELECT * from $TABLE")
+    @Query("SELECT * from $TABLE "+
+            "ORDER BY $state ASC, $nextReview ASC")
     fun selectAll(): List<Entity>
 
     @Query("SELECT * from $TABLE WHERE $id=:id")
@@ -59,9 +61,10 @@ interface TranslationDao {
     @Query("SELECT * FROM $TABLE " +
             "WHERE $state >= ${Entity.firstReviewState} " +
             "AND $state <= ${Entity.lastReviewState} " +
+            "AND $nextReview <= :currentTimeInMillis " +
             "ORDER BY $state ASC, $nextReview ASC " +
             "LIMIT :limit")
-    fun getReviewItems(limit:Int):List<Entity>
+    fun getReviewItems(limit:Int, currentTimeInMillis:Long):List<Entity>
 
     @Query("SELECT * FROM $TABLE " +
             "WHERE $state >= ${Entity.firstMistakeState} " +

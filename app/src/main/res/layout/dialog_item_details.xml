@@ -78,7 +78,8 @@
         app:layout_constraintHorizontal_bias="0.617"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/stateText"
-        app:layout_constraintVertical_bias="0.385" />
+        app:layout_constraintVertical_bias="0.385"
+        android:gravity="end" />
 
     <TextView
         android:id="@+id/nextReviewLabel"
@@ -96,7 +97,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/reviewDate"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:gravity="end" />
 
     <TextView
         android:id="@+id/addedLabel"
@@ -114,7 +116,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dateAddedText"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:gravity="end" />
 
     <TextView
         android:id="@+id/dateAddedText"
@@ -128,7 +131,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/stateText"
         app:layout_constraintTop_toBottomOf="@+id/stateText"
-        tools:text="yesterday" />
+        tools:text="yesterday"
+        android:layout_marginRight="8dp"
+        android:gravity="start" />
 
     <TextView
         android:id="@+id/reviewDate"
@@ -143,43 +148,9 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/dateAddedText"
         app:layout_constraintTop_toBottomOf="@+id/dateAddedText"
-        tools:text=" tomorrow" />
-
-    <TextView
-        android:id="@+id/reviewCountText"
-        style="@style/DetailLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="@+id/accuracy"
-        app:layout_constraintEnd_toStartOf="@+id/guideline6"
-        app:layout_constraintHorizontal_bias="0.476"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/accuracy"
-        app:layout_constraintVertical_bias="0.637"
-        tools:text="5 reviews" />
-
-    <TextView
-        android:id="@+id/accuracy"
-        style="@style/DetailLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toBottomOf="@+id/reviewDate"
-        tools:text="80% accuracy" />
-
+        tools:text=" tomorrow"
+        android:layout_marginRight="8dp"
+        android:gravity="start" />
     <Button
         android:id="@+id/editButton"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
@@ -211,7 +182,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toBottomOf="@+id/accuracy" />
+        app:layout_constraintTop_toBottomOf="@+id/reviewDate" />
 
     <Button
         android:id="@+id/reviewButton"

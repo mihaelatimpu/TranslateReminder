@@ -72,4 +72,11 @@
     <string name="choose_the_right_german_form">Choose the right german form</string>
     <string name="translate_this_text">Translate this text</string>
     <string name="group_the_items_together">Group the translation with the german version</string>
+    <string name="learn_new_items">Learn new items</string>
+    <string name="review_items">Review items</string>
+    <string name="review_wrong_items">Review wrong items</string>
+    <string name="learn_new_items_details">Learn new items(%d)</string>
+    <string name="review_items_details">Review items(%d)</string>
+    <string name="review_wrong_items_details">Review wrong items(%d)</string>
+    <string name="review">Review</string>
 </resources>

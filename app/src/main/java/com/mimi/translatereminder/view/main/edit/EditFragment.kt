@@ -11,6 +11,7 @@ import com.mimi.translatereminder.base.BaseFragment
 import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.utils.Context
 import com.mimi.translatereminder.view.main.ItemsAdapter
+import com.mimi.translatereminder.view.main.MoreOptionsDialog
 import kotlinx.android.synthetic.main.fragment_edit.*
 import org.koin.android.ext.android.inject
 
@@ -49,6 +50,20 @@ class EditFragment : BaseFragment(), EditContract.View {
 
         })
         fab.setOnClickListener { presenter.onAddButtonClicked() }
+        mainActionButton.setOnClickListener { presenter.onMainOptionClicked() }
+        otherOptionsButton.setOnClickListener { presenter.onOtherOptionsClicked() }
+    }
+
+    override fun refreshMainOption(text: Int) {
+        mainActionButton.text = getString(text)
+    }
+
+    override fun showOtherOptionsDialog(learningItems: Int, reviewItems: Int, wrongItems: Int) {
+        val dialog = MoreOptionsDialog.createDialog(reviewItems = reviewItems, learnItems = learningItems, wrongItems = wrongItems,
+                onReview = { presenter.onReviewButtonClicked() },
+                onLearn = { presenter.onLearnButtonClicked() },
+                onWrong = { presenter.onWrongButtonClicked() })
+        dialog.show(activity.fragmentManager, "")
     }
 
     override fun refreshItems(items: List<Entity>) {

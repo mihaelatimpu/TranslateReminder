@@ -4,6 +4,7 @@ import android.content.Context
 import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.repository.local.room.TranslationDao
 import com.mimi.translatereminder.repository.local.sharedprefs.SharedPreferencesUtil
+import java.util.*
 
 /**
  * Created by Mimi on 05/12/2017.
@@ -31,7 +32,8 @@ class TranslationRepository(private val db: TranslationDao) {
     }
 
     fun getReviewItems(count: Int): List<Entity> {
-        return db.getReviewItems(limit = count)
+        return db.getReviewItems(limit = count,
+                currentTimeInMillis = Calendar.getInstance().timeInMillis)
     }
 
     fun getMistakenItems(count: Int): List<Entity> {

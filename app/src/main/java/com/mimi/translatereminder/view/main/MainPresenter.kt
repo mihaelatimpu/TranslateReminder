@@ -30,7 +30,7 @@ class MainPresenter : MainContract.Presenter {
         fragments.forEach {
             it.mainPresenter = this
         }
-        view.showFragment(R.id.nav_learning)
+        view.showFragment(R.id.nav_edit)
     }
 
 

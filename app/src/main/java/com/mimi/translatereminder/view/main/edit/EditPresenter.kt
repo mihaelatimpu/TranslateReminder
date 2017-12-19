@@ -1,9 +1,10 @@
 package com.mimi.translatereminder.view.main.edit
 
-import com.mimi.translatereminder.dto.Entity
+import com.mimi.translatereminder.R
 import com.mimi.translatereminder.view.main.MainContract
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
+import java.util.*
 
 
 /**
@@ -13,9 +14,18 @@ import org.jetbrains.anko.onComplete
 
 
 class EditPresenter : EditContract.Presenter {
+    companion object {
+        val TYPE_LEARN = 0
+        val TYPE_REVIEW = 1
+        val TYPE_WRONG = 2
+    }
 
     lateinit override var mainPresenter: MainContract.Presenter
     override lateinit var view: EditContract.View
+    private var learningItems = 0
+    private var reviewItems = 0
+    private var wrongItems = 0
+    private var mainOptionType = TYPE_LEARN
 
     private val exceptionHandler: (Throwable) -> Unit = {
         it.printStackTrace()
@@ -36,15 +46,66 @@ class EditPresenter : EditContract.Presenter {
     }
 
     override fun reloadData() {
-        if (!view.isVisible())
-            return
         view.showLoadingDialog()
         doAsync(exceptionHandler) {
             val items = mainPresenter.getRepository().getAll()
+            learningItems = items.filter { it.isLearning() }.size
+            wrongItems = items.filter { it.isWrong() }.size
+            reviewItems = items.filter {
+                it.isReviewing() &&
+                        it.nextReview <= Calendar.getInstance().timeInMillis
+            }.size
             onComplete {
                 view.hideLoadingDialog()
                 view.refreshItems(items)
+                mainOptionType = getMainOptionType()
+                view.refreshMainOption(getMainOptionText())
             }
+        }
+    }
+
+    private fun getMainOptionText(): Int {
+        return when (mainOptionType) {
+            TYPE_LEARN -> R.string.learn_new_items
+            TYPE_REVIEW -> R.string.review_items
+            TYPE_WRONG -> R.string.review_wrong_items
+            else -> throw UnsupportedOperationException("Unknown type $mainOptionType")
+        }
+    }
+
+    private fun getMainOptionType(): Int {
+        if (wrongItems > 0)
+            return TYPE_WRONG
+        if (reviewItems > 0)
+            return TYPE_REVIEW
+        if (learningItems > 0)
+            return TYPE_LEARN
+        return TYPE_REVIEW
+    }
+
+    override fun onLearnButtonClicked() {
+        mainPresenter.learnNewWords()
+    }
+
+    override fun onReviewButtonClicked() {
+        mainPresenter.reviewItems()
+    }
+
+    override fun onWrongButtonClicked() {
+        mainPresenter.reviewWrongItems()
+    }
+
+    override fun onOtherOptionsClicked() {
+        view.showOtherOptionsDialog(learningItems,
+                reviewItems, wrongItems)
+    }
+
+    override fun onMainOptionClicked() {
+        when (mainOptionType) {
+            TYPE_LEARN -> onLearnButtonClicked()
+            TYPE_REVIEW -> onReviewButtonClicked()
+            TYPE_WRONG -> onWrongButtonClicked()
+            else -> throw UnsupportedOperationException("Unknown type $mainOptionType")
         }
     }
 
