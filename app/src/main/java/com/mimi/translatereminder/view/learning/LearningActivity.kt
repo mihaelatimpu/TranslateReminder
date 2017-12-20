@@ -3,9 +3,11 @@ package com.mimi.translatereminder.view.learning
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.view.ViewPager
 import com.mimi.translatereminder.R
 import com.mimi.translatereminder.base.BaseActivity
 import com.mimi.translatereminder.dto.Progress
+import com.mimi.translatereminder.utils.Speaker
 import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_LEARN_NEW_WORDS
 import com.mimi.translatereminder.view.learning.adapter.FragmentsAdapter
 import kotlinx.android.synthetic.main.activity_learning.*
@@ -29,6 +31,7 @@ class LearningActivity : BaseActivity(), LearningContract.Activity {
 
     override val presenter: LearningContract.Presenter by inject()
     private val adapter by lazy { FragmentsAdapter(supportFragmentManager) }
+    private val speaker by lazy { Speaker(this) }
 
     override fun getContext() = this
 
@@ -46,6 +49,20 @@ class LearningActivity : BaseActivity(), LearningContract.Activity {
 
     override fun init() {
         viewPager.adapter = adapter
+        indicator.setViewPager(viewPager)
+        indicator.setOnPageChangeListener(object:ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                presenter.onFragmentVisible(position)
+            }
+
+        })
     }
 
 
@@ -62,6 +79,10 @@ class LearningActivity : BaseActivity(), LearningContract.Activity {
         viewPager.post {
             viewPager.setCurrentItem(position, true)
         }
+    }
+
+    override fun spellText(text: String) {
+        speaker.speak(text)
     }
 
     override fun getCurrentFragmentPosition()

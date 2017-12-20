@@ -33,6 +33,12 @@ class TypingFragment : BaseFragment(), TypingContract.View {
         toast.show()
     }
 
+    override fun onVisibleToUser() {
+        super.onVisibleToUser()
+        presenter.onVisibleToUser()
+    }
+
+
     override val contextName = Context.Learning
 
     override fun startPresenter() {
@@ -57,8 +63,8 @@ class TypingFragment : BaseFragment(), TypingContract.View {
     override fun showIncorrectDialog(translation: String, answer: String,
                                      correctAnswer: String, onComplete: () -> Unit) {
         val message = getString(R.string.incorrect_answer_message, answer, correctAnswer)
-        alert(title=getString(R.string.incorrect_answer_title), message = message){
-            positiveButton(getString(R.string.ok)){onComplete()}
+        alert(title = getString(R.string.incorrect_answer_title), message = message) {
+            positiveButton(getString(R.string.ok)) { onComplete() }
         }.show()
     }
 

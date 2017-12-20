@@ -31,12 +31,16 @@ class TypingPresenter(override var view: TypingContract.View,
             onComplete {
                 view.hideLoadingDialog()
                 if (entity != null) {
-                    if (type == Progress.TYPE_HINT)
+                    if (type == Progress.TYPE_HINT) {
                         view.setHint(hint = entity!!.germanWord)
+                    }
                     view.refreshWord(entity!!.translation)
                 }
             }
         }
+    }
+
+    override fun onVisibleToUser() {
     }
 
     override fun onAnswered(answer: String) {

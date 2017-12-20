@@ -1,5 +1,7 @@
 package com.mimi.translatereminder.view.main.learning
 
+import com.mimi.translatereminder.dto.Entity
+import com.mimi.translatereminder.repository.TranslationRepository
 import com.mimi.translatereminder.view.main.MainContract
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
@@ -47,7 +49,7 @@ class LearningFragmentPresenter : LearningFragmentContract.Presenter {
             val items = when (type) {
                 TYPE_LEARNING -> repo.getLearningItems(50)
                 TYPE_MISTAKES -> repo.getMistakenItems(50)
-                TYPE_REVIEW -> repo.getReviewItems(50)
+                TYPE_REVIEW -> getReviewItems(repo, 50)
                 else -> throw UnsupportedOperationException("Unknown type: $type")
             }
             onComplete {
@@ -56,6 +58,14 @@ class LearningFragmentPresenter : LearningFragmentContract.Presenter {
                     view.refreshItems(items)
             }
         }
+    }
+
+    private fun getReviewItems(repo: TranslationRepository, size: Int): List<Entity> {
+        val list = ArrayList<Entity>()
+        list.addAll(repo.getReviewItems(size))
+        if (list.isEmpty())
+            list.addAll(repo.getOverflowItems(size))
+        return list
     }
 
     override fun startLearning() {

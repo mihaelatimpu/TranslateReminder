@@ -54,6 +54,12 @@ class GroupFragment : BaseFragment(), GroupContract.View {
         setText(right, rightButtons)
     }
 
+    override fun onVisibleToUser() {
+        super.onVisibleToUser()
+        presenter.onVisibleToUser()
+    }
+
+
     private fun onButtonSelected(button: Button) {
         if (leftButtons.contains(button)) { // left button selected
             if (currentSelectedLeft != null)

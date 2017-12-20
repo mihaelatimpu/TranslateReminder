@@ -18,10 +18,10 @@ import kotlinx.android.synthetic.main.fragment_first.*
 class FirstFragment : BaseFragment(), FirstContract.View {
 
     override val presenter: FirstContract.Presenter by lazy {
-        FirstPresenter(this, masterPresenter = (activity as LearningActivity).presenter) }
+        FirstPresenter(this, masterPresenter = (activity as LearningActivity).presenter)
+    }
 
     override val contextName = Learning
-
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -33,6 +33,13 @@ class FirstFragment : BaseFragment(), FirstContract.View {
             presenter.setEntityId(id)
         fab.setOnClickListener { presenter.onNextButtonPressed() }
     }
+
+    override fun onVisibleToUser() {
+        super.onVisibleToUser()
+        presenter.onVisibleToUser()
+    }
+
+
 
     override fun refreshText(germanText: String, translation: String) {
         title.text = germanText

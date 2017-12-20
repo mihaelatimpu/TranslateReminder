@@ -36,6 +36,11 @@ class TranslationRepository(private val db: TranslationDao) {
                 currentTimeInMillis = Calendar.getInstance().timeInMillis)
     }
 
+
+    fun getOverflowItems(count: Int): List<Entity> {
+        return db.getOverflow(limit = count)
+    }
+
     fun getMistakenItems(count: Int): List<Entity> {
         return db.getMistakenItems(limit = count)
     }

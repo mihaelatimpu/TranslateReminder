@@ -65,6 +65,11 @@ class LearningPresenter : LearningContract.Presenter {
         }
     }
 
+    override fun onFragmentVisible(position: Int) {
+        if (fragments[position].entity != null)
+            view.spellText(fragments[position].entity!!.germanWord)
+    }
+
     override fun onFragmentResult(addedScore: Int, entityId: Int?, correct: Boolean) {
         view.getContext().runOnUiThread {
             view.showLoadingDialog()

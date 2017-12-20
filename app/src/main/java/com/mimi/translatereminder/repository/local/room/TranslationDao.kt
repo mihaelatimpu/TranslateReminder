@@ -2,7 +2,6 @@ package com.mimi.translatereminder.repository.local.room
 
 import android.arch.persistence.room.*
 import com.mimi.translatereminder.dto.Entity
-import java.util.*
 
 
 /**
@@ -19,7 +18,6 @@ interface TranslationDao {
         const val translation = "translation"
         const val dateAdded = "dateAdded"
         const val nextReview = "nextReview"
-        const val stateBeforeBeingWrong = "stateBeforeBeingWrong"
     }
 
     @Insert
@@ -65,6 +63,13 @@ interface TranslationDao {
             "ORDER BY $state ASC, $nextReview ASC " +
             "LIMIT :limit")
     fun getReviewItems(limit:Int, currentTimeInMillis:Long):List<Entity>
+
+    @Query("SELECT * FROM $TABLE " +
+            "WHERE $state >= ${Entity.firstReviewState} " +
+            "AND $state <= ${Entity.lastReviewState} " +
+            "ORDER BY $nextReview ASC " +
+            "LIMIT :limit")
+    fun getOverflow(limit:Int):List<Entity>
 
     @Query("SELECT * FROM $TABLE " +
             "WHERE $state >= ${Entity.firstMistakeState} " +

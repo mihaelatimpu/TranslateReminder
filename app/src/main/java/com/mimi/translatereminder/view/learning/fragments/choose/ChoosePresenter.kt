@@ -33,22 +33,29 @@ class ChoosePresenter(override var view: ChooseContract.View,
                     ?: throw UnsupportedOperationException("Could not find entity $id")
             val otherTexts = masterPresenter.getRepository().getRandomItems(myEntity.id, 4)
             onComplete {
-                entity = myEntity
                 view.hideLoadingDialog()
-                if (type == Progress.TYPE_CHOOSE_GERMAN)
-                    view.refreshText(myEntity.translation,
-                            listOf(myEntity.germanWord,
-                                    otherTexts[0].germanWord,
-                                    otherTexts[1].germanWord,
-                                    otherTexts[2].germanWord))
-                else
-                    view.refreshText(myEntity.germanWord,
-                            listOf(myEntity.translation,
-                                    otherTexts[0].translation,
-                                    otherTexts[1].translation,
-                                    otherTexts[2].translation))
+                displayData(myEntity, otherTexts)
             }
         }
+    }
+
+    private fun displayData(myEntity: Entity, otherTexts: List<Entity>) {
+        entity = myEntity
+        if (type == Progress.TYPE_CHOOSE_GERMAN)
+            view.refreshText(myEntity.translation,
+                    listOf(myEntity.germanWord,
+                            otherTexts[0].germanWord,
+                            otherTexts[1].germanWord,
+                            otherTexts[2].germanWord))
+        else
+            view.refreshText(myEntity.germanWord,
+                    listOf(myEntity.translation,
+                            otherTexts[0].translation,
+                            otherTexts[1].translation,
+                            otherTexts[2].translation))
+    }
+
+    override fun onVisibleToUser() {
     }
 
     override fun onAnswered(answer: String) {

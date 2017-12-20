@@ -38,6 +38,11 @@ class ChooseFragment : BaseFragment(), ChooseContract.View {
         toast.show()
     }
 
+    override fun onVisibleToUser() {
+        super.onVisibleToUser()
+        presenter.onVisibleToUser()
+    }
+
     override val contextName = Context.Learning
 
     override fun startPresenter() {

@@ -23,6 +23,7 @@ interface LearningContract {
         fun moveToFragment(position: Int)
         fun getCurrentFragmentPosition(): Int
         fun finishActivity()
+        fun spellText(text:String)
     }
 
     interface Presenter : BasePresenter<Activity> {
@@ -30,9 +31,10 @@ interface LearningContract {
         var itemId: Int?
         fun onFragmentResult(addedScore: Int = 0, entityId: Int? = null, correct: Boolean = true)
         fun getRepository(): TranslationRepository
+        fun onFragmentVisible(position:Int)
     }
 
     interface FragmentPresenter {
-
+        fun onVisibleToUser()
     }
 }

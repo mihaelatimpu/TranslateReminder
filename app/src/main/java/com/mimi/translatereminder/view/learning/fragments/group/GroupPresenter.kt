@@ -37,14 +37,18 @@ class GroupPresenter(override var view: GroupContract.View,
 
     private fun reloadData() {
         val items = ArrayList<Entity>()
+        val repo = masterPresenter.getRepository()
         ids.forEach {
             if (items.size < maxPairs) {
-                val item = masterPresenter.getRepository().selectItemById(it)
+                val item = repo.selectItemById(it)
                 if (item != null)
                     items.add(item)
             }
         }
-        val all = masterPresenter.getRepository().getReviewItems(maxPairs *2)
+        val all = ArrayList<Entity>()
+        all.addAll(repo.getReviewItems(maxPairs * 2))
+        if (all.size < maxPairs * 2)
+            all.addAll(repo.getOverflowItems(maxPairs * 2 - all.size))
         all.forEach {
             if (!items.contains(it) && items.size < maxPairs)
                 items.add(it)
@@ -61,6 +65,9 @@ class GroupPresenter(override var view: GroupContract.View,
         } else {
             showWrongAnimation(left, right)
         }
+    }
+
+    override fun onVisibleToUser() {
     }
 
     private fun showRightAnimation(left: String, right: String) {

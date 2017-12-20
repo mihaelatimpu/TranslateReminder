@@ -46,4 +46,6 @@ dependencies {
     implementation "org.koin:koin-android:$koin_version" // koin for dependency injection
 
     compile 'com.google.code.gson:gson:2.8.0' // gson
+
+    compile 'fr.avianey.com.viewpagerindicator:library:2.4.1.1@aar' // view pager indicator
 }

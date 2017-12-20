@@ -27,7 +27,7 @@ class LearningFragmentsGenerator {
         }
         if (entities.all { it.isReviewing() })
             fragments.add(Progress(type = Progress.TYPE_GROUP, ids = entities.map { it.id },
-                    state = Entity.firstReviewState, entityId = 0))
+                    state = Entity.firstReviewState, entityId = 0, entity = null))
         return decideFragmentOrder(fragments)
     }
 
@@ -63,7 +63,7 @@ class LearningFragmentsGenerator {
             else -> throw UnsupportedOperationException("Unknown type: $state")
         }
         types.add(Progress(type = type,
-                state = state, entityId = entity.id))
+                state = state, entityId = entity.id, entity = entity))
         if (Entity.isLearningState(state + 1))
             types.addAll(getLearningFragments(entity, state + 1))
         return types
@@ -73,19 +73,19 @@ class LearningFragmentsGenerator {
         val types = ArrayList<Progress>()
         val type = getRandomFragmentType(getRandomReviewFragment())
         types.add(Progress(type = type,
-                state = state, entityId = entity.id))
+                state = state, entityId = entity.id, entity = entity))
         return types
     }
 
     fun getWrongFragments(entity: Entity): List<Progress> {
         val types = ArrayList<Progress>()
         types.add(Progress(type = TYPE_PRESENT,
-                state = Entity.firstMistakeState, entityId = entity.id))
+                state = Entity.firstMistakeState, entityId = entity.id, entity = entity))
         val fragmentTypes = getRandomReviewFragment()
         for (i in Entity.firstMistakeState + 1..Entity.lastMistakeState) {
             val type = getRandomFragmentType(fragmentTypes)
             types.add(Progress(type = type,
-                    state = i, entityId = entity.id))
+                    state = i, entityId = entity.id, entity = entity))
             fragmentTypes.remove(type)
         }
         return types

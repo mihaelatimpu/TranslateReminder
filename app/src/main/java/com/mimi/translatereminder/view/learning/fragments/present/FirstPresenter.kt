@@ -35,6 +35,8 @@ class FirstPresenter(override var view: FirstContract.View,
             }
         }
     }
+    override fun onVisibleToUser() {
+    }
 
     override fun onNextButtonPressed() {
         masterPresenter.onFragmentResult(entityId = entity!!.id)

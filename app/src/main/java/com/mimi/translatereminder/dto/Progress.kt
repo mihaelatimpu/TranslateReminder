@@ -11,7 +11,8 @@ import com.mimi.translatereminder.view.learning.fragments.typing.TypingFragment
  * Created by Mimi on 13/12/2017.
  *
  */
-class Progress(val type: Int, val state: Int, val entityId: Int, private val ids: List<Int> = ArrayList()) {
+class Progress(val type: Int, val state: Int, val entityId: Int, private val ids: List<Int> = ArrayList(),
+               var entity:Entity?) {
     companion object {
         val ENTITY_ID = "entityId"
         val TYPE = "type"
