@@ -1,218 +1,292 @@
-[
-  {
-    "dateAdded": 1512590746658,
-    "germanWord": "häufig",
-    "id": 811,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "de obicei",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512590864215,
-    "germanWord": "empfehlungen",
-    "id": 812,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "recomandari",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512590938262,
-    "germanWord": "werktag",
-    "id": 813,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "zi de munca (din timpul saptamanii)",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512590989861,
-    "germanWord": "die Ergebnisse",
-    "id": 814,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "rezultate",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512591175669,
-    "germanWord": "Vermeiden",
-    "id": 815,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "a evita",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512591253625,
-    "germanWord": "begriff",
-    "id": 816,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "termen",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512591307631,
-    "germanWord": "vergleichen",
-    "id": 817,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "a compara",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512592666085,
-    "germanWord": "eklig",
-    "id": 818,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "dezgustator",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512597050399,
-    "germanWord": "der gutsherr",
-    "id": 820,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "proprietar",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512597086895,
-    "germanWord": "geliehen",
-    "id": 821,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "imprumutat",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512597282634,
-    "germanWord": "erschlagen",
-    "id": 822,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "asasina",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512597390497,
-    "germanWord": "vornehm",
-    "id": 823,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "cu noblete",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512597433450,
-    "germanWord": "knien",
-    "id": 824,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "a ingenunchea",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512597601888,
-    "germanWord": "stroh",
-    "id": 825,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "paie",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512597792742,
-    "germanWord": "friedhof",
-    "id": 826,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "cimitir",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512597979090,
-    "germanWord": "der Gerichtsschreiber",
-    "id": 827,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "grefier",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512598114410,
-    "germanWord": "der Pförtner",
-    "id": 828,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "administrator",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512598270248,
-    "germanWord": "einfältig",
-    "id": 829,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "naiv",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512598383498,
-    "germanWord": "die Witwe",
-    "id": 830,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "vaduva",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512598884172,
-    "germanWord": "schüchter",
-    "id": 831,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "timid",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512599117034,
-    "germanWord": "kümmern",
-    "id": 832,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "preocupare",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512599302710,
-    "germanWord": "kaserne",
-    "id": 833,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "baraca",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512599774908,
-    "germanWord": "Abitur",
-    "id": 834,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "liceu",
-    "state": 1
-  },
-  {
-    "dateAdded": 1512599965582,
-    "germanWord": "hinkt",
-    "id": 835,
-    "mistakesCount": 0,
-    "reviewCount": 0,
-    "translation": "șchiop",
-    "state": 1
-  }
-]
+{
+  "values": [
+    {
+      "dateAdded": 1512597601888,
+      "germanWord": "das Stroh",
+      "id": 825,
+      "lastReview": 1512597601888,
+      "mistakesCount": 0,
+      "nextReview": 1512597601888,
+      "reviewCount": 0,
+      "state": 1,
+      "stateBeforeBeingWrong": 1,
+      "translation": "paie"
+    },
+    {
+      "dateAdded": 1512597792742,
+      "germanWord": "der Friedhof",
+      "id": 826,
+      "lastReview": 1512597792742,
+      "mistakesCount": 0,
+      "nextReview": 1512597792742,
+      "reviewCount": 0,
+      "state": 1,
+      "stateBeforeBeingWrong": 1,
+      "translation": "cimitir"
+    },
+    {
+      "dateAdded": 1512597979090,
+      "germanWord": "der Gerichtsschreiber",
+      "id": 827,
+      "lastReview": 1512597979090,
+      "mistakesCount": 0,
+      "nextReview": 1512597979090,
+      "reviewCount": 0,
+      "state": 1,
+      "stateBeforeBeingWrong": 1,
+      "translation": "grefier"
+    },
+    {
+      "dateAdded": 1512598383498,
+      "germanWord": "die Witwe",
+      "id": 830,
+      "lastReview": 1512598383498,
+      "mistakesCount": 0,
+      "nextReview": 1512598383498,
+      "reviewCount": 0,
+      "state": 1,
+      "stateBeforeBeingWrong": 1,
+      "translation": "vaduva"
+    },
+    {
+      "dateAdded": 1512598884172,
+      "germanWord": "schüchter",
+      "id": 831,
+      "lastReview": 1512598884172,
+      "mistakesCount": 0,
+      "nextReview": 1512598884172,
+      "reviewCount": 0,
+      "state": 1,
+      "stateBeforeBeingWrong": 1,
+      "translation": "timid"
+    },
+    {
+      "dateAdded": 1512599117034,
+      "germanWord": "das Kümmern",
+      "id": 832,
+      "lastReview": 1512599117034,
+      "mistakesCount": 0,
+      "nextReview": 1512599117034,
+      "reviewCount": 0,
+      "state": 1,
+      "stateBeforeBeingWrong": 1,
+      "translation": "preocupare"
+    },
+    {
+      "dateAdded": 1512599302710,
+      "germanWord": "die Kaserne",
+      "id": 833,
+      "lastReview": 1512599302710,
+      "mistakesCount": 0,
+      "nextReview": 1512599302710,
+      "reviewCount": 0,
+      "state": 1,
+      "stateBeforeBeingWrong": 1,
+      "translation": "baraca"
+    },
+    {
+      "dateAdded": 1512599774908,
+      "germanWord": "das Abitur",
+      "id": 834,
+      "lastReview": 1512599774908,
+      "mistakesCount": 0,
+      "nextReview": 1512599774908,
+      "reviewCount": 0,
+      "state": 1,
+      "stateBeforeBeingWrong": 1,
+      "translation": "liceu"
+    },
+    {
+      "dateAdded": 1512599965582,
+      "germanWord": "hinkt",
+      "id": 835,
+      "lastReview": 1512599965582,
+      "mistakesCount": 0,
+      "nextReview": 1512599965582,
+      "reviewCount": 0,
+      "state": 1,
+      "stateBeforeBeingWrong": 1,
+      "translation": "șchiop "
+    },
+    {
+      "dateAdded": 1512591175669,
+      "germanWord": "vermeiden",
+      "id": 815,
+      "lastReview": 1513850072288,
+      "mistakesCount": 0,
+      "nextReview": 1514022872288,
+      "reviewCount": 0,
+      "state": 10,
+      "stateBeforeBeingWrong": 1,
+      "translation": "a evita"
+    },
+    {
+      "dateAdded": 1512590864215,
+      "germanWord": "die Empfehlung",
+      "id": 812,
+      "lastReview": 1513850116986,
+      "mistakesCount": 0,
+      "nextReview": 1514022916986,
+      "reviewCount": 0,
+      "state": 10,
+      "stateBeforeBeingWrong": 1,
+      "translation": "recomandare"
+    },
+    {
+      "dateAdded": 1512590938262,
+      "germanWord": "der Werktag",
+      "id": 813,
+      "lastReview": 1513850132094,
+      "mistakesCount": 0,
+      "nextReview": 1514022932094,
+      "reviewCount": 0,
+      "state": 10,
+      "stateBeforeBeingWrong": 1,
+      "translation": "zi de munca (din timpul saptamanii)"
+    },
+    {
+      "dateAdded": 1512590746658,
+      "germanWord": "häufig",
+      "id": 811,
+      "lastReview": 1513850548397,
+      "mistakesCount": 3,
+      "nextReview": 1514023348397,
+      "reviewCount": 3,
+      "state": 10,
+      "stateBeforeBeingWrong": 3,
+      "translation": "de obicei"
+    },
+    {
+      "dateAdded": 1512590989861,
+      "germanWord": "das Ergebnis",
+      "id": 814,
+      "lastReview": 1513850556131,
+      "mistakesCount": 3,
+      "nextReview": 1514023356131,
+      "reviewCount": 3,
+      "state": 10,
+      "stateBeforeBeingWrong": 3,
+      "translation": "rezultat"
+    },
+    {
+      "dateAdded": 1512591307631,
+      "germanWord": "vergleichen",
+      "id": 817,
+      "lastReview": 1513850573755,
+      "mistakesCount": 0,
+      "nextReview": 1514023373755,
+      "reviewCount": 0,
+      "state": 10,
+      "stateBeforeBeingWrong": 1,
+      "translation": "a compara"
+    },
+    {
+      "dateAdded": 1512591253625,
+      "germanWord": "der Begriff",
+      "id": 816,
+      "lastReview": 1513850593142,
+      "mistakesCount": 0,
+      "nextReview": 1514023393142,
+      "reviewCount": 0,
+      "state": 10,
+      "stateBeforeBeingWrong": 1,
+      "translation": "termen"
+    },
+    {
+      "dateAdded": 1512592666085,
+      "germanWord": "eklig",
+      "id": 818,
+      "lastReview": 1513850597203,
+      "mistakesCount": 0,
+      "nextReview": 1514023397203,
+      "reviewCount": 0,
+      "state": 10,
+      "stateBeforeBeingWrong": 1,
+      "translation": "dezgustator"
+    },
+    {
+      "dateAdded": 1512597282634,
+      "germanWord": "erschlagen",
+      "id": 822,
+      "lastReview": 1513850725879,
+      "mistakesCount": 0,
+      "nextReview": 1514023525879,
+      "reviewCount": 0,
+      "state": 10,
+      "stateBeforeBeingWrong": 1,
+      "translation": "asasina"
+    },
+    {
+      "dateAdded": 1512597086895,
+      "germanWord": "geliehen",
+      "id": 821,
+      "lastReview": 1513850763119,
+      "mistakesCount": 0,
+      "nextReview": 1514023563119,
+      "reviewCount": 0,
+      "state": 10,
+      "stateBeforeBeingWrong": 1,
+      "translation": "imprumutat"
+    },
+    {
+      "dateAdded": 1512597050399,
+      "germanWord": "der Gutsherr",
+      "id": 820,
+      "lastReview": 1513850773830,
+      "mistakesCount": 0,
+      "nextReview": 1514023573830,
+      "reviewCount": 0,
+      "state": 10,
+      "stateBeforeBeingWrong": 1,
+      "translation": "proprietar"
+    },
+    {
+      "dateAdded": 1512597433450,
+      "germanWord": "knien",
+      "id": 824,
+      "lastReview": 1513850784570,
+      "mistakesCount": 0,
+      "nextReview": 1514023584570,
+      "reviewCount": 0,
+      "state": 10,
+      "stateBeforeBeingWrong": 1,
+      "translation": "a ingenunchea"
+    },
+    {
+      "dateAdded": 1512597390497,
+      "germanWord": "vornehm",
+      "id": 823,
+      "lastReview": 1513850790561,
+      "mistakesCount": 0,
+      "nextReview": 1514023590561,
+      "reviewCount": 0,
+      "state": 10,
+      "stateBeforeBeingWrong": 1,
+      "translation": "cu noblete"
+    },
+    {
+      "dateAdded": 1512598114410,
+      "germanWord": "der Pförtner",
+      "id": 828,
+      "lastReview": 1513855465969,
+      "mistakesCount": 0,
+      "nextReview": 1514028265969,
+      "reviewCount": 0,
+      "state": 10,
+      "stateBeforeBeingWrong": 1,
+      "translation": "administrator"
+    },
+    {
+      "dateAdded": 1512598270248,
+      "germanWord": "einfältig",
+      "id": 829,
+      "lastReview": 1513855600386,
+      "mistakesCount": 0,
+      "nextReview": 1514028400386,
+      "reviewCount": 0,
+      "state": 10,
+      "stateBeforeBeingWrong": 1,
+      "translation": "naiv"
+    }
+  ]
+}

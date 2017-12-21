@@ -1,10 +1,12 @@
 package com.mimi.translatereminder.view.main.edit
 
 import com.mimi.translatereminder.R
+import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.view.main.MainContract
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -57,7 +59,10 @@ class EditPresenter : EditContract.Presenter {
             }.size
             onComplete {
                 view.hideLoadingDialog()
-                view.refreshItems(items)
+                val displayItems = ArrayList<Entity>()
+                displayItems.addAll(items.filter { it.isWrong() })
+                displayItems.addAll(items.filter { !it.isWrong() })
+                view.refreshItems(displayItems)
                 mainOptionType = getMainOptionType()
                 view.refreshMainOption(getMainOptionText())
             }

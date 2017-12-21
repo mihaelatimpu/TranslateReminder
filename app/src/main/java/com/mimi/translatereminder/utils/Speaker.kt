@@ -17,7 +17,7 @@ class Speaker(context: Context) : TextToSpeech.OnInitListener {
     var allowed = true
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            tts.language = Locale.GERMAN
+            tts.language = Locale.GERMANY
             ready = true
         } else {
             ready = false

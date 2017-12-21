@@ -79,4 +79,36 @@
     <string name="review_items_details">Review items(%d)</string>
     <string name="review_wrong_items_details">Review wrong items(%d)</string>
     <string name="review">Review</string>
+    <string name="review_items_per_session">Review items per session</string>
+    <string name="learning_items_per_session">Learning items per session</string>
+    <string name="wrong_items_per_session" >Wrong items per session</string>
+    <string name="speech_to_text_label">Spell words</string>
+    <string name="language">Language</string>
+    <string name="imported">Imported</string>
+    <string name="saved">Saved</string>
+    <string-array name="review_items_per_session">
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+        <item>50</item>
+        <item>100</item>
+    </string-array>
+    <string-array name="learn_items_per_session">
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+    </string-array>
+    <string-array name="mistake_items_per_session">
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+    </string-array>
+    <string-array name="languages">
+        <item>English</item>
+        <item>Romanian</item>
+    </string-array>
 </resources>

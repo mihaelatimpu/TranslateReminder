@@ -10,6 +10,7 @@ import java.util.*
  */
 class StateUtil {
     fun increaseState(entity: Entity) {
+        entity.lastReview = Calendar.getInstance().timeInMillis
         when {
             entity.isWrong() -> increaseWrongState(entity)
             entity.isReviewing() -> increaseReviewState(entity)
@@ -19,6 +20,8 @@ class StateUtil {
     }
 
     private fun increaseWrongState(entity: Entity) {
+        entity.mistakesCount++
+        entity.reviewCount++
         val calendar = Calendar.getInstance()
         when {
             Entity.isWrongState(entity.state + 1) -> entity.state++
@@ -39,6 +42,9 @@ class StateUtil {
     }
 
     private fun increaseReviewState(entity: Entity) {
+        entity.reviewCount++
+        if (entity.nextReview > Calendar.getInstance().timeInMillis) // not today
+            return
         if (Entity.isReviewingState(entity.state + 1))
             entity.state++
         resetReviewTime(entity)

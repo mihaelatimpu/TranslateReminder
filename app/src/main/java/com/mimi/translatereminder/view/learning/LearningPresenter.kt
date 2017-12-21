@@ -2,6 +2,7 @@ package com.mimi.translatereminder.view.learning
 
 import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.dto.Progress
+import com.mimi.translatereminder.repository.local.sharedprefs.SharedPreferencesUtil
 import com.mimi.translatereminder.utils.LearningFragmentsGenerator
 import com.mimi.translatereminder.utils.StateUtil
 import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_LEARN_NEW_WORDS
@@ -22,6 +23,7 @@ class LearningPresenter : LearningContract.Presenter {
     private val fragmentGen = LearningFragmentsGenerator()
     private val fragments = ArrayList<Progress>()
     private val stateUtil = StateUtil()
+    private var shouldSpellItems = true
     private val exceptionHandler: (Throwable) -> Unit = {
         it.printStackTrace()
         view.hideLoadingDialog()
@@ -39,6 +41,7 @@ class LearningPresenter : LearningContract.Presenter {
         view.showLoadingDialog()
         doAsync(exceptionHandler) {
             val items = retrieveItems()
+            shouldSpellItems = SharedPreferencesUtil().getSpellWords(view.getContext())
             fragments.clear()
             fragments.addAll(fragmentGen.start(items))
             onComplete {
@@ -66,7 +69,8 @@ class LearningPresenter : LearningContract.Presenter {
     }
 
     override fun onFragmentVisible(position: Int) {
-        if (fragments[position].entity != null)
+        if (fragments[position].entity != null && fragments[position].type != Progress.TYPE_TYPING
+                && shouldSpellItems)
             view.spellText(fragments[position].entity!!.germanWord)
     }
 

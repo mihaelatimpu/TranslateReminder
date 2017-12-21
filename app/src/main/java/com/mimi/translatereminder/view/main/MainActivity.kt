@@ -185,15 +185,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        presenter.onOptionItemSelected(item.itemId)
-        return true
-    }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         presenter.onNavigationItemSelected(item.itemId)

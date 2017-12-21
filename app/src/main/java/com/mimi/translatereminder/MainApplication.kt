@@ -21,8 +21,7 @@ class MainApplication : Application() {
         val database = Room.databaseBuilder(this,
                 Database::class.java, "translation_db")
                 .addMigrations(Database.MIGRATION_1_2, Database.MIGRATION_2_3,
-                        Database.MIGRATION_3_4)
-                .fallbackToDestructiveMigration()
+                        Database.MIGRATION_3_4, Database.MIGRATION_4_5)
                 .build()
         translationDao = database.translationDao()
         // Start Koin

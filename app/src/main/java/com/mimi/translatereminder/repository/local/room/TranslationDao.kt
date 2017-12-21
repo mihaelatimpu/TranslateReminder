@@ -18,6 +18,7 @@ interface TranslationDao {
         const val translation = "translation"
         const val dateAdded = "dateAdded"
         const val nextReview = "nextReview"
+        const val lastReview = "lastReview"
     }
 
     @Insert
@@ -67,7 +68,7 @@ interface TranslationDao {
     @Query("SELECT * FROM $TABLE " +
             "WHERE $state >= ${Entity.firstReviewState} " +
             "AND $state <= ${Entity.lastReviewState} " +
-            "ORDER BY $nextReview ASC " +
+            "ORDER BY $lastReview ASC " +
             "LIMIT :limit")
     fun getOverflow(limit:Int):List<Entity>
 

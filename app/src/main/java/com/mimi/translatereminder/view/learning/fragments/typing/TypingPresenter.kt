@@ -12,7 +12,8 @@ import org.jetbrains.anko.onComplete
  */
 
 class TypingPresenter(override var view: TypingContract.View,
-                      private val masterPresenter: LearningContract.Presenter, override val type: Int) : TypingContract.Presenter {
+                      private val masterPresenter: LearningContract.Presenter,
+                      override val type: Int) : TypingContract.Presenter {
     private val exceptionHandler: (Throwable) -> Unit = {
         it.printStackTrace()
         view.hideLoadingDialog()

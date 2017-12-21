@@ -29,7 +29,6 @@ interface MainContract {
 
     interface Presenter : BasePresenter<Activity> {
         var fragments: List<FragmentPresenter>
-        fun onOptionItemSelected(selectionId: Int)
         fun onNavigationItemSelected(selectionId: Int)
         fun getRepository(): TranslationRepository
         fun onAddButtonClicked()
@@ -41,6 +40,8 @@ interface MainContract {
         fun learnNewWords()
         fun reviewWrongItems()
         fun reviewItems()
+        fun checkForPermission(permission: String, @StringRes title: Int,
+                               @StringRes description: Int, onPermissionResult: (Boolean) -> Unit)
     }
 
     interface FragmentPresenter {

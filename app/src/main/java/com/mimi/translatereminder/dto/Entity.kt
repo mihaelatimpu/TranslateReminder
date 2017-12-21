@@ -17,8 +17,9 @@ class Entity(
         var translation: String,
         val dateAdded: Long = Calendar.getInstance().timeInMillis,
         var nextReview: Long = Calendar.getInstance().timeInMillis,
-        val reviewCount: Int = 0,
-        val mistakesCount: Int = 0,
+        var lastReview: Long = Calendar.getInstance().timeInMillis,
+        var reviewCount: Int = 0,
+        var mistakesCount: Int = 0,
         var stateBeforeBeingWrong: Int = firstLearningState,
         var state: Int = firstLearningState) {
     fun isLearning() = isLearningState(state)

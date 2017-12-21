@@ -13,7 +13,7 @@ import java.util.*
  *
  */
 
-@Database(entities = [(Entity::class)], version = 4)
+@Database(entities = [(Entity::class)], version = 5)
 abstract class Database : RoomDatabase() {
     companion object {
         val MIGRATION_1_2: Migration = object : Migration(1, 2) {
@@ -37,6 +37,13 @@ abstract class Database : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 replace(database, 5, Entity.firstReviewState)
                 replace(database, 9, Entity.firstMistakeState)
+            }
+        }
+        val MIGRATION_4_5: Migration = object : Migration(4,5) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                        "ALTER TABLE '${TranslationDao.TABLE}' ADD COLUMN 'lastReview' " +
+                                "INTEGER NOT NULL DEFAULT ${Calendar.getInstance().timeInMillis}")
             }
         }
 

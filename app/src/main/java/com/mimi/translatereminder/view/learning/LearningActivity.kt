@@ -12,6 +12,8 @@ import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_
 import com.mimi.translatereminder.view.learning.adapter.FragmentsAdapter
 import kotlinx.android.synthetic.main.activity_learning.*
 import org.koin.android.ext.android.inject
+import android.support.constraint.ConstraintLayout
+
 
 /**
  *
@@ -44,13 +46,13 @@ class LearningActivity : BaseActivity(), LearningContract.Activity {
         if (intent.hasExtra(ITEM_ID))
             presenter.itemId = intent.getIntExtra(ITEM_ID, 0)
         presenter.view = this
+        speaker.allowed = true
         presenter.start()
     }
 
     override fun init() {
         viewPager.adapter = adapter
-        indicator.setViewPager(viewPager)
-        indicator.setOnPageChangeListener(object:ViewPager.OnPageChangeListener{
+        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
 
             }
@@ -60,6 +62,10 @@ class LearningActivity : BaseActivity(), LearningContract.Activity {
 
             override fun onPageSelected(position: Int) {
                 presenter.onFragmentVisible(position)
+                val percentage = position / adapter.count.toFloat()
+                val params = indicatorHelper.layoutParams as ConstraintLayout.LayoutParams
+                params.guidePercent = percentage
+                indicatorHelper.layoutParams = params
             }
 
         })
