@@ -70,6 +70,8 @@ class ChoosePresenter(override var view: ChooseContract.View,
         Timer("").schedule(500) {
             saveAndMoveOn(correct)
         }
+        if(type == Progress.TYPE_CHOOSE_GERMAN)
+            masterPresenter.spell(entity.germanWord)
     }
 
     private fun saveAndMoveOn(correct: Boolean) {

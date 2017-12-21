@@ -46,6 +46,8 @@ class TypingPresenter(override var view: TypingContract.View,
 
     override fun onAnswered(answer: String) {
         val myEntity = entity ?: return
+        if (type == Progress.TYPE_TYPING)
+            masterPresenter.spell(myEntity.germanWord)
         if (answer.toLowerCase() == myEntity.germanWord.toLowerCase())
             masterPresenter.onFragmentResult(addedScore = 20, entityId = myEntity.id, correct = true)
         else

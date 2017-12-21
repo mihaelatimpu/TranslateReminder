@@ -73,7 +73,11 @@ class LearningPresenter : LearningContract.Presenter {
         val spellTypes = listOf(Progress.TYPE_HINT, Progress.TYPE_CHOOSE_TRANSLATION, Progress.TYPE_PRESENT)
         if (item.entity != null && spellTypes.any { it == item.type }
                 && shouldSpellItems)
-            view.spellText(item.entity!!.germanWord)
+            spell(item.entity!!.germanWord)
+    }
+
+    override fun spell(text: String) {
+        view.spellText(text)
     }
 
     override fun onFragmentResult(addedScore: Int, entityId: Int?, correct: Boolean) {

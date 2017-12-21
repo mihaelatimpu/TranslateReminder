@@ -32,6 +32,7 @@ interface LearningContract {
         fun onFragmentResult(addedScore: Int = 0, entityId: Int? = null, correct: Boolean = true)
         fun getRepository(): TranslationRepository
         fun onFragmentVisible(position:Int)
+        fun spell(text:String)
     }
 
     interface FragmentPresenter {

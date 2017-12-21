@@ -3,6 +3,7 @@ package com.mimi.translatereminder.view.learning.fragments.group
 import android.os.Handler
 import com.mimi.translatereminder.R
 import com.mimi.translatereminder.dto.Entity
+import com.mimi.translatereminder.dto.Progress
 import com.mimi.translatereminder.view.learning.LearningContract
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
@@ -59,6 +60,7 @@ class GroupPresenter(override var view: GroupContract.View,
     }
 
     override fun onSelected(left: String, right: String) {
+            masterPresenter.spell(left)
         if (map[left] == right) {
             map.remove(left)
             showRightAnimation(left, right)
