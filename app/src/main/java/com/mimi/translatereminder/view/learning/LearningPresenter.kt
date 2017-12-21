@@ -69,9 +69,11 @@ class LearningPresenter : LearningContract.Presenter {
     }
 
     override fun onFragmentVisible(position: Int) {
-        if (fragments[position].entity != null && fragments[position].type != Progress.TYPE_TYPING
+        val item = fragments[position]
+        val spellTypes = listOf(Progress.TYPE_HINT, Progress.TYPE_CHOOSE_TRANSLATION, Progress.TYPE_PRESENT)
+        if (item.entity != null && spellTypes.any { it == item.type }
                 && shouldSpellItems)
-            view.spellText(fragments[position].entity!!.germanWord)
+            view.spellText(item.entity!!.germanWord)
     }
 
     override fun onFragmentResult(addedScore: Int, entityId: Int?, correct: Boolean) {
