@@ -57,9 +57,10 @@ class LearningFragmentsGenerator {
         val types = ArrayList<Progress>()
         val type = when (state) {
             Entity.STATE_LEARNING_1 -> TYPE_PRESENT
-            Entity.STATE_LEARNING_2 -> TYPE_CHOOSE_GERMAN
-            Entity.STATE_LEARNING_3 -> TYPE_HINT
-            Entity.STATE_LEARNING_4 -> TYPE_TYPING
+            Entity.STATE_LEARNING_2 -> TYPE_HINT
+            in Entity.STATE_LEARNING_3 until Entity.lastLearningState ->
+                getRandomFragmentType(getRandomReviewFragment())
+            Entity.lastLearningState -> TYPE_TYPING
             else -> throw UnsupportedOperationException("Unknown type: $state")
         }
         types.add(Progress(type = type,

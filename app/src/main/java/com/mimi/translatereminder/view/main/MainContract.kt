@@ -36,6 +36,7 @@ interface MainContract {
         fun editItem(item: Entity)
         fun deleteItem(item: Entity)
         fun reviewItem(item: Entity)
+        fun resetItems(item:Entity)
         fun showDetailsDialog(entityId: Int)
         fun learnNewWords()
         fun reviewWrongItems()

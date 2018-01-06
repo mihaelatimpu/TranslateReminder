@@ -26,7 +26,7 @@ class FirstPresenter(override var view: FirstContract.View,
     override fun setEntityId(id: Int) {
         view.showLoadingDialog()
         doAsync(exceptionHandler) {
-            entity = masterPresenter.getRepository().selectItemById(id)
+            entity = masterPresenter.repo.selectItemById(id)
             onComplete {
                 view.hideLoadingDialog()
                 if (entity != null) {

@@ -31,6 +31,9 @@ class Entity(
         const val STATE_LEARNING_2 = 2 // learning stage 2
         const val STATE_LEARNING_3 = 3 // learning stage 3
         const val STATE_LEARNING_4 = 4 // learning stage 4
+        const val STATE_LEARNING_5 = 5 // learning stage 4
+        const val STATE_LEARNING_6 = 6 // learning stage 4
+        const val STATE_LEARNING_7 = 7 // learning stage 4
         const val STATE_REVIEW_1 = 10 // review next day
         const val STATE_REVIEW_2 = 11 // review after two days
         const val STATE_REVIEW_3 = 12 // review after a week
@@ -44,7 +47,7 @@ class Entity(
         const val firstReviewState = STATE_REVIEW_1
         const val lastReviewState = STATE_REVIEW_6
         const val firstLearningState = STATE_LEARNING_1
-        const val lastLearningState = STATE_LEARNING_4
+        const val lastLearningState = STATE_LEARNING_7
         const val firstMistakeState = STATE_MISTAKE_1
         const val lastMistakeState = STATE_MISTAKE_3
 

@@ -27,7 +27,7 @@ class DetailsDialog : DialogFragment() {
         val ENTITY_ID = "entityId"
         fun createDialog(entityId: Int, translationRepository: TranslationRepository,
                          onEdit: (Entity) -> Unit, onDelete: (Entity) -> Unit,
-                         onReview: (Entity) -> Unit): DetailsDialog {
+                         onReview: (Entity) -> Unit, onReset: (Entity) -> Unit): DetailsDialog {
             val args = Bundle()
             args.putInt(ENTITY_ID, entityId)
             val dialog = DetailsDialog()
@@ -36,6 +36,7 @@ class DetailsDialog : DialogFragment() {
             dialog.onEdit = onEdit
             dialog.onDelete = onDelete
             dialog.onReview = onReview
+            dialog.onReset = onReset
             return dialog
         }
     }
@@ -50,6 +51,7 @@ class DetailsDialog : DialogFragment() {
     private var onEdit: (Entity) -> Unit = {}
     private var onDelete: (Entity) -> Unit = {}
     private var onReview: (Entity) -> Unit = {}
+    private var onReset: (Entity) -> Unit = {}
     private val timeUtils = TimeUtils()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -112,6 +114,10 @@ class DetailsDialog : DialogFragment() {
         reviewButton.setOnClickListener {
             dismiss()
             onReview(entity!!)
+        }
+        resetButton.setOnClickListener {
+            dismiss()
+            onReset(entity!!)
         }
     }
 

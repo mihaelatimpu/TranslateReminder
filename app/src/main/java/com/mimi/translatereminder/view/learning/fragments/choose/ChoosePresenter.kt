@@ -29,9 +29,9 @@ class ChoosePresenter(override var view: ChooseContract.View,
     override fun setEntityId(id: Int) {
         view.showLoadingDialog()
         doAsync(exceptionHandler) {
-            val myEntity = masterPresenter.getRepository().selectItemById(id)
+            val myEntity = masterPresenter.repo.selectItemById(id)
                     ?: throw UnsupportedOperationException("Could not find entity $id")
-            val otherTexts = masterPresenter.getRepository().getRandomItems(myEntity.id, 4)
+            val otherTexts = masterPresenter.repo.getRandomItems(myEntity.id, 4)
             onComplete {
                 view.hideLoadingDialog()
                 displayData(myEntity, otherTexts)

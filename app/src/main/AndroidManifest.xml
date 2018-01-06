@@ -26,6 +26,7 @@
             android:name=".view.learning.LearningActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_learning"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/FullscreenTheme">
         </activity>
     </application>

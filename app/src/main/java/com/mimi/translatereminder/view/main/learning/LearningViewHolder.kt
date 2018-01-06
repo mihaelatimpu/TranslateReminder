@@ -26,13 +26,14 @@ class LearningViewHolder(itemView: View) : ItemsAdapter.BaseHolder(itemView) {
 
     private fun bindLearningItem(entity: Entity) {
         with(itemView) {
-            val progress = listOf(progress_1, progress_2, progress_3, progress_4)
+            val progress = listOf(progress_1, progress_2, progress_3, progress_4,
+                    progress_5, progress_6, progress_7)
             progressLayout.visibility = View.VISIBLE
             reviewTime.visibility = View.GONE
             with(entity) {
-                for (i in 0..3) {
+                for (i in 0..6) {
                     progress[i].setBackgroundColor(
-                            getColor(Entity.STATE_LEARNING_4 - i, state))
+                            getColor(Entity.lastLearningState - i, state))
                 }
             }
         }

@@ -51,6 +51,8 @@ class TypingFragment : BaseFragment(), TypingContract.View {
 
     override fun setHint(hint: String) {
         answer.hint = hint
+        hintText.text = hint
+        hintText.visibility = View.VISIBLE
     }
 
     override fun init() {

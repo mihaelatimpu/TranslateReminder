@@ -24,7 +24,11 @@ class StateUtil {
         entity.reviewCount++
         val calendar = Calendar.getInstance()
         when {
-            Entity.isWrongState(entity.state + 1) -> entity.state++
+            Entity.isWrongState(entity.state + 1) -> {
+                entity.state++
+                if (Entity.isLearningState(entity.stateBeforeBeingWrong++))
+                    entity.stateBeforeBeingWrong++
+            }
             Entity.isLearningState(entity.stateBeforeBeingWrong) -> entity.state = entity.stateBeforeBeingWrong
             else -> entity.state = Entity.firstReviewState
         }
@@ -53,14 +57,11 @@ class StateUtil {
     private fun resetReviewTime(entity: Entity) {
         val calendar = Calendar.getInstance()
         when (entity.state) {
-            Entity.STATE_LEARNING_4 -> {
+            Entity.STATE_REVIEW_1 -> {
                 calendar.add(Calendar.DAY_OF_MONTH, 1)
             }
-            Entity.STATE_REVIEW_1 -> {
-                calendar.add(Calendar.DAY_OF_MONTH, 2)
-            }
             Entity.STATE_REVIEW_2 -> {
-                calendar.add(Calendar.WEEK_OF_YEAR, 1)
+                calendar.add(Calendar.DAY_OF_MONTH, 2)
             }
             Entity.STATE_REVIEW_3 -> {
                 calendar.add(Calendar.WEEK_OF_YEAR, 1)

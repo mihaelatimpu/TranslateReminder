@@ -2,6 +2,7 @@ package com.mimi.translatereminder.view.learning
 
 import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.dto.Progress
+import com.mimi.translatereminder.repository.TranslationRepository
 import com.mimi.translatereminder.repository.local.sharedprefs.SharedPreferencesUtil
 import com.mimi.translatereminder.utils.LearningFragmentsGenerator
 import com.mimi.translatereminder.utils.StateUtil
@@ -11,6 +12,7 @@ import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
 import org.jetbrains.anko.runOnUiThread
+import java.util.*
 
 /**
  * Created by Mimi on 13/12/2017.
@@ -23,7 +25,11 @@ class LearningPresenter : LearningContract.Presenter {
     private val fragmentGen = LearningFragmentsGenerator()
     private val fragments = ArrayList<Progress>()
     private val stateUtil = StateUtil()
+
     private var shouldSpellItems = true
+    override val repo:TranslationRepository
+        get() = view.getRepository()
+
     private val exceptionHandler: (Throwable) -> Unit = {
         it.printStackTrace()
         view.hideLoadingDialog()
@@ -32,12 +38,9 @@ class LearningPresenter : LearningContract.Presenter {
 
     override fun start() {
         view.init()
-        reloadItems()
+        loadItems()
     }
-
-    override fun getRepository() = view.getRepository()
-
-    private fun reloadItems() {
+    private fun loadItems() {
         view.showLoadingDialog()
         doAsync(exceptionHandler) {
             val items = retrieveItems()
@@ -48,12 +51,12 @@ class LearningPresenter : LearningContract.Presenter {
                 view.hideLoadingDialog()
                 view.setFragments(items = fragments)
                 view.moveToFragment(0)
+                onFragmentVisible(0)
             }
         }
     }
 
     private fun retrieveItems(): List<Entity> {
-        val repo = view.getRepository()
         val itemId = itemId
         if (itemId != null && itemId != 0) {
             val item = repo.selectItemById(itemId)
@@ -63,14 +66,21 @@ class LearningPresenter : LearningContract.Presenter {
         return when (type) {
             TYPE_LEARN_NEW_WORDS -> repo.retrieveLearningItems(view.getContext())
             TYPE_REVIEW_ITEMS -> repo.retrieveReviewItems(view.getContext())
-            TYPE_REVIEW_WRONG_WORDS -> repo.retrieveWrongItems(view.getContext())
+            TYPE_REVIEW_WRONG_WORDS -> retrieveWrongItems()
             else -> listOf()
         }
     }
 
+    private fun retrieveWrongItems(): List<Entity> {
+        val items = repo.retrieveWrongItems(view.getContext())
+        items.forEach { it.state = Entity.firstMistakeState }
+        return items
+    }
+
     override fun onFragmentVisible(position: Int) {
         val item = fragments[position]
-        val spellTypes = listOf(Progress.TYPE_HINT, Progress.TYPE_CHOOSE_TRANSLATION, Progress.TYPE_PRESENT)
+        val spellTypes = listOf(Progress.TYPE_HINT, Progress.TYPE_CHOOSE_TRANSLATION,
+                Progress.TYPE_PRESENT)
         if (item.entity != null && spellTypes.any { it == item.type }
                 && shouldSpellItems)
             spell(item.entity!!.germanWord)
@@ -85,13 +95,15 @@ class LearningPresenter : LearningContract.Presenter {
             view.showLoadingDialog()
             doAsync(exceptionHandler) {
                 if (entityId != null) {
-                    val item = view.getRepository().selectItemById(entityId)
+                    val item = repo.selectItemById(entityId)
                     if (item != null) {
-                        if (correct)
-                            stateUtil.increaseState(item)
-                        else
+                        if (correct) {
+                            if (item.nextReview < Calendar.getInstance().timeInMillis)
+                                stateUtil.increaseState(item)
+                        } else {
                             stateUtil.setWrong(item)
-                        view.getRepository().saveEntity(item)
+                        }
+                        repo.saveEntity(item)
                     }
                 }
                 onComplete {

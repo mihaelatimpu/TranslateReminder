@@ -5,9 +5,12 @@
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="progress_width">5dp</dimen>
+    <dimen name="progress_width">4dp</dimen>
     <dimen name="progress_height_1">20dp</dimen>
-    <dimen name="progress_height_2">15dp</dimen>
-    <dimen name="progress_height_3">10dp</dimen>
-    <dimen name="progress_height_4">5dp</dimen>
+    <dimen name="progress_height_2">17dp</dimen>
+    <dimen name="progress_height_3">14dp</dimen>
+    <dimen name="progress_height_4">11dp</dimen>
+    <dimen name="progress_height_5">8dp</dimen>
+    <dimen name="progress_height_6">5dp</dimen>
+    <dimen name="progress_height_7">2dp</dimen>
 </resources>

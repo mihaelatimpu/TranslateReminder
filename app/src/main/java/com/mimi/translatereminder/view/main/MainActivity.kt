@@ -10,7 +10,6 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
-import android.view.Menu
 import android.view.MenuItem
 import com.mimi.translatereminder.R
 import com.mimi.translatereminder.base.BaseActivity
@@ -20,8 +19,8 @@ import com.mimi.translatereminder.view.addedit.AddEditActivity
 import com.mimi.translatereminder.view.learning.LearningActivity
 import com.mimi.translatereminder.view.main.about.AboutFragment
 import com.mimi.translatereminder.view.main.contact.ContactFragment
-import com.mimi.translatereminder.view.main.learning.LearningFragment
 import com.mimi.translatereminder.view.main.edit.EditFragment
+import com.mimi.translatereminder.view.main.learning.LearningFragment
 import com.mimi.translatereminder.view.main.learning.LearningFragmentPresenter
 import com.mimi.translatereminder.view.main.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -168,6 +167,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 onEdit = { presenter.editItem(it) },
                 onDelete = { presenter.deleteItem(it) },
                 onReview = { presenter.reviewItem(it) },
+                onReset = { presenter.resetItems(it) },
                 translationRepository = getRepository())
         dialog.show(fragmentManager, "")
     }

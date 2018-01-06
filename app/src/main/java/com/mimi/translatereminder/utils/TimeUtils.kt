@@ -28,8 +28,10 @@ class TimeUtils {
         val now = Calendar.getInstance()
         return when (now.timeInMillis - timeInMillis) {
             in 0..MINUTE -> context.getString(R.string.less_then_a_minute_ago)
-            in MINUTE..HOUR -> context.getString(R.string.then_than_an_hour_ago)
-            in HOUR..DAY -> context.getString(R.string.today)
+            in MINUTE..HOUR -> context.getString(R.string.number_minutes_ago,
+                    getMinutes(now.timeInMillis - timeInMillis))
+            in HOUR..DAY -> context.getString(R.string.number_hours_ago,
+                    getHours(now.timeInMillis - timeInMillis))
             in DAY..2 * DAY -> context.getString(R.string.yesterday)
             in DAY..MONTH -> context.getString(R.string.number_days_ago,
                     getDays(now.timeInMillis - timeInMillis))
@@ -42,8 +44,8 @@ class TimeUtils {
         val now = Calendar.getInstance()
         return when (timeInMillis - now.timeInMillis) {
             in 0..MINUTE -> context.getString(R.string.in_a_minute)
-            in MINUTE..HOUR -> context.getString(R.string.in_less_then_an_hour)
-            in HOUR..DAY -> context.getString(R.string.today)
+            in MINUTE..HOUR -> context.getString(R.string.in_number_minutes, getMinutes(timeInMillis - now.timeInMillis))
+            in HOUR..DAY -> context.getString(R.string.in_number_hours, getHours(timeInMillis - now.timeInMillis))
             in DAY..2 * DAY -> context.getString(R.string.tomorrow)
             in DAY..MONTH -> context.getString(R.string.in_number_days, getDays(timeInMillis - now.timeInMillis))
             else -> context.getString(R.string.in_a_month)
@@ -53,5 +55,11 @@ class TimeUtils {
 
     fun getDays(time: Long): Int {
         return (time / DAY).toInt()
+    }
+    fun getHours(time: Long): Int {
+        return (time / HOUR).toInt()
+    }
+    fun getMinutes(time: Long): Int {
+        return (time / MINUTE).toInt()
     }
 }

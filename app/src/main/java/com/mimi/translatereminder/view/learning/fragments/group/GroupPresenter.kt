@@ -38,7 +38,7 @@ class GroupPresenter(override var view: GroupContract.View,
 
     private fun reloadData() {
         val items = ArrayList<Entity>()
-        val repo = masterPresenter.getRepository()
+        val repo = masterPresenter.repo
         ids.forEach {
             if (items.size < maxPairs) {
                 val item = repo.selectItemById(it)

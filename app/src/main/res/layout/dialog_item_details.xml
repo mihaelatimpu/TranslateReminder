@@ -71,6 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:gravity="end"
         android:text="@string/state"
         android:textAlignment="textEnd"
         app:layout_constraintBottom_toBottomOf="@+id/stateText"
@@ -78,8 +79,7 @@
         app:layout_constraintHorizontal_bias="0.617"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/stateText"
-        app:layout_constraintVertical_bias="0.385"
-        android:gravity="end" />
+        app:layout_constraintVertical_bias="0.385" />
 
     <TextView
         android:id="@+id/nextReviewLabel"
@@ -89,6 +89,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="8dp"
+        android:gravity="end"
         android:text="@string/next_review"
         android:textAlignment="textEnd"
         app:layout_constraintBottom_toBottomOf="@+id/reviewDate"
@@ -97,8 +98,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/reviewDate"
-        app:layout_constraintVertical_bias="0.0"
-        android:gravity="end" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/addedLabel"
@@ -108,6 +108,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="8dp"
+        android:gravity="end"
         android:text="@string/date_added"
         android:textAlignment="textEnd"
         app:layout_constraintBottom_toBottomOf="@+id/dateAddedText"
@@ -116,8 +117,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dateAddedText"
-        app:layout_constraintVertical_bias="0.0"
-        android:gravity="end" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/dateAddedText"
@@ -125,15 +125,15 @@
         android:layout_width="0dp"
         android:layout_height="28dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="16dp"
+        android:gravity="start"
         android:textAlignment="textStart"
         android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/stateText"
         app:layout_constraintTop_toBottomOf="@+id/stateText"
-        tools:text="yesterday"
-        android:layout_marginRight="8dp"
-        android:gravity="start" />
+        tools:text="yesterday" />
 
     <TextView
         android:id="@+id/reviewDate"
@@ -141,47 +141,56 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="16dp"
+        android:gravity="start"
         android:textAlignment="textStart"
         android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/dateAddedText"
         app:layout_constraintTop_toBottomOf="@+id/dateAddedText"
-        tools:text=" tomorrow"
-        android:layout_marginRight="8dp"
-        android:gravity="start" />
+        tools:text=" tomorrow" />
+
     <Button
         android:id="@+id/editButton"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="8dp"
         android:text="@string/edit"
         app:layout_constraintBottom_toBottomOf="@+id/deleteButton"
-        app:layout_constraintEnd_toStartOf="@+id/guideline6"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/resetButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/deleteButton"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/resetButton"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reset"
+        app:layout_constraintBottom_toBottomOf="@+id/deleteButton"
+        app:layout_constraintEnd_toStartOf="@+id/deleteButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/editButton"
         app:layout_constraintTop_toTopOf="@+id/deleteButton"
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/deleteButton"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="@string/delete"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/resetButton"
         app:layout_constraintTop_toBottomOf="@+id/reviewDate" />
 
     <Button

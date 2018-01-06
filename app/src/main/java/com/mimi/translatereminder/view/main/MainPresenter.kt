@@ -83,8 +83,23 @@ class MainPresenter : MainContract.Presenter {
         reloadData()
     }
 
+    override fun resetItems(item: Entity) {
+        view.showLoadingDialog()
+        doAsync(exceptionHandler) {
+            item.state = Entity.firstLearningState
+            item.nextReview = item.dateAdded
+            item.lastReview = item.dateAdded
+            getRepository().saveEntity(item)
+            onComplete {
+                view.hideLoadingDialog()
+                reloadData()
+            }
+        }
+    }
 
-    override fun checkForPermission(permission: String, title: Int, description: Int, onPermissionResult: (Boolean) -> Unit) {
+
+    override fun checkForPermission(permission: String, title: Int,
+                                    description: Int, onPermissionResult: (Boolean) -> Unit) {
         view.checkForPermission(permission, title, description, onPermissionResult)
     }
 
