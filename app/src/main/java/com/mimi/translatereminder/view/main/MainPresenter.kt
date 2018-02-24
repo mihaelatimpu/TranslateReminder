@@ -35,7 +35,8 @@ class MainPresenter : MainContract.Presenter {
 
 
     override fun editItem(item: Entity) {
-        view.startEditActivity(item.id)
+        val itemId = if(item.type == Entity.TYPE_SENTENCE)  item.parentId else item.id
+        view.startEditActivity(itemId)
     }
 
     override fun reviewItem(item: Entity) {

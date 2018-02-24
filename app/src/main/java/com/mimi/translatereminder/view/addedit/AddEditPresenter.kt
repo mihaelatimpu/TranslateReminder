@@ -25,8 +25,50 @@ class AddEditPresenter : AddEditContract.Presenter {
         view.init()
     }
 
-    override fun onAddButtonPressed(german: String, translation: String) {
+    override fun onAddSentence() {
+        if (editedItem == null) {
+            onAddWord {
+                activity.showAddSentenceDialog(editedItem!!.id) {
+                    refreshItem(editedItem!!.id)
+                }
+            }
+        } else {
+            activity.showAddSentenceDialog(editedItem!!.id) {
+                refreshItem(editedItem!!.id)
+            }
+        }
+    }
+
+    override fun onEditSentence(id: Int) {
+        activity.showEditSentenceDialog(editedItem!!.id, id) {
+            refreshItem(editedItem!!.id)
+        }
+    }
+
+    override fun onDeleteSentence(item:Entity) {
+        activity.showConfirmDialog(R.string.are_you_sure,R.string.you_cannot_restore_data){
+            view.showLoadingDialog()
+            doAsync(exceptionHandler) {
+                val repo = activity.getRepository()
+                repo.delete(item)
+                onComplete {
+                    view.hideLoadingDialog()
+                    refreshItem(editedItem!!.id)
+                }
+            }
+        }
+    }
+
+    override fun editItem(id: Int) {
+        refreshItem(id) {
+            activity.refreshTitle(R.string.edit_item)
+        }
+    }
+
+    override fun onAddWord(onFinish: () -> Unit) {
         view.clearErrors()
+        val german = view.getOriginalText()
+        val translation = view.getTranslation()
         if (german.isEmpty()) {
             view.showGermanError(R.string.empty_text)
             return
@@ -36,28 +78,30 @@ class AddEditPresenter : AddEditContract.Presenter {
             return
         }
         if (editedItem == null)
-            addTranslation(Entity(germanWord = german, translation = translation))
+            addTranslation(Entity(germanWord = german, translation = translation), onFinish)
         else
-            saveItem(german, translation)
+            saveItem(german, translation, onFinish)
     }
 
-    override fun editItem(id: Int) {
+    private fun refreshItem(id: Int, onFinish: () -> Unit = {}) {
         view.showLoadingDialog()
         doAsync(exceptionHandler) {
             val repo = activity.getRepository()
             editedItem = repo.selectItemById(id)
+            val sentences = repo.findSentences(editedItem?.id ?: -1)
             onComplete {
                 view.hideLoadingDialog()
                 if (editedItem != null) {
                     view.refreshText(editedItem!!.germanWord, editedItem!!.translation)
-                    view.refreshAddButton(R.string.save)
+                    onFinish()
+                    view.refreshSentences(sentences)
                     activity.refreshTitle(R.string.edit_item)
                 }
             }
         }
     }
 
-    private fun saveItem(german: String, translation: String) {
+    private fun saveItem(german: String, translation: String, onFinish: () -> Unit) {
         view.showLoadingDialog()
         doAsync(exceptionHandler) {
             val repo = activity.getRepository()
@@ -67,17 +111,16 @@ class AddEditPresenter : AddEditContract.Presenter {
             repo.saveEntity(item)
             onComplete {
                 view.hideLoadingDialog()
-                activity.returnToPreviousActivity()
+                onFinish()
             }
         }
     }
 
-    private fun addTranslation(entity: Entity) {
+    private fun addTranslation(entity: Entity, onFinish: () -> Unit) {
         view.showLoadingDialog()
         doAsync(exceptionHandler) {
             val repo = activity.getRepository()
-            val preExistingWord = repo.findEntityByGermanWord(entity.germanWord).firstOrNull() ?:
-                    repo.findEntityByTranslation(entity.translation).firstOrNull()
+            val preExistingWord = repo.findEntityByGermanWord(entity.germanWord).firstOrNull()
             if (preExistingWord == null) {
                 repo.addEntity(entity)
                 val itemsSoFar = repo.getAll()
@@ -86,11 +129,9 @@ class AddEditPresenter : AddEditContract.Presenter {
             onComplete {
                 view.hideLoadingDialog()
                 when {
-                    (preExistingWord == null) -> activity.returnToPreviousActivity()
+                    (preExistingWord == null) -> onFinish()
                     preExistingWord.germanWord == entity.germanWord ->
                         view.showGermanError(R.string.german_word_already_added)
-                    preExistingWord.translation == entity.translation ->
-                        view.showTranslationError(R.string.translation_already_added)
                 }
             }
         }

@@ -9,11 +9,13 @@ import com.mimi.translatereminder.dto.Entity
  *
  */
 @Dao
-interface TranslationDao {
+interface EntityDao {
     companion object {
         const val TABLE = "entity"
         const val id = "id"
         const val state = "state"
+        const val type = "type"
+        const val parentId = "parentId"
         const val germanWord = "germanWord"
         const val translation = "translation"
         const val dateAdded = "dateAdded"
@@ -78,6 +80,11 @@ interface TranslationDao {
             "ORDER BY $state DESC, $nextReview ASC " +
             "LIMIT :limit")
     fun getMistakenItems(limit:Int):List<Entity>
+
+    @Query("SELECT * from $TABLE " +
+            "WHERE $type = ${Entity.TYPE_SENTENCE} " +
+            "AND $parentId = :itemId")
+    fun findSentences(itemId:Int):List<Entity>
 
     @Delete
     fun delete(vararg entities: Entity)

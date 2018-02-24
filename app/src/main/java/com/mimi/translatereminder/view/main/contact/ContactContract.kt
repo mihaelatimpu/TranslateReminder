@@ -14,4 +14,5 @@ interface ContactContract {
         fun isVisible():Boolean
     }
     interface Presenter : MainContract.FragmentPresenter, BasePresenter<View>
+
 }

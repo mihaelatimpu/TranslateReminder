@@ -2,7 +2,7 @@ package com.mimi.translatereminder.repository
 
 import android.content.Context
 import com.mimi.translatereminder.dto.Entity
-import com.mimi.translatereminder.repository.local.room.TranslationDao
+import com.mimi.translatereminder.repository.local.room.EntityDao
 import com.mimi.translatereminder.repository.local.sharedprefs.SharedPreferencesUtil
 import java.util.*
 
@@ -10,56 +10,54 @@ import java.util.*
  * Created by Mimi on 05/12/2017.
  *
  */
-class TranslationRepository(private val db: TranslationDao) {
+class TranslationRepository(private val itemDb: EntityDao) {
     private val sharedPrefs = SharedPreferencesUtil()
 
     fun addEntity(entity: Entity) {
-        db.insertAll(entity)
+        itemDb.insertAll(entity)
     }
 
     fun saveEntity(entity: Entity) {
-        db.updateEntity(entity)
+        itemDb.updateEntity(entity)
     }
 
-    fun selectItemById(id: Int) = db.selectItemById(id).firstOrNull()
+    fun selectItemById(id: Int) = itemDb.selectItemById(id).firstOrNull()
 
     fun getRandomItems(excludeId: Int, count: Int): List<Entity> {
-        return db.getRandomItems(excludeId = excludeId, limit = count)
+        return itemDb.getRandomItems(excludeId = excludeId, limit = count)
     }
 
     fun getLearningItems(count: Int): List<Entity> {
-        return db.getLearningItems(limit = count)
+        return itemDb.getLearningItems(limit = count)
     }
 
     fun getReviewItems(count: Int): List<Entity> {
-        return db.getReviewItems(limit = count,
+        return itemDb.getReviewItems(limit = count,
                 currentTimeInMillis = Calendar.getInstance().timeInMillis)
     }
 
 
     fun getOverflowItems(count: Int): List<Entity> {
-        return db.getOverflow(limit = count)
+        return itemDb.getOverflow(limit = count)
     }
 
     fun getMistakenItems(count: Int): List<Entity> {
-        return db.getMistakenItems(limit = count)
+        return itemDb.getMistakenItems(limit = count)
     }
 
     fun deleteAll() {
-        db.deleteAll()
+        itemDb.deleteAll()
     }
 
     fun delete(item: Entity) {
-        db.delete(item)
+        itemDb.delete(item)
     }
 
-    fun findEntityByGermanWord(germanVersion: String)
-            = db.getEntitiesByGermanVersion(germanVersion)
+    fun findEntityByGermanWord(germanVersion: String) = itemDb.getEntitiesByGermanVersion(germanVersion)
 
-    fun findEntityByTranslation(translation: String)
-            = db.getEntityByTranslation(translation)
+    fun findEntityByTranslation(translation: String) = itemDb.getEntityByTranslation(translation)
 
-    fun getAll() = db.selectAll()
+    fun getAll() = itemDb.selectAll()
 
     fun retrieveLearningItems(context: Context): List<Entity> {
         val count = sharedPrefs.getLearningItemsPerSession(context)
@@ -75,4 +73,5 @@ class TranslationRepository(private val db: TranslationDao) {
         val count = sharedPrefs.getReviewItemsPerSession(context)
         return getReviewItems(count)
     }
+    fun findSentences(parentId:Int) = itemDb.findSentences(parentId)
 }

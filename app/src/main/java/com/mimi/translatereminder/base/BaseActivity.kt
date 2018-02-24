@@ -5,9 +5,10 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.mimi.translatereminder.MainApplication
 import com.mimi.translatereminder.R
-import com.mimi.translatereminder.repository.TranslationRepository
-import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.alert
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.indeterminateProgressDialog
+import org.jetbrains.anko.noButton
+import org.jetbrains.anko.yesButton
 
 /**
  * Created by Mimi on 06/12/2017.
@@ -21,7 +22,7 @@ abstract class BaseActivity : AppCompatActivity() {
         indeterminateProgressDialog(R.string.loading_data, R.string.please_wait)
     }
 
-    fun getRepository() = TranslationRepository((application as MainApplication).translationDao)
+    fun getRepository() = (application as MainApplication).repository
 
     fun showLoadingDialog() {
         loadingDialog.show()

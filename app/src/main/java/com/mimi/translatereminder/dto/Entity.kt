@@ -2,14 +2,14 @@ package com.mimi.translatereminder.dto
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
-import com.mimi.translatereminder.repository.local.room.TranslationDao
+import com.mimi.translatereminder.repository.local.room.EntityDao
 import java.util.*
 
 /**
  * Created by Mimi on 05/12/2017.
  * The base entity of the application
  */
-@Entity(tableName = TranslationDao.TABLE)
+@Entity(tableName = EntityDao.TABLE)
 class Entity(
         @PrimaryKey(autoGenerate = true)
         val id: Int = 0,
@@ -21,12 +21,16 @@ class Entity(
         var reviewCount: Int = 0,
         var mistakesCount: Int = 0,
         var stateBeforeBeingWrong: Int = firstLearningState,
-        var state: Int = firstLearningState) {
+        var state: Int = firstLearningState,
+        var type: Int = TYPE_WORD,
+        var parentId: Int = -1) {
     fun isLearning() = isLearningState(state)
     fun isWrong() = isWrongState(state)
     fun isReviewing() = isReviewingState(state)
 
     companion object {
+        const val TYPE_WORD = 1
+        const val TYPE_SENTENCE = 0
         const val STATE_LEARNING_1 = 1 // learning stage 1
         const val STATE_LEARNING_2 = 2 // learning stage 2
         const val STATE_LEARNING_3 = 3 // learning stage 3

@@ -46,9 +46,9 @@ class LearningFragmentsGenerator {
     }
 
     private fun isValid(progress: Progress, alreadyAdded: List<Progress>, remainingItems: List<Progress>): Boolean {
-        if (alreadyAdded.any { it.entityId == progress.entityId && it.state > progress.state })
+        if (alreadyAdded.filter { it.entityId == progress.entityId }.any { it.state > progress.state })
             return false
-        if (remainingItems.any { it.entityId == progress.entityId && it.state < progress.state })
+        if (remainingItems.filter { it.entityId == progress.entityId }.any { it.state < progress.state })
             return false
         return true
     }

@@ -89,6 +89,13 @@
     <string name="language">Language</string>
     <string name="imported">Imported</string>
     <string name="saved">Saved</string>
+    <string name="sentences">Sentences</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_example">Add example</string>
+    <string name="edit_example">Edit example</string>
+    <string name="original_sentence">Original sentence </string>
+    <string name="new_sentence_translation">New sentence translation</string>
+    <string name="original_word">Original word: %s</string>
     <string-array name="review_items_per_session">
         <item>5</item>
         <item>10</item>
