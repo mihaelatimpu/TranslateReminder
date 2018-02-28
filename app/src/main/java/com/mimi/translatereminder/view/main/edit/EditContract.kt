@@ -27,5 +27,6 @@ interface EditContract {
         fun onLearnButtonClicked()
         fun onReviewButtonClicked()
         fun onWrongButtonClicked()
+        fun onListeningButtonClicked()
     }
 }

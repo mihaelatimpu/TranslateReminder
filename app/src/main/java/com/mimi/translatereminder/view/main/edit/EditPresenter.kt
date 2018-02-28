@@ -105,6 +105,10 @@ class EditPresenter : EditContract.Presenter {
                 reviewItems, wrongItems)
     }
 
+    override fun onListeningButtonClicked() {
+        mainPresenter.startListeningActivity()
+    }
+
     override fun onMainOptionClicked() {
         when (mainOptionType) {
             TYPE_LEARN -> onLearnButtonClicked()

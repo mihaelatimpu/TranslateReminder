@@ -3,6 +3,7 @@ package com.mimi.translatereminder.view.learning
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.support.v4.view.ViewPager
 import com.mimi.translatereminder.R
 import com.mimi.translatereminder.base.BaseActivity
@@ -12,7 +13,6 @@ import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_
 import com.mimi.translatereminder.view.learning.adapter.FragmentsAdapter
 import kotlinx.android.synthetic.main.activity_learning.*
 import org.koin.android.ext.android.inject
-import android.support.constraint.ConstraintLayout
 
 
 /**
@@ -87,8 +87,8 @@ class LearningActivity : BaseActivity(), LearningContract.Activity {
         }
     }
 
-    override fun spellText(text: String) {
-        speaker.speak(text)
+    override fun spellText(text: String, onFinish: () -> Unit) {
+        speaker.speak(text, onFinish)
     }
 
     override fun getCurrentFragmentPosition()

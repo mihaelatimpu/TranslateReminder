@@ -11,6 +11,7 @@ class SharedPreferencesUtil {
         private val PREF_FILENAME = "settingsPreferences"
         private val LEARNING_ITEMS_PER_SESSION = "learningItemsPerSession"
         private val REVIEW_ITEMS_PER_SESSION = "reviewItemsPerSession"
+        private val LISTENING_ITEMS_PER_SESSION = "listeningItemsPerSession"
         private val WRONG_ITEMS_PER_SESSION = "wrongItemsPerSession"
         private val SPELL_WORDS = "spellWords"
     }
@@ -23,6 +24,12 @@ class SharedPreferencesUtil {
     fun getReviewItemsPerSession(context: Context): Int {
         val prefs = context.getSharedPreferences(PREF_FILENAME, 0)
         return prefs.getInt(REVIEW_ITEMS_PER_SESSION, 15)
+    }
+
+
+    fun getListeningItemsPerSession(context: Context): Int {
+        val prefs = context.getSharedPreferences(PREF_FILENAME, 0)
+        return prefs.getInt(LISTENING_ITEMS_PER_SESSION, -1)
     }
 
     fun getWrongItemsPerSession(context: Context): Int {

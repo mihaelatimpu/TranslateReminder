@@ -15,6 +15,7 @@ interface LearningContract {
         val TYPE_LEARN_NEW_WORDS = 343
         val TYPE_REVIEW_WRONG_WORDS = 4353
         val TYPE_REVIEW_ITEMS = 3234
+        val TYPE_LISTENING = 567
     }
     interface Activity : BaseView<Presenter> {
         fun getRepository(): TranslationRepository
@@ -23,7 +24,7 @@ interface LearningContract {
         fun moveToFragment(position: Int)
         fun getCurrentFragmentPosition(): Int
         fun finishActivity()
-        fun spellText(text:String)
+        fun spellText(text:String, onFinish:()->Unit)
     }
 
     interface Presenter : BasePresenter<Activity> {

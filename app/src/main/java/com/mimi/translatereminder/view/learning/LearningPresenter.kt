@@ -7,6 +7,7 @@ import com.mimi.translatereminder.repository.local.sharedprefs.SharedPreferences
 import com.mimi.translatereminder.utils.LearningFragmentsGenerator
 import com.mimi.translatereminder.utils.StateUtil
 import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_LEARN_NEW_WORDS
+import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_LISTENING
 import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_REVIEW_ITEMS
 import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_REVIEW_WRONG_WORDS
 import org.jetbrains.anko.doAsync
@@ -27,7 +28,7 @@ class LearningPresenter : LearningContract.Presenter {
     private val stateUtil = StateUtil()
 
     private var shouldSpellItems = true
-    override val repo:TranslationRepository
+    override val repo: TranslationRepository
         get() = view.getRepository()
 
     private val exceptionHandler: (Throwable) -> Unit = {
@@ -40,13 +41,18 @@ class LearningPresenter : LearningContract.Presenter {
         view.init()
         loadItems()
     }
+
     private fun loadItems() {
         view.showLoadingDialog()
         doAsync(exceptionHandler) {
             val items = retrieveItems()
             shouldSpellItems = SharedPreferencesUtil().getSpellWords(view.getContext())
             fragments.clear()
-            fragments.addAll(fragmentGen.start(items))
+            if (type == TYPE_LISTENING) {
+                fragments.addAll(fragmentGen.generateListeningFragments(items))
+            } else {
+                fragments.addAll(fragmentGen.start(items))
+            }
             onComplete {
                 view.hideLoadingDialog()
                 view.setFragments(items = fragments)
@@ -67,6 +73,7 @@ class LearningPresenter : LearningContract.Presenter {
             TYPE_LEARN_NEW_WORDS -> repo.retrieveLearningItems(view.getContext())
             TYPE_REVIEW_ITEMS -> repo.retrieveReviewItems(view.getContext())
             TYPE_REVIEW_WRONG_WORDS -> retrieveWrongItems()
+            TYPE_LISTENING -> repo.retrieveListeningItems(view.getContext())
             else -> listOf()
         }
     }
@@ -79,6 +86,12 @@ class LearningPresenter : LearningContract.Presenter {
 
     override fun onFragmentVisible(position: Int) {
         val item = fragments[position]
+        if (type == TYPE_LISTENING) {
+            view.spellText(item.entity?.germanWord ?: "") {
+                if (position < fragments.size - 1)
+                    moveToNextFragment()
+            }
+        }
         val spellTypes = listOf(Progress.TYPE_HINT, Progress.TYPE_CHOOSE_TRANSLATION,
                 Progress.TYPE_PRESENT)
         if (item.entity != null && spellTypes.any { it == item.type }
@@ -87,7 +100,7 @@ class LearningPresenter : LearningContract.Presenter {
     }
 
     override fun spell(text: String) {
-        view.spellText(text)
+        view.spellText(text, {})
     }
 
     override fun onFragmentResult(addedScore: Int, entityId: Int?, correct: Boolean) {

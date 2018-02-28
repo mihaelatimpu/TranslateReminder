@@ -62,7 +62,8 @@ class EditFragment : BaseFragment(), EditContract.View {
         val dialog = MoreOptionsDialog.createDialog(reviewItems = reviewItems, learnItems = learningItems, wrongItems = wrongItems,
                 onReview = { presenter.onReviewButtonClicked() },
                 onLearn = { presenter.onLearnButtonClicked() },
-                onWrong = { presenter.onWrongButtonClicked() })
+                onWrong = { presenter.onWrongButtonClicked() },
+                onListening = {presenter.onListeningButtonClicked()})
         dialog.show(activity.fragmentManager, "")
     }
 

@@ -41,6 +41,7 @@ interface MainContract {
         fun learnNewWords()
         fun reviewWrongItems()
         fun reviewItems()
+        fun startListeningActivity()
         fun checkForPermission(permission: String, @StringRes title: Int,
                                @StringRes description: Int, onPermissionResult: (Boolean) -> Unit)
     }

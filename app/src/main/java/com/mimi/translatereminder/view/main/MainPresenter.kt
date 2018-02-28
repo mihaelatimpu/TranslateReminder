@@ -2,10 +2,8 @@ package com.mimi.translatereminder.view.main
 
 import com.mimi.translatereminder.R
 import com.mimi.translatereminder.dto.Entity
-import com.mimi.translatereminder.utils.FileUtil
-import com.mimi.translatereminder.utils.json.ExportUtil
-import com.mimi.translatereminder.utils.json.ImportUtil
 import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_LEARN_NEW_WORDS
+import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_LISTENING
 import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_REVIEW_ITEMS
 import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_REVIEW_WRONG_WORDS
 import org.jetbrains.anko.doAsync
@@ -35,7 +33,7 @@ class MainPresenter : MainContract.Presenter {
 
 
     override fun editItem(item: Entity) {
-        val itemId = if(item.type == Entity.TYPE_SENTENCE)  item.parentId else item.id
+        val itemId = if (item.type == Entity.TYPE_SENTENCE) item.parentId else item.id
         view.startEditActivity(itemId)
     }
 
@@ -73,7 +71,10 @@ class MainPresenter : MainContract.Presenter {
 
     override fun reviewWrongItems() {
         view.startLearningActivity(type = TYPE_REVIEW_WRONG_WORDS)
+    }
 
+    override fun startListeningActivity() {
+        view.startLearningActivity(type = TYPE_LISTENING)
     }
 
     override fun onAddButtonClicked() {

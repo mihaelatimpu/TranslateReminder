@@ -96,6 +96,9 @@
     <string name="original_sentence">Original sentence </string>
     <string name="new_sentence_translation">New sentence translation</string>
     <string name="original_word">Original word: %s</string>
+    <string name="finish">Finish</string>
+    <string name="form_the_sentence_from_words">Form the sentence from the existing words.</string>
+    <string name="listening_words">Listening words</string>
     <string-array name="review_items_per_session">
         <item>5</item>
         <item>10</item>

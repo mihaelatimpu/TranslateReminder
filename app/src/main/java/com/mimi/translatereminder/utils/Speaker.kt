@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.AudioManager
 import android.os.Build
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import java.util.*
 import kotlin.collections.HashMap
@@ -32,7 +33,7 @@ class Speaker(context: Context) : TextToSpeech.OnInitListener {
         }
     }
 
-    fun speak(text: String) {
+    fun speak(text: String, onFinish: () -> Unit = {}) {
         Log.d("Speaker", "Speaking: $text")
         if (ready && allowed) {
             Log.d("Speaker", "Speaker allowed and ready")
@@ -45,6 +46,18 @@ class Speaker(context: Context) : TextToSpeech.OnInitListener {
             } else {
                 tts.speak(text, TextToSpeech.QUEUE_ADD, hash)
             }
+            tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                override fun onDone(utteranceId: String?) {
+                    onFinish()
+                }
+
+                override fun onError(utteranceId: String?) {
+                }
+
+                override fun onStart(utteranceId: String?) {
+                }
+
+            })
             delayedWord = null
 
         } else {

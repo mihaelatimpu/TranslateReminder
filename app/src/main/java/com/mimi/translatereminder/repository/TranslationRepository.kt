@@ -73,5 +73,14 @@ class TranslationRepository(private val itemDb: EntityDao) {
         val count = sharedPrefs.getReviewItemsPerSession(context)
         return getReviewItems(count)
     }
-    fun findSentences(parentId:Int) = itemDb.findSentences(parentId)
+
+    fun retrieveListeningItems(context: Context): List<Entity> {
+        val count = sharedPrefs.getListeningItemsPerSession(context)
+        return if (count == -1)
+            getAll()
+        else
+            getReviewItems(count)
+    }
+
+    fun findSentences(parentId: Int) = itemDb.findSentences(parentId)
 }

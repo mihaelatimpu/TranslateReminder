@@ -4,6 +4,7 @@ import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.dto.Progress
 import com.mimi.translatereminder.dto.Progress.Companion.TYPE_CHOOSE_GERMAN
 import com.mimi.translatereminder.dto.Progress.Companion.TYPE_CHOOSE_TRANSLATION
+import com.mimi.translatereminder.dto.Progress.Companion.TYPE_FORM
 import com.mimi.translatereminder.dto.Progress.Companion.TYPE_HINT
 import com.mimi.translatereminder.dto.Progress.Companion.TYPE_PRESENT
 import com.mimi.translatereminder.dto.Progress.Companion.TYPE_TYPING
@@ -15,6 +16,11 @@ import kotlin.collections.ArrayList
  * This class will generate the fragments information for the learning activity
  */
 class LearningFragmentsGenerator {
+    fun generateListeningFragments(entities: List<Entity>): List<Progress> {
+        return entities.map {
+            Progress(type = TYPE_PRESENT,state = Entity.firstLearningState,entityId = it.id,entity = it)
+        }
+    }
     fun start(entities: List<Entity>): List<Progress> {
         val fragments = ArrayList<Progress>()
         entities.forEach {
@@ -55,14 +61,7 @@ class LearningFragmentsGenerator {
 
     private fun getLearningFragments(entity: Entity, state: Int): List<Progress> {
         val types = ArrayList<Progress>()
-        val type = when (state) {
-            Entity.STATE_LEARNING_1 -> TYPE_PRESENT
-            Entity.STATE_LEARNING_2 -> TYPE_HINT
-            in Entity.STATE_LEARNING_3 until Entity.lastLearningState ->
-                getRandomFragmentType(getRandomReviewFragment())
-            Entity.lastLearningState -> TYPE_TYPING
-            else -> throw UnsupportedOperationException("Unknown type: $state")
-        }
+        val type = getLearningFragmentType(entity, state)
         types.add(Progress(type = type,
                 state = state, entityId = entity.id, entity = entity))
         if (Entity.isLearningState(state + 1))
@@ -70,24 +69,49 @@ class LearningFragmentsGenerator {
         return types
     }
 
+    private fun getLearningFragmentType(entity: Entity, state: Int): Int {
+        if (state == Entity.STATE_LEARNING_1)
+            return TYPE_PRESENT
+        if (entity.type == Entity.TYPE_SENTENCE)
+            return Progress.TYPE_FORM
+        return when (state) {
+            Entity.STATE_LEARNING_2 -> TYPE_HINT
+            in Entity.STATE_LEARNING_3 until Entity.lastLearningState ->
+                getRandomFragmentType(getRandomReviewFragment())
+            Entity.lastLearningState -> TYPE_TYPING
+            else -> throw UnsupportedOperationException("Unknown type: $state")
+        }
+    }
+
     fun getReviewFragments(entity: Entity, state: Int): List<Progress> {
         val types = ArrayList<Progress>()
-        val type = getRandomFragmentType(getRandomReviewFragment())
+        val type = when (entity.type) {
+            Entity.TYPE_SENTENCE -> TYPE_FORM
+            Entity.TYPE_WORD -> getRandomFragmentType(getRandomReviewFragment())
+            else -> throw UnsupportedOperationException("Unknown type: ${entity.type}")
+        }
         types.add(Progress(type = type,
                 state = state, entityId = entity.id, entity = entity))
         return types
+
     }
 
     fun getWrongFragments(entity: Entity): List<Progress> {
         val types = ArrayList<Progress>()
         types.add(Progress(type = TYPE_PRESENT,
                 state = Entity.firstMistakeState, entityId = entity.id, entity = entity))
-        val fragmentTypes = getRandomReviewFragment()
+
+        val fragmentTypes = when (entity.type) {
+            Entity.TYPE_SENTENCE -> arrayListOf(TYPE_FORM)
+            Entity.TYPE_WORD -> getRandomReviewFragment()
+            else -> throw UnsupportedOperationException("Unknown type: ${entity.type}")
+        }
         for (i in Entity.firstMistakeState + 1..Entity.lastMistakeState) {
             val type = getRandomFragmentType(fragmentTypes)
             types.add(Progress(type = type,
                     state = i, entityId = entity.id, entity = entity))
-            fragmentTypes.remove(type)
+            if (entity.type != Entity.TYPE_SENTENCE)
+                fragmentTypes.remove(type)
         }
         return types
     }

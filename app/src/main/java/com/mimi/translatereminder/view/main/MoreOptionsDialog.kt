@@ -23,7 +23,7 @@ class MoreOptionsDialog : DialogFragment() {
         val LEARN_ITEMS = "learnItems"
         val WRONG_ITEMS = "wrongItems"
         fun createDialog(reviewItems: Int, learnItems: Int, wrongItems: Int, onReview: () -> Unit, onLearn: () -> Unit,
-                         onWrong: () -> Unit): MoreOptionsDialog {
+                         onWrong: () -> Unit, onListening: () -> Unit): MoreOptionsDialog {
             val args = Bundle()
             args.putInt(REVIEW_ITEMS, reviewItems)
             args.putInt(LEARN_ITEMS, learnItems)
@@ -33,6 +33,7 @@ class MoreOptionsDialog : DialogFragment() {
             dialog.onReview = onReview
             dialog.onLearn = onLearn
             dialog.onWrong = onWrong
+            dialog.onListening = onListening
             return dialog
         }
     }
@@ -40,6 +41,7 @@ class MoreOptionsDialog : DialogFragment() {
     private var onReview: () -> Unit = {}
     private var onLearn: () -> Unit = {}
     private var onWrong: () -> Unit = {}
+    private var onListening: () -> Unit = {}
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -69,6 +71,7 @@ class MoreOptionsDialog : DialogFragment() {
         initLearnItems(grey, blue)
         initReviewItems()
         initWrongItems(grey, blue)
+        initListeningItems()
     }
 
     private fun initLearnItems(grey: Int, blue: Int) {
@@ -114,6 +117,17 @@ class MoreOptionsDialog : DialogFragment() {
             wrongWordsButton.setOnClickListener { wrongItems() }
         }
 
+    }
+
+    private fun initListeningItems() {
+        listeningImage.setOnClickListener {
+            onListening()
+            dismiss()
+        }
+        listeningWordsText.setOnClickListener {
+            onListening()
+            dismiss()
+        }
     }
 
     private fun wrongItems() {
