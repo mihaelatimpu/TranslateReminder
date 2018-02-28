@@ -88,7 +88,9 @@ class LearningActivity : BaseActivity(), LearningContract.Activity {
     }
 
     override fun spellText(text: String, onFinish: () -> Unit) {
-        speaker.speak(text, onFinish)
+        runOnUiThread{
+            speaker.speak(text, onFinish)
+        }
     }
 
     override fun getCurrentFragmentPosition()

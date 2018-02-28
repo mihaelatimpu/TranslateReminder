@@ -1,5 +1,6 @@
 package com.mimi.translatereminder.view.learning
 
+import android.os.Handler
 import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.dto.Progress
 import com.mimi.translatereminder.repository.TranslationRepository
@@ -14,6 +15,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
 import org.jetbrains.anko.runOnUiThread
 import java.util.*
+import kotlin.concurrent.schedule
 
 /**
  * Created by Mimi on 13/12/2017.
@@ -88,15 +90,36 @@ class LearningPresenter : LearningContract.Presenter {
         val item = fragments[position]
         if (type == TYPE_LISTENING) {
             view.spellText(item.entity?.germanWord ?: "") {
-                if (position < fragments.size - 1)
-                    moveToNextFragment()
+                //spellTranslation(position, item.entity)
+                delayToNextFragment(position)
             }
+            return
         }
         val spellTypes = listOf(Progress.TYPE_HINT, Progress.TYPE_CHOOSE_TRANSLATION,
                 Progress.TYPE_PRESENT)
         if (item.entity != null && spellTypes.any { it == item.type }
                 && shouldSpellItems)
             spell(item.entity!!.germanWord)
+    }
+
+    private fun spellTranslation(position: Int, item: Entity?) {
+        delay(300){
+            view.spellText(item?.translation ?: "") {
+                delayToNextFragment(position)
+            }
+        }
+    }
+
+    private fun delayToNextFragment(position: Int) {
+        delay(1000){
+            if (position < fragments.size - 1)
+                moveToNextFragment()
+        }
+    }
+
+    private fun delay(delay: Long, function: () -> Unit) {
+        val timer = Timer()
+        timer.schedule(delay) { function() }
     }
 
     override fun spell(text: String) {

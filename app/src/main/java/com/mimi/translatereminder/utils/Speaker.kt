@@ -8,6 +8,8 @@ import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import java.util.*
 import kotlin.collections.HashMap
+import android.os.Bundle
+
 
 /**
  * Created by Mimi on 20/12/2017.
@@ -18,6 +20,7 @@ class Speaker(context: Context) : TextToSpeech.OnInitListener {
     private var ready = false
     var allowed = true
     private var delayedWord: String? = null
+    private var delayedWordListener: () -> Unit = {}
     override fun onInit(status: Int) {
         Log.d("Speaker", "Initialising speaker")
         if (status == TextToSpeech.SUCCESS) {
@@ -37,17 +40,9 @@ class Speaker(context: Context) : TextToSpeech.OnInitListener {
         Log.d("Speaker", "Speaking: $text")
         if (ready && allowed) {
             Log.d("Speaker", "Speaker allowed and ready")
-            val hash = HashMap<String, String>()
-            hash.put(TextToSpeech.Engine.KEY_PARAM_STREAM,
-                    AudioManager.STREAM_NOTIFICATION.toString())
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                tts.speak(text, TextToSpeech.QUEUE_ADD, null, null)
-            } else {
-                tts.speak(text, TextToSpeech.QUEUE_ADD, hash)
-            }
             tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                 override fun onDone(utteranceId: String?) {
+                    delayedWordListener()
                     onFinish()
                 }
 
@@ -58,11 +53,25 @@ class Speaker(context: Context) : TextToSpeech.OnInitListener {
                 }
 
             })
+            val hash = HashMap<String, String>()
+            hash.put(TextToSpeech.Engine.KEY_PARAM_STREAM,
+                    AudioManager.STREAM_NOTIFICATION.toString())
+            hash.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, text)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val params = Bundle()
+                params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "")
+                tts.speak(text, TextToSpeech.QUEUE_FLUSH, params, text)
+            } else {
+                tts.speak(text, TextToSpeech.QUEUE_FLUSH, hash)
+            }
             delayedWord = null
 
         } else {
             Log.d("Speaker", "Speaker not ready. $text will be spoken later")
             delayedWord = text
+            delayedWordListener = onFinish
         }
+
     }
 }
