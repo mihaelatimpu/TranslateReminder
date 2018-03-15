@@ -2,6 +2,7 @@ package com.mimi.translatereminder.view.learning.fragments.form
 
 import android.text.TextUtils
 import com.mimi.translatereminder.dto.Entity
+import com.mimi.translatereminder.dto.Entity.Companion.TYPE_SENTENCE
 import com.mimi.translatereminder.view.learning.LearningContract
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
@@ -28,13 +29,15 @@ class FormPresenter(override var view: FormContract.View,
                     ?: throw UnsupportedOperationException("Unknown word")
             val options =
                     if (word.type == Entity.TYPE_SENTENCE)
-                        TextUtils.split(word.germanWord, " ")
+                        TextUtils.split(word.germanWord, " ").map { it.toString() }
                     else
-                        TextUtils.split(word.germanWord, "")
+                        word.germanWord.toCharArray().toList().map { it.toString() }
+
             optionsList = options.map { OptionWord(it, false) }.shuffled()
             initialWord = word
             onComplete {
                 view.hideLoadingDialog()
+                view.refreshTranslation(word.translation)
                 view.refreshOptions(optionsList)
             }
         }
@@ -49,7 +52,9 @@ class FormPresenter(override var view: FormContract.View,
             return
         view.addResult(word)
         view.removeOption(word)
-        masterPresenter.spell(word.word)
+        if (initialWord?.type == TYPE_SENTENCE) {
+            masterPresenter.spell(word.word)
+        }
     }
 
     override fun onResultSelected(word: OptionWord) {
@@ -60,14 +65,16 @@ class FormPresenter(override var view: FormContract.View,
     override fun onFinishClicked() {
         val resultList = view.getFinalResult()
         var resultWord = ""
-        resultList.forEach { resultWord += it.word + " " }
-        if (resultWord.isNotEmpty()) {
+        val space = if (initialWord?.type == TYPE_SENTENCE) " " else ""
+        resultList.forEach { resultWord += it.word + space }
+        if (resultWord.isNotEmpty() && (initialWord?.type == TYPE_SENTENCE)) {
             resultWord = resultWord.dropLast(1)
         }
         val success = initialWord != null && initialWord?.germanWord == resultWord
         if (success) {
-            masterPresenter.spell(resultWord)
-            masterPresenter.onFragmentResult(0, initialWord?.id, success)
+            masterPresenter.spell(resultWord) {
+                masterPresenter.onFragmentResult(0, initialWord?.id, success)
+            }
 
         } else {
             masterPresenter.spell(initialWord?.germanWord ?: "")

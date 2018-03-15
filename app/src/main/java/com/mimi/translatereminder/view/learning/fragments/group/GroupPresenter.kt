@@ -3,7 +3,6 @@ package com.mimi.translatereminder.view.learning.fragments.group
 import android.os.Handler
 import com.mimi.translatereminder.R
 import com.mimi.translatereminder.dto.Entity
-import com.mimi.translatereminder.dto.Progress
 import com.mimi.translatereminder.view.learning.LearningContract
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
@@ -15,9 +14,12 @@ import org.jetbrains.anko.onComplete
 class GroupPresenter(override var view: GroupContract.View,
                      private val masterPresenter: LearningContract.Presenter,
                      override var type: Int, override var ids: List<Int>) : GroupContract.Presenter {
-    private val map: HashMap<String, String> = HashMap()
+    private val solutionsMap: HashMap<String, String> = HashMap()
     private val maxPairs = 4
     private val animationDelay = 300L
+    private var selectedLeft: GroupItem? = null
+    private var selectedRight: GroupItem? = null
+
     private val exceptionHandler: (Throwable) -> Unit = {
         it.printStackTrace()
         view.hideLoadingDialog()
@@ -31,9 +33,65 @@ class GroupPresenter(override var view: GroupContract.View,
             reloadData()
             onComplete {
                 view.hideLoadingDialog()
-                view.refreshText(map.keys.toList(), map.values.toList())
+                view.refreshText(solutionsMap.keys.toList(), solutionsMap.values.toList())
             }
         }
+    }
+
+    override fun onLeftSelected(left: GroupItem) {
+        val oldLeft = selectedLeft
+        if (oldLeft != null) {
+            oldLeft.state = State.Default
+            view.refreshLeftItem(oldLeft)
+        }
+        selectedLeft = left
+        left.state = State.Chosen
+        view.refreshLeftItem(left)
+        if (selectedRight != null) {
+            onBothItemsSelected()
+        }
+    }
+
+    override fun onRightSelected(right: GroupItem) {
+        val oldRight = selectedRight
+        if (oldRight != null) {
+            oldRight.state = State.Default
+            view.refreshRightItem(oldRight)
+        }
+        selectedRight = right
+        right.state = State.Chosen
+        view.refreshRightItem(right)
+        if (selectedLeft != null) {
+            onBothItemsSelected()
+        }
+    }
+
+    private fun onBothItemsSelected() {
+        val left = selectedLeft ?: return
+        val right = selectedRight ?: return
+        val correct = solutionsMap[left.text] == right.text
+        if (correct) {
+            left.state = State.Correct
+            right.state = State.Correct
+        } else {
+            left.state = State.Wrong
+            right.state = State.Wrong
+        }
+        view.refreshLeftItem(left)
+        view.refreshRightItem(right)
+
+        Handler().postDelayed({
+            val newState = if (correct) State.NotSelectable else State.Default
+            left.state = newState
+            right.state = newState
+            view.refreshLeftItem(left)
+            view.refreshRightItem(right)
+            solutionsMap.remove(left.text)
+            selectedLeft = null
+            selectedRight = null
+
+            checkIfFinished()
+        }, animationDelay)
     }
 
     private fun reloadData() {
@@ -54,43 +112,18 @@ class GroupPresenter(override var view: GroupContract.View,
             if (!items.contains(it) && items.size < maxPairs)
                 items.add(it)
         }
-        map.clear()
-        items.forEach { map.put(it.germanWord, it.translation) }
+        solutionsMap.clear()
+        items.forEach { solutionsMap.put(it.germanWord, it.translation) }
 
     }
 
-    override fun onSelected(left: String, right: String) {
-            masterPresenter.spell(left)
-        if (map[left] == right) {
-            map.remove(left)
-            showRightAnimation(left, right)
-        } else {
-            showWrongAnimation(left, right)
-        }
-    }
 
     override fun onVisibleToUser() {
     }
 
-    private fun showRightAnimation(left: String, right: String) {
-        view.makeButtonsInactive(left, right)
-        view.changeBackground(left, right, R.color.green)
-        Handler().postDelayed({
-            view.changeBackground(left, right, R.color.grey)
-            checkIfFinished()
-        }, animationDelay)
-    }
-
     private fun checkIfFinished() {
-        if (map.isEmpty())
+        if (solutionsMap.isEmpty())
             masterPresenter.onFragmentResult(10, correct = true)
-    }
-
-    private fun showWrongAnimation(left: String, right: String) {
-        view.changeBackground(left, right, R.color.red)
-        Handler().postDelayed({
-            view.changeBackground(left, right, R.color.colorPrimaryDark)
-        }, animationDelay)
     }
 
 }

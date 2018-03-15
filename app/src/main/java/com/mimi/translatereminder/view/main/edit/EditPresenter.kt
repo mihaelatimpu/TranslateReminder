@@ -17,12 +17,12 @@ import kotlin.collections.ArrayList
 
 class EditPresenter : EditContract.Presenter {
     companion object {
-        val TYPE_LEARN = 0
-        val TYPE_REVIEW = 1
-        val TYPE_WRONG = 2
+        const val TYPE_LEARN = 0
+        const val TYPE_REVIEW = 1
+        const val TYPE_WRONG = 2
     }
 
-    lateinit override var mainPresenter: MainContract.Presenter
+    override lateinit var mainPresenter: MainContract.Presenter
     override lateinit var view: EditContract.View
     private var learningItems = 0
     private var reviewItems = 0
@@ -44,8 +44,27 @@ class EditPresenter : EditContract.Presenter {
 
     override fun start() {
         view.init()
+        mainPresenter.registerMultiSelectChangeListener(this)
         reloadData()
     }
+
+    override fun getSelectedItems(): List<Entity> {
+        return view.getSelectedItems()
+    }
+
+    override fun onMultiSelectChange(selectable: Boolean) {
+        view.changeSelectableState(selectable)
+    }
+
+    override fun notifyChangeState(selectable: Boolean) {
+        mainPresenter.onMultiSelectChange(selectable)
+    }
+
+    override fun notifyChangeCount(count: Int) {
+        mainPresenter.onSelectCountChanged(count)
+    }
+
+    override fun onSelectCountChanged(newCount: Int) {}
 
     override fun reloadData() {
         view.showLoadingDialog()

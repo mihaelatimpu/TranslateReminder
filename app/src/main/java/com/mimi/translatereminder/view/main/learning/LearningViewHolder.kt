@@ -6,6 +6,7 @@ import com.mimi.translatereminder.R
 import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.utils.TimeUtils
 import com.mimi.translatereminder.view.main.ItemsAdapter
+import com.mimi.translatereminder.view.main.SelectableInterface
 import kotlinx.android.synthetic.main.item_learning.view.*
 
 /**
@@ -13,7 +14,8 @@ import kotlinx.android.synthetic.main.item_learning.view.*
  *
  */
 class LearningViewHolder(itemView: View) : ItemsAdapter.BaseHolder(itemView) {
-    override fun bind(entity: Entity, onClick: (Entity) -> Unit) {
+    override fun bind(entity: Entity, onClick: (Entity) -> Unit, selected: Boolean,
+                      selectableInterface: SelectableInterface) {
         itemView.translationTitle.text = entity.germanWord
         itemView.setOnClickListener { onClick(entity) }
         when {

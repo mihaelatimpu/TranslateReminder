@@ -11,12 +11,12 @@ import com.mimi.translatereminder.view.learning.LearningContract
 interface ChooseContract {
     interface View : BaseView<Presenter> {
         fun refreshText(translation: String, options:List<String>)
-        fun changeBackground(green:Boolean, text:String)
+        fun changeBackground(answer: ChooseItem)
     }
 
     interface Presenter : BasePresenter<View>, LearningContract.FragmentPresenter {
         var type:Int
         fun setEntityId(id:Int)
-        fun onAnswered(answer: String)
+        fun onAnswered(answer: ChooseItem)
     }
 }

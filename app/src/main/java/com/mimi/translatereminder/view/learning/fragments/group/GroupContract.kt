@@ -11,14 +11,16 @@ import com.mimi.translatereminder.view.learning.LearningContract
  */
 interface GroupContract {
     interface View : BaseView<Presenter> {
+
+        fun refreshLeftItem(left: GroupItem)
+        fun refreshRightItem(right: GroupItem)
         fun refreshText(left: List<String>, right: List<String>)
-        fun changeBackground(left: String, right: String, @ColorRes color: Int)
-        fun makeButtonsInactive(left: String, right: String)
     }
 
     interface Presenter : BasePresenter<View>, LearningContract.FragmentPresenter {
         var type: Int
         var ids: List<Int>
-        fun onSelected(left: String, right: String)
+        fun onLeftSelected(left:GroupItem)
+        fun onRightSelected(right:GroupItem)
     }
 }

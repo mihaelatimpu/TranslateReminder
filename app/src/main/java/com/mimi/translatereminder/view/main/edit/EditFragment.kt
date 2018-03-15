@@ -28,7 +28,9 @@ class EditFragment : BaseFragment(), EditContract.View {
         ItemsAdapter(context = activity,
                 onClick = { presenter.showDetailsDialog(it.id) },
                 createHolder = { EditViewHolder(it) },
-                resourceId = R.layout.item_translation)
+                resourceId = R.layout.item_translation,
+                notifyChangeCount = { presenter.notifyChangeCount(it) },
+                notifyChangeState = { presenter.notifyChangeState(it) })
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -54,6 +56,12 @@ class EditFragment : BaseFragment(), EditContract.View {
         otherOptionsButton.setOnClickListener { presenter.onOtherOptionsClicked() }
     }
 
+    override fun getSelectedItems() = adapter.getSelectedItems()
+
+    override fun changeSelectableState(selectable: Boolean) {
+        adapter.changeState(selectable)
+    }
+
     override fun refreshMainOption(text: Int) {
         mainActionButton.text = getString(text)
     }
@@ -63,7 +71,7 @@ class EditFragment : BaseFragment(), EditContract.View {
                 onReview = { presenter.onReviewButtonClicked() },
                 onLearn = { presenter.onLearnButtonClicked() },
                 onWrong = { presenter.onWrongButtonClicked() },
-                onListening = {presenter.onListeningButtonClicked()})
+                onListening = { presenter.onListeningButtonClicked() })
         dialog.show(activity.fragmentManager, "")
     }
 

@@ -24,26 +24,34 @@ interface MainContract {
 
         fun showDetailsDialog(entityId: Int)
         fun toast(@StringRes text: Int)
-        fun startLearningActivity(type:Int, reviewId:Int? = null)
+        fun startLearningActivity(type: Int, reviewIds: List<Int> = arrayListOf())
     }
 
-    interface Presenter : BasePresenter<Activity> {
+    interface Presenter : BasePresenter<Activity>, MultiselectStateListener {
         var fragments: List<FragmentPresenter>
         fun onNavigationItemSelected(selectionId: Int)
         fun getRepository(): TranslationRepository
         fun onAddButtonClicked()
         fun onReturnedFromActivity()
         fun editItem(item: Entity)
-        fun deleteItem(item: Entity)
-        fun reviewItem(item: Entity)
-        fun resetItems(item:Entity)
+        fun deleteItems(items: List<Entity>)
+        fun reviewItems(items: List<Entity> = listOf())
+        fun listenItems(items: List<Entity>)
+        fun resetItems(items: List<Entity>)
         fun showDetailsDialog(entityId: Int)
         fun learnNewWords()
         fun reviewWrongItems()
-        fun reviewItems()
         fun startListeningActivity()
+        fun onDeleteActionSelected()
+        fun onCancelActionSelected()
+        fun onArchiveActionSelected()
+        fun onReviewActionSelected()
+        fun onListenActionSelected()
         fun checkForPermission(permission: String, @StringRes title: Int,
                                @StringRes description: Int, onPermissionResult: (Boolean) -> Unit)
+
+        fun registerMultiSelectChangeListener(listener: MultiselectStateListener)
+        fun unregisterMultiSelectChangeListener(listener: MultiselectStateListener)
     }
 
     interface FragmentPresenter {

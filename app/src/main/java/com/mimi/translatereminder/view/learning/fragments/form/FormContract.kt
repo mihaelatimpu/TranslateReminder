@@ -18,6 +18,7 @@ interface FormContract {
     }
 
     interface View : BaseView<Presenter> {
+        fun refreshTranslation(translation:String)
         fun refreshOptions(options: List<OptionWord>)
         fun addOption(word: OptionWord)
         fun removeOption(word: OptionWord)

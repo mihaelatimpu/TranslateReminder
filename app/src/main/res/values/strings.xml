@@ -99,6 +99,9 @@
     <string name="finish">Finish</string>
     <string name="form_the_sentence_from_words">Form the sentence from the existing words.</string>
     <string name="listening_words">Listening words</string>
+    <string name="listen_items">Listen items</string>
+    <string name="archive">Archive</string>
+    <string name="items_selected">%d items selected</string>
     <string-array name="review_items_per_session">
         <item>5</item>
         <item>10</item>

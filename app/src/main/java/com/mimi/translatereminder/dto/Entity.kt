@@ -12,7 +12,7 @@ import java.util.*
 @Entity(tableName = EntityDao.TABLE)
 class Entity(
         @PrimaryKey(autoGenerate = true)
-        val id: Int = 0,
+        var id: Int = 0,
         var germanWord: String,
         var translation: String,
         val dateAdded: Long = Calendar.getInstance().timeInMillis,

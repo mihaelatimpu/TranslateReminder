@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:id="@+id/cancel_action"
+    android:title="@string/cancel"
+    android:icon="@drawable/ic_close_white_24dp"
+    app:showAsAction="always" />
+<item
+    android:id="@+id/delete_action"
+    android:title="@string/delete"
+    android:icon="@drawable/ic_delete_white_24dp"
+    android:tint="@color/white"/>
+<item
+    android:id="@+id/archive_action"
+    android:title="@string/archive"
+    android:icon="@drawable/ic_archive_white_24dp"
+    android:tint="@color/white"/>
+<item
+    android:id="@+id/review_action"
+    android:title="@string/review"
+    android:icon="@drawable/ic_menu_slideshow"
+    android:tint="@color/white"/>
+<item
+    android:id="@+id/listen_action"
+    android:title="@string/listen_items"
+    android:icon="@drawable/ic_audiotrack_black_24dp"
+    android:tint="@color/white"/>
+
+</menu>

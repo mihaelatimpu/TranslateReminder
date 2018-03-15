@@ -29,11 +29,11 @@ interface LearningContract {
 
     interface Presenter : BasePresenter<Activity> {
         var type: Int
-        var itemId: Int?
+        var itemIds: List<Int>
         val repo:TranslationRepository
         fun onFragmentResult(addedScore: Int = 0, entityId: Int? = null, correct: Boolean = true)
         fun onFragmentVisible(position:Int)
-        fun spell(text:String)
+        fun spell(text:String, onFinish:()->Unit = {})
     }
 
     interface FragmentPresenter {

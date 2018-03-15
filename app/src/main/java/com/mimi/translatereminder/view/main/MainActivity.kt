@@ -30,12 +30,12 @@ import org.koin.android.ext.android.inject
 
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener,
-        MainContract.Activity {
+        MainContract.Activity, MultiselectStateListener {
     companion object {
-        val ADD_EDIT_ACTIVITY_CODE = 3424
-        val LEARNING_ACTIVITY_CODE = 766
-        val ITEM_ID = "itemId"
-        val REQUESTING_PERMISSION = 4545
+        const val ADD_EDIT_ACTIVITY_CODE = 3424
+        const val LEARNING_ACTIVITY_CODE = 766
+        const val ITEM_ID = "itemIds"
+        const val REQUESTING_PERMISSION = 4545
     }
 
     private val learningFragment by lazy {
@@ -70,6 +70,18 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         init()
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.cancel_action -> presenter.onCancelActionSelected()
+            R.id.delete_action -> presenter.onDeleteActionSelected()
+            R.id.archive_action -> presenter.onArchiveActionSelected()
+            R.id.review_action -> presenter.onReviewActionSelected()
+            R.id.listen_action -> presenter.onListenActionSelected()
+            else -> return false
+        }
+        return true
+    }
+
     override fun init() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
@@ -85,6 +97,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         nav_view.setNavigationItemSelectedListener(this)
         initPresenters()
         presenter.start()
+        presenter.registerMultiSelectChangeListener(this)
     }
 
     private fun initPresenters() {
@@ -146,13 +159,36 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     }
 
-    override fun startLearningActivity(type: Int, reviewId: Int?) {
-        startActivityForResult(LearningActivity.startActivityIntent(this, type, reviewId)
+    override fun startLearningActivity(type: Int, reviewIds: List<Int>) {
+        startActivityForResult(LearningActivity.startActivityIntent(this, type, reviewIds)
                 , LEARNING_ACTIVITY_CODE)
     }
 
     override fun startAddActivity() {
         startActivityForResult(Intent(this, AddEditActivity::class.java), ADD_EDIT_ACTIVITY_CODE)
+    }
+
+    override fun onMultiSelectChange(selectable: Boolean) {
+        if (selectable) {
+            showMultiselectActionMenu()
+        } else {
+            hideMultiselectActionMenu()
+        }
+    }
+
+    private fun showMultiselectActionMenu() {
+        toolbar.menu.clear()
+        toolbar.inflateMenu(R.menu.action_mode_menu)
+        toolbar.tag = "normalToolbar"
+    }
+
+    private fun hideMultiselectActionMenu() {
+        toolbar.menu.clear()
+        supportActionBar?.title = getString(R.string.edit)
+    }
+
+    override fun onSelectCountChanged(newCount: Int) {
+        toolbar.title = getString(R.string.items_selected, newCount)
     }
 
     override fun startEditActivity(id: Int) {
@@ -165,9 +201,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun showDetailsDialog(entityId: Int) {
         val dialog = DetailsDialog.createDialog(entityId = entityId,
                 onEdit = { presenter.editItem(it) },
-                onDelete = { presenter.deleteItem(it) },
-                onReview = { presenter.reviewItem(it) },
-                onReset = { presenter.resetItems(it) },
+                onDelete = { presenter.deleteItems(listOf(it)) },
+                onReview = { presenter.reviewItems(listOf(it)) },
+                onReset = { presenter.resetItems(listOf(it)) },
                 translationRepository = getRepository())
         dialog.show(fragmentManager, "")
     }

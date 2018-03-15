@@ -73,7 +73,7 @@ class LearningFragmentsGenerator {
         if (state == Entity.STATE_LEARNING_1)
             return TYPE_PRESENT
         if (entity.type == Entity.TYPE_SENTENCE)
-            return Progress.TYPE_FORM
+            return getRandomFragmentType(getRandomSentenceReviewFragment())
         return when (state) {
             Entity.STATE_LEARNING_2 -> TYPE_HINT
             in Entity.STATE_LEARNING_3 until Entity.lastLearningState ->
@@ -86,7 +86,7 @@ class LearningFragmentsGenerator {
     fun getReviewFragments(entity: Entity, state: Int): List<Progress> {
         val types = ArrayList<Progress>()
         val type = when (entity.type) {
-            Entity.TYPE_SENTENCE -> TYPE_FORM
+            Entity.TYPE_SENTENCE -> getRandomFragmentType(getRandomSentenceReviewFragment())
             Entity.TYPE_WORD -> getRandomFragmentType(getRandomReviewFragment())
             else -> throw UnsupportedOperationException("Unknown type: ${entity.type}")
         }
@@ -102,7 +102,7 @@ class LearningFragmentsGenerator {
                 state = Entity.firstMistakeState, entityId = entity.id, entity = entity))
 
         val fragmentTypes = when (entity.type) {
-            Entity.TYPE_SENTENCE -> arrayListOf(TYPE_FORM)
+            Entity.TYPE_SENTENCE -> getRandomSentenceReviewFragment()
             Entity.TYPE_WORD -> getRandomReviewFragment()
             else -> throw UnsupportedOperationException("Unknown type: ${entity.type}")
         }
@@ -117,7 +117,10 @@ class LearningFragmentsGenerator {
     }
 
     private fun getRandomReviewFragment(): ArrayList<Int> {
-        return arrayListOf(TYPE_CHOOSE_GERMAN, TYPE_CHOOSE_TRANSLATION, TYPE_TYPING)
+        return arrayListOf(TYPE_CHOOSE_GERMAN, TYPE_CHOOSE_TRANSLATION, TYPE_TYPING, TYPE_FORM)
+    }
+    private fun getRandomSentenceReviewFragment(): ArrayList<Int> {
+        return arrayListOf(TYPE_CHOOSE_GERMAN, TYPE_CHOOSE_TRANSLATION, TYPE_FORM, TYPE_FORM)
     }
 
     private fun getRandomFragmentType(types: List<Int>): Int {

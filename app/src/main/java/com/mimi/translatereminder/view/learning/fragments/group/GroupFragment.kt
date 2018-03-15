@@ -2,6 +2,8 @@ package com.mimi.translatereminder.view.learning.fragments.group
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,19 +29,19 @@ class GroupFragment : BaseFragment(), GroupContract.View {
         val ids = arguments.getIntArray(Progress.IDS)
         GroupPresenter(this, (activity as LearningActivity).presenter, type = type, ids = ids.asList())
     }
-    private val leftButtons by lazy { listOf(left1, left2, left3, left4) }
-    private val rightButtons by lazy { listOf(right1, right2, right3, right4) }
-    private var currentSelectedLeft: Button? = null
-    private var currentSelectedRight: Button? = null
+    private val leftAdapter by lazy { GroupAdapter(context, { presenter.onLeftSelected(it) }) }
+    private val rightAdapter by lazy { GroupAdapter(context, { presenter.onRightSelected(it) }) }
+
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_group, container, false)
 
     override fun init() {
-        val list = ArrayList(leftButtons)
-        list.addAll(rightButtons)
-        list.forEach { it.setOnClickListener { onButtonSelected(it as Button) } }
+        leftList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        leftList.adapter = leftAdapter
+        rightList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        rightList.adapter = rightAdapter
     }
 
     override fun toast(text: String) {
@@ -50,77 +52,21 @@ class GroupFragment : BaseFragment(), GroupContract.View {
     override val contextName = Context.Learning
 
     override fun refreshText(left: List<String>, right: List<String>) {
-        setText(left, leftButtons)
-        setText(right, rightButtons)
+        leftAdapter.refreshItems(left)
+        rightAdapter.refreshItems(right)
+    }
+
+    override fun refreshLeftItem(left: GroupItem) {
+        leftAdapter.refreshItem(left)
+    }
+
+    override fun refreshRightItem(right: GroupItem) {
+        rightAdapter.refreshItem(right)
     }
 
     override fun onVisibleToUser() {
         super.onVisibleToUser()
         presenter.onVisibleToUser()
-    }
-
-
-    private fun onButtonSelected(button: Button) {
-        if (leftButtons.contains(button)) { // left button selected
-            if (currentSelectedLeft != null)
-                currentSelectedLeft!!.backgroundColor = getUnselectedColor()
-            currentSelectedLeft = if (currentSelectedLeft == button) {
-                null
-            } else {
-                button.setBackgroundColor(getSelectedColor())
-                button
-            }
-        } else if (rightButtons.contains(button)) { // right button selected
-            if (currentSelectedRight != null)
-                currentSelectedRight!!.backgroundColor = getUnselectedColor()
-            currentSelectedRight = if (currentSelectedRight == button) {
-                null
-            } else {
-                button.setBackgroundColor(getSelectedColor())
-                button
-            }
-
-        }
-        if (currentSelectedLeft != null && currentSelectedRight != null) {
-            presenter.onSelected(currentSelectedLeft!!.text.toString(),
-                    currentSelectedRight!!.text.toString())
-            currentSelectedLeft = null
-            currentSelectedRight = null
-        }
-    }
-
-    private fun getUnselectedColor() = ContextCompat.getColor(context, R.color.colorPrimaryDark)
-    private fun getSelectedColor() = ContextCompat.getColor(context, R.color.colorAccent)
-
-    private fun setText(text: List<String>, buttons: List<Button>) {
-        val list = ArrayList<String>()
-        list.addAll(text)
-        buttons.forEach {
-            if (list.isNotEmpty())
-                setText(it, list)
-        }
-    }
-
-
-    private fun setText(button: Button, options: ArrayList<String>): ArrayList<String> {
-        val position = Random().nextInt(options.size)
-        button.text = options[position]
-        options.removeAt(position)
-        return options
-    }
-
-    override fun changeBackground(left: String, right: String, color: Int) {
-        leftButtons.filter { it.text == left }
-                .forEach { it.setBackgroundColor(ContextCompat.getColor(activity, color)) }
-        rightButtons.filter { it.text == right }
-                .forEach { it.setBackgroundColor(ContextCompat.getColor(activity, color)) }
-    }
-
-    override fun makeButtonsInactive(left: String, right: String) {
-        leftButtons.filter { it.text == left }
-                .forEach { it.setOnClickListener { } }
-        rightButtons.filter { it.text == right }
-                .forEach { it.setOnClickListener { } }
     }
 
     override fun startPresenter() {

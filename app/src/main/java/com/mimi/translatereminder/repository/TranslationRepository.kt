@@ -13,9 +13,9 @@ import java.util.*
 class TranslationRepository(private val itemDb: EntityDao) {
     private val sharedPrefs = SharedPreferencesUtil()
 
-    fun addEntity(entity: Entity) {
-        itemDb.insertAll(entity)
-    }
+    fun addEntity(entity: Entity) =
+            itemDb.insert(entity)
+
 
     fun saveEntity(entity: Entity) {
         itemDb.updateEntity(entity)

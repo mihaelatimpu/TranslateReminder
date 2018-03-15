@@ -1,6 +1,5 @@
 package com.mimi.translatereminder.view.learning
 
-import android.os.Handler
 import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.dto.Progress
 import com.mimi.translatereminder.repository.TranslationRepository
@@ -15,6 +14,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
 import org.jetbrains.anko.runOnUiThread
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
 
 /**
@@ -24,7 +24,7 @@ import kotlin.concurrent.schedule
 class LearningPresenter : LearningContract.Presenter {
     override lateinit var view: LearningContract.Activity
     override var type: Int = TYPE_LEARN_NEW_WORDS
-    override var itemId: Int? = null
+    override var itemIds: List<Int> = listOf()
     private val fragmentGen = LearningFragmentsGenerator()
     private val fragments = ArrayList<Progress>()
     private val stateUtil = StateUtil()
@@ -65,11 +65,9 @@ class LearningPresenter : LearningContract.Presenter {
     }
 
     private fun retrieveItems(): List<Entity> {
-        val itemId = itemId
-        if (itemId != null && itemId != 0) {
-            val item = repo.selectItemById(itemId)
-            if (item != null)
-                return listOf(item)
+        val items = itemIds.map { repo.selectItemById(it)}
+        if (items.isNotEmpty()) {
+            return items.filterNotNull()
         }
         return when (type) {
             TYPE_LEARN_NEW_WORDS -> repo.retrieveLearningItems(view.getContext())
@@ -111,7 +109,7 @@ class LearningPresenter : LearningContract.Presenter {
     }
 
     private fun delayToNextFragment(position: Int) {
-        delay(1000){
+        delay(1500){
             if (position < fragments.size - 1)
                 moveToNextFragment()
         }
@@ -122,8 +120,8 @@ class LearningPresenter : LearningContract.Presenter {
         timer.schedule(delay) { function() }
     }
 
-    override fun spell(text: String) {
-        view.spellText(text, {})
+    override fun spell(text: String, onFinish: () -> Unit) {
+        view.spellText(text, onFinish)
     }
 
     override fun onFragmentResult(addedScore: Int, entityId: Int?, correct: Boolean) {
@@ -152,10 +150,11 @@ class LearningPresenter : LearningContract.Presenter {
 
     private fun moveToNextFragment() {
         val currentPosition = view.getCurrentFragmentPosition()
-        if (currentPosition + 1 < fragments.size)
-            view.moveToFragment(currentPosition + 1)
-        else
-            view.finishActivity()
+        when {
+            currentPosition + 1 < fragments.size -> view.moveToFragment(currentPosition + 1)
+            type == TYPE_LISTENING -> view.moveToFragment(currentPosition + 1)
+            else -> view.finishActivity()
+        }
     }
 
 

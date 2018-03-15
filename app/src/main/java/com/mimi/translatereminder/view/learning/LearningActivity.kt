@@ -20,13 +20,12 @@ import org.koin.android.ext.android.inject
  */
 class LearningActivity : BaseActivity(), LearningContract.Activity {
     companion object {
-        private val TYPE = "type"
-        private val ITEM_ID = "itemId"
-        fun startActivityIntent(context: Context, type: Int, reviewId: Int?): Intent {
+        private const val TYPE = "type"
+        private const val ITEM_ID = "itemIds"
+        fun startActivityIntent(context: Context, type: Int, reviewIds: List<Int>): Intent {
             val intent = Intent(context, LearningActivity::class.java)
             intent.putExtra(TYPE, type)
-            if (reviewId != null)
-                intent.putExtra(ITEM_ID, reviewId)
+                intent.putExtra(ITEM_ID, reviewIds.toIntArray())
             return intent
         }
     }
@@ -44,7 +43,7 @@ class LearningActivity : BaseActivity(), LearningContract.Activity {
         if (intent.hasExtra(TYPE))
             presenter.type = intent.getIntExtra(TYPE, TYPE_LEARN_NEW_WORDS)
         if (intent.hasExtra(ITEM_ID))
-            presenter.itemId = intent.getIntExtra(ITEM_ID, 0)
+            presenter.itemIds = intent.getIntArrayExtra(ITEM_ID).toList()
         presenter.view = this
         speaker.allowed = true
         presenter.start()

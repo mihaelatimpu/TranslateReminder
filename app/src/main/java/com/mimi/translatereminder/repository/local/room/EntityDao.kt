@@ -24,7 +24,7 @@ interface EntityDao {
     }
 
     @Insert
-    fun insertAll(vararg entities: Entity)
+    fun insert(entity: Entity):Long
 
     @Update
     fun updateEntity(vararg entity: Entity)

@@ -122,10 +122,11 @@ class AddEditPresenter : AddEditContract.Presenter {
             val repo = activity.getRepository()
             val preExistingWord = repo.findEntityByGermanWord(entity.germanWord).firstOrNull()
             if (preExistingWord == null) {
-                repo.addEntity(entity)
+                entity.id = repo.addEntity(entity).toInt()
                 val itemsSoFar = repo.getAll()
                 wordsCounter = itemsSoFar.size
             }
+            editedItem = entity
             onComplete {
                 view.hideLoadingDialog()
                 when {

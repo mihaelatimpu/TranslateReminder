@@ -1,10 +1,10 @@
 package com.mimi.translatereminder.view.learning.fragments.choose
 
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import com.mimi.translatereminder.R
 import com.mimi.translatereminder.base.BaseFragment
 import com.mimi.translatereminder.dto.Progress
@@ -12,8 +12,6 @@ import com.mimi.translatereminder.dto.Progress.Companion.TYPE
 import com.mimi.translatereminder.utils.Context
 import com.mimi.translatereminder.view.learning.LearningActivity
 import kotlinx.android.synthetic.main.fragment_choose.*
-import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by Mimi on 13/12/2017.
@@ -26,8 +24,7 @@ class ChooseFragment : BaseFragment(), ChooseContract.View {
         ChoosePresenter(this, (activity as LearningActivity).presenter, type = type)
     }
 
-    private val optionButtons by lazy { listOf(option1, option2, option3, option4) }
-
+    private val adapter by lazy { ChooseAdapter(context, { presenter.onAnswered(it) }) }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -53,38 +50,18 @@ class ChooseFragment : BaseFragment(), ChooseContract.View {
         val id = arguments.getInt(Progress.ENTITY_ID, 0)
         if (id != 0)
             presenter.setEntityId(id)
-        optionButtons.forEach { setOnClickListener(it) }
+        optionsList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        optionsList.adapter = adapter
     }
 
-    private fun setOnClickListener(button: Button) {
-        button.setOnClickListener { presenter.onAnswered(button.text.toString()) }
-
-    }
 
     override fun refreshText(translation: String, options: List<String>) {
         subtitle.text = translation
-        var array = ArrayList<String>(options)
-        optionButtons.forEach {
-            array = setText(it, array)
-        }
+        adapter.refreshItems(options)
     }
 
-    override fun changeBackground(green: Boolean, text: String) {
-        optionButtons.forEach {
-            if (it.text == text) {
-                val color = if (green) R.color.green
-                else R.color.red
-                it.setBackgroundResource(color)
-            }
-        }
-    }
-
-
-    private fun setText(button: Button, options: ArrayList<String>): ArrayList<String> {
-        val position = Random().nextInt(options.size)
-        button.text = options[position]
-        options.removeAt(position)
-        return options
+    override fun changeBackground(answer: ChooseItem) {
+        adapter.refreshItem(answer)
     }
 
 

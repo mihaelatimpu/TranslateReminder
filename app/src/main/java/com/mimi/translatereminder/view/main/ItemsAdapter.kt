@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import com.mimi.translatereminder.R
 import com.mimi.translatereminder.dto.Entity
 
 /**
@@ -17,13 +16,17 @@ import com.mimi.translatereminder.dto.Entity
 open class ItemsAdapter<T : ItemsAdapter.BaseHolder>(val context: Context,
                                                      private val onClick: (Entity) -> Unit,
                                                      private val createHolder: (View) -> T,
-                                                     private val resourceId: Int)
+                                                     private val resourceId: Int,
+                                                     private val notifyChangeState: (Boolean) -> Unit = {},
+                                                     private val notifyChangeCount: (Int) -> Unit = {})
     : RecyclerView.Adapter<T>(),
-        Filterable {
+        Filterable, SelectableInterface {
 
     private val allItems = arrayListOf<Entity>()
     private val filteredItems = arrayListOf<Entity>()
     private val mFilter = ItemsFilter()
+    private val selectedItems = arrayListOf<Entity>()
+    private var selectableMode = false
 
     fun refreshItems(newTranslations: List<Entity>) {
         allItems.clear()
@@ -31,15 +34,33 @@ open class ItemsAdapter<T : ItemsAdapter.BaseHolder>(val context: Context,
         notifyDataSetChanged()
     }
 
+    override fun isInSelectableMode() = selectableMode
+    override fun changeSelectedCount(count: Int) {
+        notifyChangeCount(count)
+    }
+
+    override fun changeState(state: Boolean) {
+        if (state == selectableMode) {
+            return
+        }
+        selectableMode = state
+        notifyChangeState(selectableMode)
+        if (!selectableMode) {
+            selectedItems.clear()
+            notifyDataSetChanged()
+        }
+    }
+
+    override fun getSelectedItems() = selectedItems
+
     override fun getFilter() = mFilter
 
     override fun onBindViewHolder(holder: T, position: Int) {
-        holder.bind(filteredItems[position], onClick)
+        val entity = filteredItems[position]
+        holder.bind(entity, onClick, selectedItems.contains(entity), this)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int)
-            = createHolder(LayoutInflater.from(context).
-            inflate(resourceId, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int) = createHolder(LayoutInflater.from(context).inflate(resourceId, parent, false))
 
 
     override fun getItemCount() = filteredItems.size
@@ -68,6 +89,15 @@ open class ItemsAdapter<T : ItemsAdapter.BaseHolder>(val context: Context,
     }
 
     abstract class BaseHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        abstract fun bind(entity: Entity, onClick: (Entity) -> Unit)
+        abstract fun bind(entity: Entity, onClick: (Entity) -> Unit,
+                          selected: Boolean, selectableInterface: SelectableInterface)
     }
+}
+
+interface SelectableInterface {
+
+    fun changeState(state: Boolean)
+    fun changeSelectedCount(count: Int)
+    fun getSelectedItems(): ArrayList<Entity>
+    fun isInSelectableMode(): Boolean
 }

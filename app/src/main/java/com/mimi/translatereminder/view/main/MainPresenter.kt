@@ -16,12 +16,24 @@ import org.jetbrains.anko.onComplete
 class MainPresenter : MainContract.Presenter {
     override var fragments: List<MainContract.FragmentPresenter> = listOf()
 
-    lateinit override var view: MainContract.Activity
+    override lateinit var view: MainContract.Activity
+
+    private var multiSelectableMode = false
+    private val selectableListeners = arrayListOf<MultiselectStateListener>()
 
     private val exceptionHandler: (Throwable) -> Unit = {
         it.printStackTrace()
         view.hideLoadingDialog()
         view.toast(it.message ?: "Unknown error")
+    }
+
+    override fun registerMultiSelectChangeListener(listener: MultiselectStateListener) {
+        selectableListeners.add(listener)
+        listener.onMultiSelectChange(multiSelectableMode)
+    }
+
+    override fun unregisterMultiSelectChangeListener(listener: MultiselectStateListener) {
+        selectableListeners.remove(listener)
     }
 
     override fun start() {
@@ -31,24 +43,46 @@ class MainPresenter : MainContract.Presenter {
         view.showFragment(R.id.nav_edit)
     }
 
+    override fun getSelectedItems(): List<Entity> {
+        val array = arrayListOf<Entity>()
+        selectableListeners.forEach { array.addAll(it.getSelectedItems()) }
+        return array
+    }
+
+    override fun onMultiSelectChange(selectable: Boolean) {
+        if (multiSelectableMode == selectable) {
+            return
+        }
+        multiSelectableMode = selectable
+        selectableListeners.forEach {
+            it.onMultiSelectChange(multiSelectableMode)
+        }
+    }
+
+    override fun onSelectCountChanged(newCount: Int) {
+        selectableListeners.forEach { it.onSelectCountChanged(newCount) }
+    }
 
     override fun editItem(item: Entity) {
         val itemId = if (item.type == Entity.TYPE_SENTENCE) item.parentId else item.id
         view.startEditActivity(itemId)
     }
 
-    override fun reviewItem(item: Entity) {
-        view.startLearningActivity(TYPE_REVIEW_ITEMS, item.id)
+    override fun reviewItems(items: List<Entity>) {
+        view.startLearningActivity(TYPE_REVIEW_ITEMS, items.map { it.id })
+
     }
 
     override fun getRepository() = view.getRepository()
 
-    override fun deleteItem(item: Entity) {
+    override fun deleteItems(items: List<Entity>) {
         view.showConfirmDialog(R.string.are_you_sure,
                 R.string.you_cannot_restore_data) {
             view.showLoadingDialog()
             doAsync(exceptionHandler) {
-                view.getRepository().delete(item)
+                items.forEach {
+                    view.getRepository().delete(it)
+                }
                 onComplete {
                     view.hideLoadingDialog()
                     reloadData()
@@ -65,12 +99,13 @@ class MainPresenter : MainContract.Presenter {
         view.startLearningActivity(type = TYPE_LEARN_NEW_WORDS)
     }
 
-    override fun reviewItems() {
-        view.startLearningActivity(type = TYPE_REVIEW_ITEMS)
-    }
 
     override fun reviewWrongItems() {
         view.startLearningActivity(type = TYPE_REVIEW_WRONG_WORDS)
+    }
+
+    override fun listenItems(items: List<Entity>) {
+        view.startLearningActivity(type = TYPE_LISTENING, reviewIds = items.map { it.id })
     }
 
     override fun startListeningActivity() {
@@ -85,13 +120,15 @@ class MainPresenter : MainContract.Presenter {
         reloadData()
     }
 
-    override fun resetItems(item: Entity) {
+    override fun resetItems(items: List<Entity>) {
         view.showLoadingDialog()
         doAsync(exceptionHandler) {
-            item.state = Entity.firstLearningState
-            item.nextReview = item.dateAdded
-            item.lastReview = item.dateAdded
-            getRepository().saveEntity(item)
+            items.forEach {
+                it.state = Entity.firstLearningState
+                it.nextReview = it.dateAdded
+                it.lastReview = it.dateAdded
+                getRepository().saveEntity(it)
+            }
             onComplete {
                 view.hideLoadingDialog()
                 reloadData()
@@ -99,6 +136,29 @@ class MainPresenter : MainContract.Presenter {
         }
     }
 
+    override fun onCancelActionSelected() {
+        onMultiSelectChange(false)
+    }
+
+    override fun onDeleteActionSelected() {
+        view.showConfirmDialog(R.string.are_you_sure,
+                R.string.you_cannot_restore_data) {
+            view.toast("Deleting items")
+        }
+    }
+
+    override fun onArchiveActionSelected() {
+        view.toast("Not yet..")
+    }
+
+    override fun onListenActionSelected() {
+        listenItems(getSelectedItems())
+    }
+
+    override fun onReviewActionSelected() {
+        reviewItems(getSelectedItems())
+
+    }
 
     override fun checkForPermission(permission: String, title: Int,
                                     description: Int, onPermissionResult: (Boolean) -> Unit) {
@@ -118,4 +178,10 @@ class MainPresenter : MainContract.Presenter {
         // reloadData()
     }
 
+}
+
+interface MultiselectStateListener {
+    fun onMultiSelectChange(selectable: Boolean)
+    fun onSelectCountChanged(newCount: Int)
+    fun getSelectedItems(): List<Entity> = listOf()
 }

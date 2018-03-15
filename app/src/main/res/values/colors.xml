@@ -11,5 +11,6 @@
     <color name="option_button_bg">#00ffffff</color>
     <color name="grey" >#8f8f8f</color>
     <color name="grey_light" >#e2e2e2</color>
+    <color name="grey_darker" >#c6c6c6</color>
     <color name="transparent">#00e2e2e2</color>
 </resources>

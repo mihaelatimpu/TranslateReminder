@@ -60,6 +60,9 @@ class FormFragment : BaseFragment(), FormContract.View {
         return flowLayoutManager
     }
 
+    override fun refreshTranslation(translation: String) {
+        translatedText.text = translation
+    }
     override fun refreshOptions(options: List<OptionWord>) {
         optionAdapter.refreshWords(options)
     }

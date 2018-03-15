@@ -58,20 +58,24 @@ class ChoosePresenter(override var view: ChooseContract.View,
     override fun onVisibleToUser() {
     }
 
-    override fun onAnswered(answer: String) {
+    override fun onAnswered(answer: ChooseItem) {
         if (entity == null)
             return
         val entity = entity!!
         val correctAnswer = if (type == Progress.TYPE_CHOOSE_GERMAN)
             entity.germanWord else entity.translation
-        val correct = answer.toLowerCase() == correctAnswer.toLowerCase()
-        view.changeBackground(correct, answer)
-        view.changeBackground(true, entity.germanWord)
-        Timer("").schedule(500) {
-            saveAndMoveOn(correct)
+        val correct = answer.text.toLowerCase() == correctAnswer.toLowerCase()
+        answer.state = if(correct) State.Correct else State.Wrong
+        view.changeBackground(answer)
+        if(type == Progress.TYPE_CHOOSE_GERMAN){
+            masterPresenter.spell(entity.germanWord){
+                saveAndMoveOn(correct)
+            }
+        } else {
+            Timer("").schedule(500) {
+                saveAndMoveOn(correct)
+            }
         }
-        if(type == Progress.TYPE_CHOOSE_GERMAN)
-            masterPresenter.spell(entity.germanWord)
     }
 
     private fun saveAndMoveOn(correct: Boolean) {
