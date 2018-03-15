@@ -22,7 +22,10 @@ import org.koin.android.ext.android.inject
 class AddEditFragment : BaseFragment(), AddEditContract.View {
     override val contextName = Context.AddEditTranslation
     override val presenter: AddEditContract.Presenter by inject()
-    private val adapter by lazy {  SentenceAdapter(context, delete = { presenter.onDeleteSentence(it) })}
+    private val adapter by lazy {
+        SentenceAdapter(context, delete = { presenter.onDeleteSentence(it) },
+                edit = { presenter.onEditSentence(it.id) })
+    }
 
 
     override fun onCreateView(inflater: LayoutInflater,

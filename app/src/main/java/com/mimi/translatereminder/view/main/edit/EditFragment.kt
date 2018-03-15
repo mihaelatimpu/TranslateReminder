@@ -37,6 +37,7 @@ class EditFragment : BaseFragment(), EditContract.View {
                               container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_edit, container, false)
 
+
     override fun init() {
         lstEntities.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         lstEntities.adapter = adapter

@@ -44,6 +44,7 @@ class EditPresenter : EditContract.Presenter {
 
     override fun start() {
         view.init()
+        mainPresenter.unregisterMultiSelectChangeListener(this)
         mainPresenter.registerMultiSelectChangeListener(this)
         reloadData()
     }

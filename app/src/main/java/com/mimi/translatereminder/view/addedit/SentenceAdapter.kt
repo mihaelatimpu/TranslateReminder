@@ -12,7 +12,8 @@ import kotlinx.android.synthetic.main.item_sentence.view.*
 /**
  * Created by Mimi on 08/02/2018.
  */
-class SentenceAdapter(val context: Context, private val delete: (Entity) -> Unit) : RecyclerView.Adapter<SentenceViewHolder>() {
+class SentenceAdapter(val context: Context, private val delete: (Entity) -> Unit,
+                      private val edit: (Entity) -> Unit) : RecyclerView.Adapter<SentenceViewHolder>() {
     private val sentences = ArrayList<Entity>()
     fun refreshSentences(newItems: List<Entity>) {
         sentences.clear()
@@ -27,16 +28,17 @@ class SentenceAdapter(val context: Context, private val delete: (Entity) -> Unit
     override fun getItemCount() = sentences.size
 
     override fun onBindViewHolder(holder: SentenceViewHolder?, position: Int) {
-        holder?.bind(sentences[position], delete)
+        holder?.bind(sentences[position], delete,edit)
     }
 
 }
 
 class SentenceViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    fun bind(sentence: Entity, delete: (Entity) -> Unit) {
+    fun bind(sentence: Entity, delete: (Entity) -> Unit, edit: (Entity) -> Unit) {
         itemView.label.text = sentence.germanWord
         itemView.imageDelete.setOnClickListener {
             delete(sentence)
         }
+        itemView.setOnClickListener { edit(sentence) }
     }
 }

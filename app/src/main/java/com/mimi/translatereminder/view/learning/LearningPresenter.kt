@@ -4,6 +4,7 @@ import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.dto.Progress
 import com.mimi.translatereminder.repository.TranslationRepository
 import com.mimi.translatereminder.repository.local.sharedprefs.SharedPreferencesUtil
+import com.mimi.translatereminder.utils.EntityReorganiser
 import com.mimi.translatereminder.utils.LearningFragmentsGenerator
 import com.mimi.translatereminder.utils.StateUtil
 import com.mimi.translatereminder.view.learning.LearningContract.Companion.TYPE_LEARN_NEW_WORDS
@@ -51,7 +52,8 @@ class LearningPresenter : LearningContract.Presenter {
             shouldSpellItems = SharedPreferencesUtil().getSpellWords(view.getContext())
             fragments.clear()
             if (type == TYPE_LISTENING) {
-                fragments.addAll(fragmentGen.generateListeningFragments(items))
+                val reorderedItems = EntityReorganiser().reorganiseEntities(items)
+                fragments.addAll(fragmentGen.generateListeningFragments(reorderedItems))
             } else {
                 fragments.addAll(fragmentGen.start(items))
             }
@@ -65,7 +67,7 @@ class LearningPresenter : LearningContract.Presenter {
     }
 
     private fun retrieveItems(): List<Entity> {
-        val items = itemIds.map { repo.selectItemById(it)}
+        val items = itemIds.map { repo.selectItemById(it) }
         if (items.isNotEmpty()) {
             return items.filterNotNull()
         }
@@ -87,9 +89,9 @@ class LearningPresenter : LearningContract.Presenter {
     override fun onFragmentVisible(position: Int) {
         val item = fragments[position]
         if (type == TYPE_LISTENING) {
-            view.spellText(item.entity?.germanWord ?: "") {
-                //spellTranslation(position, item.entity)
-                delayToNextFragment(position)
+            val spelledText = item.entity?.germanWord ?: ""
+            view.spellText(spelledText) {
+                delayToNextFragment(spelledText)
             }
             return
         }
@@ -100,18 +102,14 @@ class LearningPresenter : LearningContract.Presenter {
             spell(item.entity!!.germanWord)
     }
 
-    private fun spellTranslation(position: Int, item: Entity?) {
-        delay(300){
-            view.spellText(item?.translation ?: "") {
-                delayToNextFragment(position)
-            }
-        }
-    }
 
-    private fun delayToNextFragment(position: Int) {
-        delay(1500){
-            if (position < fragments.size - 1)
-                moveToNextFragment()
+    private fun delayToNextFragment(spelledText: String) {
+        var delay = 50 * spelledText.length
+        if (delay < 1000) {
+            delay = 1000
+        }
+        delay(delay.toLong()) {
+            moveToNextFragment()
         }
     }
 
@@ -142,7 +140,9 @@ class LearningPresenter : LearningContract.Presenter {
                 }
                 onComplete {
                     view.hideLoadingDialog()
-                    moveToNextFragment()
+                    if (type != TYPE_LISTENING) {
+                        moveToNextFragment()
+                    }
                 }
             }
         }
@@ -152,7 +152,7 @@ class LearningPresenter : LearningContract.Presenter {
         val currentPosition = view.getCurrentFragmentPosition()
         when {
             currentPosition + 1 < fragments.size -> view.moveToFragment(currentPosition + 1)
-            type == TYPE_LISTENING -> view.moveToFragment(currentPosition + 1)
+            type == TYPE_LISTENING -> view.moveToFragment(0)
             else -> view.finishActivity()
         }
     }
