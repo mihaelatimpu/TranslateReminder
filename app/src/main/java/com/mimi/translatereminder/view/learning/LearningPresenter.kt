@@ -1,5 +1,6 @@
 package com.mimi.translatereminder.view.learning
 
+import android.util.Log
 import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.dto.Progress
 import com.mimi.translatereminder.repository.TranslationRepository
@@ -87,10 +88,14 @@ class LearningPresenter : LearningContract.Presenter {
     }
 
     override fun onFragmentVisible(position: Int) {
+        Log.d("LearningPresenter","OnFragmentVisible: $position")
         val item = fragments[position]
         if (type == TYPE_LISTENING) {
             val spelledText = item.entity?.germanWord ?: ""
+
+            Log.d("LearningPresenter","spellingText: $position $spelledText")
             view.spellText(spelledText) {
+                Log.d("LearningPresenter","delayToNextFragment: $position $spelledText")
                 delayToNextFragment(spelledText)
             }
             return
@@ -109,6 +114,7 @@ class LearningPresenter : LearningContract.Presenter {
             delay = 1000
         }
         delay(delay.toLong()) {
+            Log.d("LearningPresenter","moveToNextFragment from: $spelledText")
             moveToNextFragment()
         }
     }

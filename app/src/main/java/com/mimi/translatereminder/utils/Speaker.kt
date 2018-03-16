@@ -29,7 +29,10 @@ class Speaker(context: Context) : TextToSpeech.OnInitListener {
             tts.setPitch(0.5f)
             ready = true
             if (delayedWord != null)
-                speak(delayedWord!!)
+                speak(delayedWord!!){
+                    delayedWordListener()
+                    delayedWordListener = {}
+                }
         } else {
             Log.d("Speaker", "Speaker not ready")
             ready = false
@@ -42,7 +45,7 @@ class Speaker(context: Context) : TextToSpeech.OnInitListener {
             Log.d("Speaker", "Speaker allowed and ready")
             tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                 override fun onDone(utteranceId: String?) {
-                    delayedWordListener()
+                    Log.d("Speaker", "Finished speaking: $text")
                     onFinish()
                 }
 
