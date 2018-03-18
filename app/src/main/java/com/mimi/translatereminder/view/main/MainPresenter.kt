@@ -40,7 +40,7 @@ class MainPresenter : MainContract.Presenter {
         fragments.forEach {
             it.mainPresenter = this
         }
-        view.showFragment(R.id.nav_edit)
+        view.showFragment(R.id.nav_main)
     }
 
     override fun getSelectedItems(): List<Entity> {
@@ -83,6 +83,23 @@ class MainPresenter : MainContract.Presenter {
                 items.forEach {
                     view.getRepository().delete(it)
                 }
+                onComplete {
+                    view.hideLoadingDialog()
+                    reloadData()
+                }
+            }
+        }
+    }
+
+
+    private fun archiveItems(items: List<Entity>) {
+        view.showConfirmDialog(R.string.are_you_sure,
+                R.string.this_will_move_the_items_to_archive) {
+            view.showLoadingDialog()
+            doAsync(exceptionHandler) {
+
+                view.getRepository().archiveItems(items)
+
                 onComplete {
                     view.hideLoadingDialog()
                     reloadData()
@@ -141,15 +158,15 @@ class MainPresenter : MainContract.Presenter {
     }
 
     override fun onDeleteActionSelected() {
-        view.showConfirmDialog(R.string.are_you_sure,
-                R.string.you_cannot_restore_data) {
-            view.toast("Deleting items")
-        }
+        deleteItems(getSelectedItems())
+        onMultiSelectChange(false)
     }
 
     override fun onArchiveActionSelected() {
-        view.toast("Not yet..")
+        archiveItems(getSelectedItems())
+        onMultiSelectChange(false)
     }
+
 
     override fun onListenActionSelected() {
         listenItems(getSelectedItems())
@@ -174,6 +191,7 @@ class MainPresenter : MainContract.Presenter {
     }
 
     override fun onNavigationItemSelected(selectionId: Int) {
+        onMultiSelectChange(false)
         view.showFragment(selectionId)
         // reloadData()
     }

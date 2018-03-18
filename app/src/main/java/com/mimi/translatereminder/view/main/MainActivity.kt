@@ -19,9 +19,10 @@ import com.mimi.translatereminder.view.addedit.AddEditActivity
 import com.mimi.translatereminder.view.learning.LearningActivity
 import com.mimi.translatereminder.view.main.about.AboutFragment
 import com.mimi.translatereminder.view.main.contact.ContactFragment
-import com.mimi.translatereminder.view.main.edit.EditFragment
-import com.mimi.translatereminder.view.main.learning.LearningFragment
-import com.mimi.translatereminder.view.main.learning.LearningFragmentPresenter
+import com.mimi.translatereminder.view.main.main.MainFragment
+import com.mimi.translatereminder.view.main.main.presenters.ArchivedFragmentPresenter
+import com.mimi.translatereminder.view.main.main.presenters.FavouritesFragmentPresenter
+import com.mimi.translatereminder.view.main.main.presenters.MainFragmentPresenter
 import com.mimi.translatereminder.view.main.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -36,20 +37,24 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         const val LEARNING_ACTIVITY_CODE = 766
         const val ITEM_ID = "itemIds"
         const val REQUESTING_PERMISSION = 4545
+        const val FRAGMENT_TYPE_MAIN = 1
+        const val FRAGMENT_TYPE_FAVOURITES = 2
+        const val FRAGMENT_TYPE_ARCHIVED = 3
     }
 
-    private val learningFragment by lazy {
-        createLearningFragment(LearningFragmentPresenter.TYPE_LEARNING)
+    private val mainFragment by lazy {
+        createItemsFragment(FRAGMENT_TYPE_MAIN)
     }
-    private val reviewFragment by lazy {
-        createLearningFragment(LearningFragmentPresenter.TYPE_REVIEW)
+
+    private val archivedFragment by lazy {
+        createItemsFragment(FRAGMENT_TYPE_ARCHIVED)
     }
-    private val mistakesFragment by lazy {
-        createLearningFragment(LearningFragmentPresenter.TYPE_MISTAKES)
+
+    private val favouritesFragment by lazy {
+        createItemsFragment(FRAGMENT_TYPE_FAVOURITES)
     }
     private val aboutFragment by inject<AboutFragment>()
     private val contactFragment by inject<ContactFragment>()
-    private val editFragment by inject<EditFragment>()
     private val settingsFragment by inject<SettingsFragment>()
 
     override fun getContext() = this
@@ -58,9 +63,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override val presenter: MainContract.Presenter by inject()
     private var onPermissionResult: (Boolean) -> Unit = {}
 
-    private fun createLearningFragment(type: Int): LearningFragment {
-        val fragment = LearningFragment()
-        fragment.presenter.type = type
+    private fun createItemsFragment(type: Int): MainFragment {
+        val fragment = MainFragment()
+        fragment.presenter = when (type) {
+            FRAGMENT_TYPE_MAIN -> MainFragmentPresenter()
+            FRAGMENT_TYPE_ARCHIVED -> ArchivedFragmentPresenter()
+            FRAGMENT_TYPE_FAVOURITES -> FavouritesFragmentPresenter()
+            else -> throw UnsupportedOperationException("Unknown type: $type")
+        }
         return fragment
 
     }
@@ -102,20 +112,18 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun initPresenters() {
         presenter.view = this
-        learningFragment.presenter.view = learningFragment
-        reviewFragment.presenter.view = reviewFragment
-        mistakesFragment.presenter.view = mistakesFragment
+        archivedFragment.presenter.view = archivedFragment
+        mainFragment.presenter.view = mainFragment
+        favouritesFragment.presenter.view = favouritesFragment
         aboutFragment.presenter.view = aboutFragment
         contactFragment.presenter.view = contactFragment
-        editFragment.presenter.view = editFragment
         settingsFragment.presenter.view = settingsFragment
         presenter.fragments = listOf(
-                learningFragment.presenter,
-                reviewFragment.presenter,
-                mistakesFragment.presenter,
+                archivedFragment.presenter,
+                mainFragment.presenter,
+                favouritesFragment.presenter,
                 aboutFragment.presenter,
                 contactFragment.presenter,
-                editFragment.presenter,
                 settingsFragment.presenter
         )
     }
@@ -124,21 +132,17 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val fragment: BaseFragment
         val titleId: Int
         when (id) {
-            R.id.nav_learning -> {
-                fragment = learningFragment
-                titleId = R.string.menu_learning
+            R.id.nav_main -> {
+                fragment = mainFragment
+                titleId = R.string.menu_main
             }
-            R.id.nav_review -> {
-                fragment = reviewFragment
-                titleId = R.string.menu_review
+            R.id.nav_archive -> {
+                fragment = archivedFragment
+                titleId = R.string.menu_archive
             }
-            R.id.nav_mistakes -> {
-                fragment = mistakesFragment
-                titleId = R.string.menu_mistakes
-            }
-            R.id.nav_edit -> {
-                fragment = editFragment
-                titleId = R.string.edit
+            R.id.nav_favourites -> {
+                fragment = favouritesFragment
+                titleId = R.string.menu_favourites
             }
             R.id.nav_settings -> {
                 fragment = settingsFragment

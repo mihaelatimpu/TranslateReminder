@@ -7,14 +7,12 @@ import android.arch.persistence.room.migration.Migration
 import com.mimi.translatereminder.dto.Entity
 import java.util.*
 
-
 /**
- * Created by Mimi on 05/12/2017.
- *
+ * Created by Mimi on 18/03/2018.
  */
 
 @Database(entities = [(Entity::class)], version = 7)
-abstract class Database : RoomDatabase() {
+abstract class ArchivedDatabase : RoomDatabase() {
     companion object {
         val MIGRATION_1_2: Migration = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
@@ -69,5 +67,5 @@ abstract class Database : RoomDatabase() {
         }
     }
 
-    abstract fun translationDao(): EntityDao
+    abstract fun archivedDao(): ArchivedDao
 }

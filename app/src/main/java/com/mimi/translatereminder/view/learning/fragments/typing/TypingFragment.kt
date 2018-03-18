@@ -19,7 +19,7 @@ import org.jetbrains.anko.support.v4.alert
 class TypingFragment : BaseFragment(), TypingContract.View {
 
     override val presenter: TypingContract.Presenter by lazy {
-        val type = arguments.getInt(Progress.TYPE)
+        val type = arguments?.getInt(Progress.TYPE)?:0
         TypingPresenter(this, (activity as LearningActivity).presenter, type = type)
     }
 
@@ -56,7 +56,7 @@ class TypingFragment : BaseFragment(), TypingContract.View {
     }
 
     override fun init() {
-        val id = arguments.getInt(Progress.ENTITY_ID, 0)
+        val id = arguments?.getInt(Progress.ENTITY_ID, 0)?:0
         if (id != 0)
             presenter.setEntityId(id)
         fab.setOnClickListener { presenter.onAnswered(answer.text.toString()) }

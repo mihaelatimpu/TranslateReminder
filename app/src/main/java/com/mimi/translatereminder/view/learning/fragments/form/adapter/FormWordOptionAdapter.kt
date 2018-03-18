@@ -35,7 +35,7 @@ class FormWordOptionAdapter(val context: Context, private val onSelected: (Optio
         notifyItemChanged(words.indexOf(word))
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
             = ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_form_word_option, parent, false))
 
     override fun getItemCount() = words.size

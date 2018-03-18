@@ -16,9 +16,9 @@ import com.mimi.translatereminder.view.main.about.AboutPresenter
 import com.mimi.translatereminder.view.main.contact.ContactContract
 import com.mimi.translatereminder.view.main.contact.ContactFragment
 import com.mimi.translatereminder.view.main.contact.ContactPresenter
-import com.mimi.translatereminder.view.main.edit.EditContract
-import com.mimi.translatereminder.view.main.edit.EditFragment
-import com.mimi.translatereminder.view.main.edit.EditPresenter
+import com.mimi.translatereminder.view.main.main.MainFragmentContract
+import com.mimi.translatereminder.view.main.main.MainFragment
+import com.mimi.translatereminder.view.main.main.presenters.MainFragmentPresenter
 import com.mimi.translatereminder.view.main.settings.SettingsContract
 import com.mimi.translatereminder.view.main.settings.SettingsFragment
 import com.mimi.translatereminder.view.main.settings.SettingsPresenter
@@ -44,8 +44,8 @@ class ViewModule : AndroidModule() {
             provide { ContactPresenter() } bind ContactContract.Presenter::class
 
 
-            provide { EditFragment() } bind EditContract.View::class
-            provide { EditPresenter() } bind EditContract.Presenter::class
+            provide { MainFragment() } bind MainFragmentContract.View::class
+            provide { MainFragmentPresenter() } bind MainFragmentContract.Presenter::class
 
             provide { SettingsFragment() } bind SettingsContract.View::class
             provide { SettingsPresenter() } bind SettingsContract.Presenter::class

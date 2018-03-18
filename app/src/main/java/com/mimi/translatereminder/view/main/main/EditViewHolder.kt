@@ -1,4 +1,4 @@
-package com.mimi.translatereminder.view.main.edit
+package com.mimi.translatereminder.view.main.main
 
 import android.view.View
 import com.mimi.translatereminder.R
@@ -15,12 +15,28 @@ import kotlinx.android.synthetic.main.item_translation.view.*
 class EditViewHolder(itemView: View) : ItemsAdapter.BaseHolder(itemView) {
 
     override fun bind(entity: Entity, onClick: (Entity) -> Unit, selected: Boolean,
-                      selectableInterface: SelectableInterface) {
+                      selectableInterface: SelectableInterface, shouldShowState:Boolean) {
         itemView.title.text = entity.germanWord
         itemView.translation.text = entity.translation
+        refreshState(entity, shouldShowState)
         refreshSelected(selectableInterface.getSelectedItems().contains(entity))
 
+        itemView.setOnClickListener { onClick(entity, onClick, selectableInterface) }
+
+        itemView.setOnLongClickListener {
+            selectableInterface.changeState(!selectableInterface.isInSelectableMode())
+            if (selectableInterface.isInSelectableMode()) {
+                selectableInterface.getSelectedItems().add(entity)
+                refreshSelected(true)
+                selectableInterface.changeSelectedCount(selectableInterface.getSelectedItems().size)
+            }
+            return@setOnLongClickListener true
+        }
+    }
+    private fun refreshState(entity: Entity, shouldShowState: Boolean){
+
         val state = when {
+            !shouldShowState -> null
             entity.isLearning() -> itemView.context.getString(R.string.menu_learning)
             entity.isWrong() -> itemView.context.getString(R.string.menu_mistakes)
             entity.isReviewing() -> TimeUtils().getTime(entity.nextReview, itemView.context)
@@ -32,17 +48,6 @@ class EditViewHolder(itemView: View) : ItemsAdapter.BaseHolder(itemView) {
         } else {
             itemView.subtitle.visibility = View.INVISIBLE
 
-        }
-        itemView.setOnClickListener { onClick(entity, onClick, selectableInterface) }
-
-        itemView.setOnLongClickListener {
-            selectableInterface.changeState(!selectableInterface.isInSelectableMode())
-            if (selectableInterface.isInSelectableMode()) {
-                selectableInterface.getSelectedItems().add(entity)
-                refreshSelected(true)
-                selectableInterface.changeSelectedCount(selectableInterface.getSelectedItems().size)
-            }
-            return@setOnLongClickListener true
         }
     }
 

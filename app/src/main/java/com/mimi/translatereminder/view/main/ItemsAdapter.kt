@@ -27,10 +27,12 @@ open class ItemsAdapter<T : ItemsAdapter.BaseHolder>(val context: Context,
     private val mFilter = ItemsFilter()
     private val selectedItems = arrayListOf<Entity>()
     private var selectableMode = false
+    private var shouldShowState: Boolean = false
 
-    fun refreshItems(newTranslations: List<Entity>) {
+    fun refreshItems(newTranslations: List<Entity>, shouldShowState: Boolean) {
         allItems.clear()
         allItems.addAll(newTranslations)
+        this.shouldShowState = shouldShowState
         notifyDataSetChanged()
     }
 
@@ -57,10 +59,11 @@ open class ItemsAdapter<T : ItemsAdapter.BaseHolder>(val context: Context,
 
     override fun onBindViewHolder(holder: T, position: Int) {
         val entity = filteredItems[position]
-        holder.bind(entity, onClick, selectedItems.contains(entity), this)
+        holder.bind(entity, onClick, selectedItems.contains(entity), this,
+                shouldShowState)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int) = createHolder(LayoutInflater.from(context).inflate(resourceId, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = createHolder(LayoutInflater.from(context).inflate(resourceId, parent, false))
 
 
     override fun getItemCount() = filteredItems.size
@@ -90,7 +93,8 @@ open class ItemsAdapter<T : ItemsAdapter.BaseHolder>(val context: Context,
 
     abstract class BaseHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         abstract fun bind(entity: Entity, onClick: (Entity) -> Unit,
-                          selected: Boolean, selectableInterface: SelectableInterface)
+                          selected: Boolean, selectableInterface: SelectableInterface,
+                          shouldShowState: Boolean)
     }
 }
 

@@ -9,7 +9,7 @@ import com.mimi.translatereminder.dto.Entity
  *
  */
 @Dao
-interface EntityDao {
+interface EntityDao:ItemDao {
     companion object {
         const val TABLE = "entity"
         const val id = "id"
@@ -24,18 +24,18 @@ interface EntityDao {
     }
 
     @Insert
-    fun insert(entity: Entity):Long
+    override fun insert(entity: Entity):Long
 
     @Update
-    fun updateEntity(vararg entity: Entity)
+    override fun updateEntity(vararg entity: Entity)
 
 
     @Query("SELECT * from $TABLE "+
             "ORDER BY $state ASC, $nextReview ASC")
-    fun selectAll(): List<Entity>
+    override fun selectAll(): List<Entity>
 
     @Query("SELECT * from $TABLE WHERE $id=:id")
-    fun selectItemById(id:Int): List<Entity>
+    override fun selectItemById(id:Int): List<Entity>
 
     @Query("SELECT * from $TABLE WHERE $germanWord=:german")
     fun getEntitiesByGermanVersion(german: String): List<Entity>
@@ -84,11 +84,11 @@ interface EntityDao {
     @Query("SELECT * from $TABLE " +
             "WHERE $type = ${Entity.TYPE_SENTENCE} " +
             "AND $parentId = :itemId")
-    fun findSentences(itemId:Int):List<Entity>
+    override fun findSentences(itemId:Int):List<Entity>
 
     @Delete
-    fun delete(vararg entities: Entity)
+    override fun delete(vararg entities: Entity)
 
     @Query("DELETE FROM $TABLE")
-    fun deleteAll()
+    override fun deleteAll()
 }

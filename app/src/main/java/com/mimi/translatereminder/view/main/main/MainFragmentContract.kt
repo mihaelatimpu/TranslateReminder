@@ -1,4 +1,4 @@
-package com.mimi.translatereminder.view.main.edit
+package com.mimi.translatereminder.view.main.main
 
 import android.support.annotation.StringRes
 import com.mimi.translatereminder.base.BasePresenter
@@ -12,14 +12,15 @@ import com.mimi.translatereminder.view.main.MultiselectStateListener
  *
  */
 
-interface EditContract {
+interface MainFragmentContract {
     interface View : BaseView<Presenter> {
         fun isVisible(): Boolean
-        fun refreshItems(items: List<Entity>)
-        fun refreshMainOption(@StringRes text: Int)
+        fun refreshItems(items: List<Entity>, showState:Boolean)
+        fun refreshMainOption(visible:Boolean, @StringRes text: Int)
         fun showOtherOptionsDialog(learningItems: Int, reviewItems: Int, wrongItems: Int)
         fun changeSelectableState(selectable: Boolean)
         fun getSelectedItems(): List<Entity>
+        fun refreshAddButtonVisibility(visible:Boolean)
     }
 
     interface Presenter : MainContract.FragmentPresenter, BasePresenter<View>, MultiselectStateListener {

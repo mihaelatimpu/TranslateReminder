@@ -31,8 +31,8 @@ class FormWordResultAdapter(val context: Context, private val onSelected: (Optio
     }
 
     fun getAllWords() = words
-
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int) = ResultViewHolder(LayoutInflater.from(context).inflate(R.layout.item_form_word_option, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
+    = ResultViewHolder(LayoutInflater.from(context).inflate(R.layout.item_form_word_option, parent, false))
 
     override fun getItemCount() = words.size
 

@@ -30,6 +30,9 @@ class SettingsFragment : BaseFragment(), SettingsContract.View {
                               container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_settings, container, false)
 
+    override fun getContext(): android.content.Context {
+        return super.getContext()!!
+    }
 
     override fun toast(text: String) {
         toast.setText(text)

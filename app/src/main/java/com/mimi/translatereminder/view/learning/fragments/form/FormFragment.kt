@@ -26,8 +26,8 @@ class FormFragment : BaseFragment(), FormContract.View {
     override val presenter by lazy {
         FormPresenter(this, masterPresenter = (activity as LearningActivity).presenter)
     }
-    private val resultAdapter by lazy { FormWordResultAdapter(activity, onSelected = { presenter.onResultSelected(it) }) }
-    private val optionAdapter by lazy { FormWordOptionAdapter(activity, onSelected = { presenter.onOptionSelected(it) }) }
+    private val resultAdapter by lazy { FormWordResultAdapter(activity!!, onSelected = { presenter.onResultSelected(it) }) }
+    private val optionAdapter by lazy { FormWordOptionAdapter(activity!!, onSelected = { presenter.onOptionSelected(it) }) }
 
     override fun startPresenter() {
         presenter.start()
@@ -45,7 +45,7 @@ class FormFragment : BaseFragment(), FormContract.View {
     }
 
     override fun init() {
-        val id = arguments.getInt(Progress.ENTITY_ID, 0)
+        val id = arguments?.getInt(Progress.ENTITY_ID, 0)?:0
         if (id != 0)
             presenter.setEntityId(id)
         resultList.layoutManager = getLayoutManager()

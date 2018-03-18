@@ -25,12 +25,12 @@ class ChooseAdapter(val context: Context, private val onSelected: (ChooseItem) -
         notifyItemChanged(items.indexOf(item))
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int) = GroupViewHolder(LayoutInflater.from(context).inflate(R.layout.item_group, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = GroupViewHolder(LayoutInflater.from(context).inflate(R.layout.item_group, parent, false))
 
     override fun getItemCount() = items.size
 
-    override fun onBindViewHolder(holder: GroupViewHolder?, position: Int) {
-        holder?.bindItem(items[position], onSelected)
+    override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
+        holder.bindItem(items[position], onSelected)
     }
 
 }

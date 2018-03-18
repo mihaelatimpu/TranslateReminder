@@ -1,4 +1,4 @@
-package com.mimi.translatereminder.view.main.edit
+package com.mimi.translatereminder.view.main.main
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -13,19 +13,19 @@ import com.mimi.translatereminder.utils.Context
 import com.mimi.translatereminder.view.main.ItemsAdapter
 import com.mimi.translatereminder.view.main.MoreOptionsDialog
 import kotlinx.android.synthetic.main.fragment_edit.*
-import org.koin.android.ext.android.inject
 
 /**
  * Created by Mimi on 06/12/2017.
  *
  */
 
-class EditFragment : BaseFragment(), EditContract.View {
+class MainFragment : BaseFragment(), MainFragmentContract.View {
+
     override val contextName = Context.Main
 
-    override val presenter: EditContract.Presenter by inject()
+    override lateinit var presenter: MainFragmentContract.Presenter
     val adapter by lazy {
-        ItemsAdapter(context = activity,
+        ItemsAdapter(context = activity!!,
                 onClick = { presenter.showDetailsDialog(it.id) },
                 createHolder = { EditViewHolder(it) },
                 resourceId = R.layout.item_translation,
@@ -63,8 +63,13 @@ class EditFragment : BaseFragment(), EditContract.View {
         adapter.changeState(selectable)
     }
 
-    override fun refreshMainOption(text: Int) {
-        mainActionButton.text = getString(text)
+    override fun refreshMainOption(visible: Boolean, text: Int) {
+        if (visible) {
+            mainActionLayout.visibility = View.VISIBLE
+            mainActionButton.text = getString(text)
+        } else {
+            mainActionLayout.visibility = View.GONE
+        }
     }
 
     override fun showOtherOptionsDialog(learningItems: Int, reviewItems: Int, wrongItems: Int) {
@@ -73,13 +78,21 @@ class EditFragment : BaseFragment(), EditContract.View {
                 onLearn = { presenter.onLearnButtonClicked() },
                 onWrong = { presenter.onWrongButtonClicked() },
                 onListening = { presenter.onListeningButtonClicked() })
-        dialog.show(activity.fragmentManager, "")
+        dialog.show(activity?.fragmentManager, "")
     }
 
-    override fun refreshItems(items: List<Entity>) {
-        adapter.refreshItems(items)
+    override fun refreshItems(items: List<Entity>, showState: Boolean) {
+        adapter.refreshItems(items, showState)
         if (searchView != null)
             adapter.filter.filter(searchView.query)
+    }
+
+    override fun refreshAddButtonVisibility(visible: Boolean) {
+        if(visible){
+            fab.visibility = View.VISIBLE
+        } else {
+            fab.visibility = View.GONE
+        }
     }
 
     override fun toast(text: String) {

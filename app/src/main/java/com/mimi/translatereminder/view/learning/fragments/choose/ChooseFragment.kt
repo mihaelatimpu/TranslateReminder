@@ -20,11 +20,11 @@ import kotlinx.android.synthetic.main.fragment_choose.*
 class ChooseFragment : BaseFragment(), ChooseContract.View {
 
     override val presenter: ChooseContract.Presenter by lazy {
-        val type = arguments.getInt(TYPE)
-        ChoosePresenter(this, (activity as LearningActivity).presenter, type = type)
+        val type = arguments?.getInt(TYPE)
+        ChoosePresenter(this, (activity as LearningActivity).presenter, type = type?:0)
     }
 
-    private val adapter by lazy { ChooseAdapter(context, { presenter.onAnswered(it) }) }
+    private val adapter by lazy { ChooseAdapter(context!!, { presenter.onAnswered(it) }) }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -47,7 +47,7 @@ class ChooseFragment : BaseFragment(), ChooseContract.View {
     }
 
     override fun init() {
-        val id = arguments.getInt(Progress.ENTITY_ID, 0)
+        val id = arguments?.getInt(Progress.ENTITY_ID, 0)?:0
         if (id != 0)
             presenter.setEntityId(id)
         optionsList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

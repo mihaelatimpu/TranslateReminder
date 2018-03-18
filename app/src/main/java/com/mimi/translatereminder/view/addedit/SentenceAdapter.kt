@@ -21,14 +21,14 @@ class SentenceAdapter(val context: Context, private val delete: (Entity) -> Unit
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): SentenceViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SentenceViewHolder {
         return SentenceViewHolder(LayoutInflater.from(context).inflate(R.layout.item_sentence, parent, false))
     }
 
     override fun getItemCount() = sentences.size
 
-    override fun onBindViewHolder(holder: SentenceViewHolder?, position: Int) {
-        holder?.bind(sentences[position], delete,edit)
+    override fun onBindViewHolder(holder: SentenceViewHolder, position: Int) {
+        holder.bind(sentences[position], delete,edit)
     }
 
 }

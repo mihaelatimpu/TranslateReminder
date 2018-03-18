@@ -1,8 +1,9 @@
-package com.mimi.translatereminder.view.main.edit
+package com.mimi.translatereminder.view.main.main.presenters
 
 import com.mimi.translatereminder.R
 import com.mimi.translatereminder.dto.Entity
 import com.mimi.translatereminder.view.main.MainContract
+import com.mimi.translatereminder.view.main.main.MainFragmentContract
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
 import java.util.*
@@ -15,7 +16,7 @@ import kotlin.collections.ArrayList
  */
 
 
-class EditPresenter : EditContract.Presenter {
+abstract class AbstractFragmentPresenter : MainFragmentContract.Presenter {
     companion object {
         const val TYPE_LEARN = 0
         const val TYPE_REVIEW = 1
@@ -23,7 +24,7 @@ class EditPresenter : EditContract.Presenter {
     }
 
     override lateinit var mainPresenter: MainContract.Presenter
-    override lateinit var view: EditContract.View
+    override lateinit var view: MainFragmentContract.View
     private var learningItems = 0
     private var reviewItems = 0
     private var wrongItems = 0
@@ -70,7 +71,7 @@ class EditPresenter : EditContract.Presenter {
     override fun reloadData() {
         view.showLoadingDialog()
         doAsync(exceptionHandler) {
-            val items = mainPresenter.getRepository().getAll()
+            val items = retrieveItemsFromDB()
             learningItems = items.filter { it.isLearning() }.size
             wrongItems = items.filter { it.isWrong() }.size
             reviewItems = items.filter {
@@ -82,9 +83,10 @@ class EditPresenter : EditContract.Presenter {
                 val displayItems = ArrayList<Entity>()
                 displayItems.addAll(items.filter { it.isWrong() })
                 displayItems.addAll(items.filter { !it.isWrong() })
-                view.refreshItems(displayItems)
+                view.refreshItems(displayItems, shouldShowItemsState())
                 mainOptionType = getMainOptionType()
-                view.refreshMainOption(getMainOptionText())
+                view.refreshMainOption(isMainButtonVisible(), getMainOptionText())
+                view.refreshAddButtonVisibility(isAddButtonVisible())
             }
         }
     }
@@ -141,4 +143,10 @@ class EditPresenter : EditContract.Presenter {
     override fun onAddButtonClicked() {
         mainPresenter.onAddButtonClicked()
     }
+
+    abstract fun retrieveItemsFromDB(): List<Entity>
+    abstract fun isMainButtonVisible(): Boolean
+    abstract fun isAddButtonVisible(): Boolean
+    abstract fun shouldShowItemsState(): Boolean
+
 }

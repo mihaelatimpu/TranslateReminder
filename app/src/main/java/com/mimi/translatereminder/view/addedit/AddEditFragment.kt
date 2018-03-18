@@ -23,7 +23,7 @@ class AddEditFragment : BaseFragment(), AddEditContract.View {
     override val contextName = Context.AddEditTranslation
     override val presenter: AddEditContract.Presenter by inject()
     private val adapter by lazy {
-        SentenceAdapter(context, delete = { presenter.onDeleteSentence(it) },
+        SentenceAdapter(context!!, delete = { presenter.onDeleteSentence(it) },
                 edit = { presenter.onEditSentence(it.id) })
     }
 
@@ -36,8 +36,9 @@ class AddEditFragment : BaseFragment(), AddEditContract.View {
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
         fab.setOnClickListener { presenter.onAddSentence() }
-        if (activity.intent != null && activity.intent.hasExtra(MainActivity.ITEM_ID)) {
-            presenter.editItem(activity.intent.getIntExtra(MainActivity.ITEM_ID, 0))
+        val intent = activity?.intent
+        if (intent != null && intent.hasExtra(MainActivity.ITEM_ID)) {
+            presenter.editItem(intent.getIntExtra(MainActivity.ITEM_ID, 0))
         }
 
     }

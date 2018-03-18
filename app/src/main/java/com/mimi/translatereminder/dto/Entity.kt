@@ -10,7 +10,7 @@ import java.util.*
  * The base entity of the application
  */
 @Entity(tableName = EntityDao.TABLE)
-class Entity(
+open class Entity(
         @PrimaryKey(autoGenerate = true)
         var id: Int = 0,
         var germanWord: String,
@@ -59,4 +59,5 @@ class Entity(
         fun isWrongState(state: Int) = state in firstMistakeState..lastMistakeState
         fun isReviewingState(state: Int) = state in firstReviewState..lastReviewState
     }
+
 }

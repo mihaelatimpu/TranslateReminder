@@ -28,7 +28,7 @@ class FirstFragment : BaseFragment(), FirstContract.View {
             inflater.inflate(R.layout.fragment_first, container, false)
 
     override fun init() {
-        val id = arguments.getInt(Progress.ENTITY_ID, 0)
+        val id = arguments?.getInt(Progress.ENTITY_ID, 0)?:0
         if (id != 0)
             presenter.setEntityId(id)
         fab.setOnClickListener { presenter.onNextButtonPressed() }
