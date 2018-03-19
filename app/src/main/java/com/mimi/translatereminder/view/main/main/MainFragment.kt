@@ -57,6 +57,7 @@ class MainFragment : BaseFragment(), MainFragmentContract.View {
         otherOptionsButton.setOnClickListener { presenter.onOtherOptionsClicked() }
     }
 
+    override fun getFilteredItems() = adapter.getFilteredItems()
     override fun getSelectedItems() = adapter.getSelectedItems()
 
     override fun changeSelectableState(selectable: Boolean) {
@@ -72,8 +73,9 @@ class MainFragment : BaseFragment(), MainFragmentContract.View {
         }
     }
 
-    override fun showOtherOptionsDialog(learningItems: Int, reviewItems: Int, wrongItems: Int) {
-        val dialog = MoreOptionsDialog.createDialog(reviewItems = reviewItems, learnItems = learningItems, wrongItems = wrongItems,
+    override fun showOtherOptionsDialog(totalItems: Int, learningItems: Int, reviewItems: Int, wrongItems: Int) {
+        val dialog = MoreOptionsDialog.createDialog(totalItems = totalItems,
+                reviewItems = reviewItems, learnItems = learningItems, wrongItems = wrongItems,
                 onReview = { presenter.onReviewButtonClicked() },
                 onLearn = { presenter.onLearnButtonClicked() },
                 onWrong = { presenter.onWrongButtonClicked() },
@@ -88,7 +90,7 @@ class MainFragment : BaseFragment(), MainFragmentContract.View {
     }
 
     override fun refreshAddButtonVisibility(visible: Boolean) {
-        if(visible){
+        if (visible) {
             fab.visibility = View.VISIBLE
         } else {
             fab.visibility = View.GONE

@@ -64,6 +64,8 @@ class SettingsPresenter : SettingsContract.Presenter {
             doAsync(resultAnswer = view.getContext().getString(R.string.exported), code = {
                 val exportedJson = ExportUtil(mainPresenter.getRepository().getAll()).start()
                 FileUtil().writeExportedDataToNewFile(exportedJson)
+                val exportedArchivedJson = ExportUtil(mainPresenter.getRepository().getArchivedItems()).start()
+                FileUtil().writeExportedDataToNewFile(exportedJson, FileUtil.EXPORT_ARCHIVED_FILENAME)
             })
         }
     }

@@ -22,9 +22,12 @@ class MoreOptionsDialog : DialogFragment() {
         val REVIEW_ITEMS = "reviewItems"
         val LEARN_ITEMS = "learnItems"
         val WRONG_ITEMS = "wrongItems"
-        fun createDialog(reviewItems: Int, learnItems: Int, wrongItems: Int, onReview: () -> Unit, onLearn: () -> Unit,
+        val TOTAL_ITEMS = "totalItems"
+        fun createDialog(totalItems:Int,
+                         reviewItems: Int, learnItems: Int, wrongItems: Int, onReview: () -> Unit, onLearn: () -> Unit,
                          onWrong: () -> Unit, onListening: () -> Unit): MoreOptionsDialog {
             val args = Bundle()
+            args.putInt(TOTAL_ITEMS, totalItems)
             args.putInt(REVIEW_ITEMS, reviewItems)
             args.putInt(LEARN_ITEMS, learnItems)
             args.putInt(WRONG_ITEMS, wrongItems)
@@ -68,6 +71,7 @@ class MoreOptionsDialog : DialogFragment() {
     private fun init() {
         val grey = ContextCompat.getColor(activity, R.color.grey)
         val blue = ContextCompat.getColor(activity, R.color.colorPrimary)
+        title.text = getString(R.string.added_items, arguments.getInt(TOTAL_ITEMS, 0))
         initLearnItems(grey, blue)
         initReviewItems()
         initWrongItems(grey, blue)

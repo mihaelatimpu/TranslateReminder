@@ -47,6 +47,7 @@ interface MainContract {
         fun onArchiveActionSelected()
         fun onReviewActionSelected()
         fun onListenActionSelected()
+        fun onStarActionSelected()
         fun checkForPermission(permission: String, @StringRes title: Int,
                                @StringRes description: Int, onPermissionResult: (Boolean) -> Unit)
 

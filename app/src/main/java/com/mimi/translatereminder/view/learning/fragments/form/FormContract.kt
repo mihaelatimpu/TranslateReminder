@@ -27,5 +27,6 @@ interface FormContract {
         fun addResult(word: OptionWord)
         fun removeResult(word: OptionWord)
         fun getFinalResult():List<OptionWord>
+        fun refreshSaveButton(active: Boolean)
     }
 }

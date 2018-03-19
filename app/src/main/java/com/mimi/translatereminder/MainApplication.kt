@@ -14,6 +14,9 @@ import org.koin.android.ext.android.startAndroidContext
  */
 
 class MainApplication : Application() {
+    companion object {
+        const val DB_VERSION = 8
+    }
     lateinit var repository: TranslationRepository
 
     override fun onCreate() {
@@ -23,13 +26,13 @@ class MainApplication : Application() {
                 Database::class.java, "translation_db")
                 .addMigrations(Database.MIGRATION_1_2, Database.MIGRATION_2_3,
                         Database.MIGRATION_3_4, Database.MIGRATION_4_5,
-                        Database.MIGRATION_5_6, Database.MIGRATION_6_7)
+                        Database.MIGRATION_5_6, Database.MIGRATION_6_7, Database.MIGRATION_7_8)
                 .build()
         val archivedDatabase = Room.databaseBuilder(this,
                 ArchivedDatabase::class.java, "archived_translation_db")
                 .addMigrations(Database.MIGRATION_1_2, Database.MIGRATION_2_3,
                         Database.MIGRATION_3_4, Database.MIGRATION_4_5,
-                        Database.MIGRATION_5_6, Database.MIGRATION_6_7)
+                        Database.MIGRATION_5_6, Database.MIGRATION_6_7, Database.MIGRATION_7_8)
                 .build()
         repository = TranslationRepository(
                 database.translationDao(), archivedDatabase.archivedDao())

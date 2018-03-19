@@ -84,6 +84,7 @@ class TranslationRepository(private val itemDb: EntityDao, private val archivedD
             getReviewItems(count)
     }
     fun getArchivedItems() = archivedDao.selectAll()
+    fun getStarredItems() = itemDb.getStarredItems()
 
     fun archiveItems(items: List<Entity>) {
         moveItems(itemDb, archivedDao, items)

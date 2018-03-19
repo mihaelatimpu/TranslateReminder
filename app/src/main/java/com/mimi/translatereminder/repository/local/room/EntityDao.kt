@@ -9,7 +9,7 @@ import com.mimi.translatereminder.dto.Entity
  *
  */
 @Dao
-interface EntityDao:ItemDao {
+interface EntityDao : ItemDao {
     companion object {
         const val TABLE = "entity"
         const val id = "id"
@@ -21,21 +21,25 @@ interface EntityDao:ItemDao {
         const val dateAdded = "dateAdded"
         const val nextReview = "nextReview"
         const val lastReview = "lastReview"
+        const val isStarred = "isStarred"
     }
 
     @Insert
-    override fun insert(entity: Entity):Long
+    override fun insert(entity: Entity): Long
 
     @Update
     override fun updateEntity(vararg entity: Entity)
 
 
-    @Query("SELECT * from $TABLE "+
+    @Query("SELECT * from $TABLE " +
             "ORDER BY $state ASC, $nextReview ASC")
     override fun selectAll(): List<Entity>
 
     @Query("SELECT * from $TABLE WHERE $id=:id")
-    override fun selectItemById(id:Int): List<Entity>
+    override fun selectItemById(id: Int): List<Entity>
+
+    @Query("SELECT * from $TABLE WHERE $isStarred=${Entity.ENABLED}")
+    fun getStarredItems(): List<Entity>
 
     @Query("SELECT * from $TABLE WHERE $germanWord=:german")
     fun getEntitiesByGermanVersion(german: String): List<Entity>
@@ -44,20 +48,20 @@ interface EntityDao:ItemDao {
     fun getEntityByTranslation(translation: String): List<Entity>
 
     @Query("SELECT * from $TABLE WHERE $state=:state ORDER BY $dateAdded LIMIT :limit")
-    fun getEntityByState(state:Int, limit:Int): List<Entity>
+    fun getEntityByState(state: Int, limit: Int): List<Entity>
 
     @Query("SELECT * FROM $TABLE " +
             "WHERE $id<>:excludeId " +
             "ORDER BY $state DESC, $dateAdded ASC " +
             "LIMIT :limit")
-    fun getRandomItems(excludeId:Int, limit:Int):List<Entity>
+    fun getRandomItems(excludeId: Int, limit: Int): List<Entity>
 
     @Query("SELECT * FROM $TABLE " +
             "WHERE $state >= ${Entity.firstLearningState} " +
             "AND $state <= ${Entity.lastLearningState} " +
             "ORDER BY $state DESC, $dateAdded ASC " +
             "LIMIT :limit")
-    fun getLearningItems(limit:Int):List<Entity>
+    fun getLearningItems(limit: Int): List<Entity>
 
     @Query("SELECT * FROM $TABLE " +
             "WHERE $state >= ${Entity.firstReviewState} " +
@@ -65,26 +69,26 @@ interface EntityDao:ItemDao {
             "AND $nextReview <= :currentTimeInMillis " +
             "ORDER BY $state ASC, $nextReview ASC " +
             "LIMIT :limit")
-    fun getReviewItems(limit:Int, currentTimeInMillis:Long):List<Entity>
+    fun getReviewItems(limit: Int, currentTimeInMillis: Long): List<Entity>
 
     @Query("SELECT * FROM $TABLE " +
             "WHERE $state >= ${Entity.firstReviewState} " +
             "AND $state <= ${Entity.lastReviewState} " +
             "ORDER BY $lastReview ASC " +
             "LIMIT :limit")
-    fun getOverflow(limit:Int):List<Entity>
+    fun getOverflow(limit: Int): List<Entity>
 
     @Query("SELECT * FROM $TABLE " +
             "WHERE $state >= ${Entity.firstMistakeState} " +
             "AND $state <= ${Entity.lastMistakeState} " +
             "ORDER BY $state DESC, $nextReview ASC " +
             "LIMIT :limit")
-    fun getMistakenItems(limit:Int):List<Entity>
+    fun getMistakenItems(limit: Int): List<Entity>
 
     @Query("SELECT * from $TABLE " +
             "WHERE $type = ${Entity.TYPE_SENTENCE} " +
             "AND $parentId = :itemId")
-    override fun findSentences(itemId:Int):List<Entity>
+    override fun findSentences(itemId: Int): List<Entity>
 
     @Delete
     override fun delete(vararg entities: Entity)

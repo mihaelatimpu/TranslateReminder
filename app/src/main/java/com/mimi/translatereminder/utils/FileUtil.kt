@@ -13,7 +13,8 @@ import java.io.*
  */
 class FileUtil {
     companion object {
-        val EXPORT_FILENAME = "exported.json"
+        const val EXPORT_FILENAME = "exported.json"
+        const val EXPORT_ARCHIVED_FILENAME = "exported_archived.json"
     }
 
     fun readTextFromImportResources(context: Context): String {
@@ -31,32 +32,10 @@ class FileUtil {
         return jsonString
     }
 
-    fun writeExportedDataToNewFile(json: String): String? {
-     /*   val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                EXPORT_FILENAME)
-        file.parentFile.mkdirs()
-        if (!file.exists())
-            file.createNewFile()
-        try {
-
-            val f = FileOutputStream(file)
-            val pw = PrintWriter(f)
-            pw.print(json)
-            pw.flush()
-            pw.close()
-            f.close()
-            *//*
-                   val writer = FileWriter(file)
-                   writer.write(json)
-                   writer.flush()
-                   writer.close()*//*
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return file*/
+    fun writeExportedDataToNewFile(json: String, fileName: String = EXPORT_FILENAME): String? {
         var path: String?
         try {
-            path = getPathForDownloadsFolder(EXPORT_FILENAME)
+            path = getPathForDownloadsFolder(fileName)
             val file = FileWriter(path)
             file.write(json)
             file.flush()

@@ -14,6 +14,7 @@ interface TypingContract {
         fun setHint(hint: String)
         fun showIncorrectDialog(translation: String, answer: String,
                                 correctAnswer: String, onComplete: () -> Unit)
+        fun refreshSaveButton(active:Boolean)
     }
 
     interface Presenter : BasePresenter<View>, LearningContract.FragmentPresenter {

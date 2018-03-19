@@ -4,6 +4,7 @@ import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.migration.Migration
+import com.mimi.translatereminder.MainApplication
 import com.mimi.translatereminder.dto.Entity
 import java.util.*
 
@@ -13,7 +14,7 @@ import java.util.*
  *
  */
 
-@Database(entities = [(Entity::class)], version = 7)
+@Database(entities = [(Entity::class)], version = MainApplication.DB_VERSION)
 abstract class Database : RoomDatabase() {
     companion object {
         val MIGRATION_1_2: Migration = object : Migration(1, 2) {
@@ -57,6 +58,13 @@ abstract class Database : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL(
                         "ALTER TABLE '${EntityDao.TABLE}' ADD COLUMN 'parentId' " +
+                                "INTEGER NOT NULL DEFAULT -1")
+            }
+        }
+        val MIGRATION_7_8: Migration = object : Migration(7,8) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                        "ALTER TABLE '${EntityDao.TABLE}' ADD COLUMN 'isStarred' " +
                                 "INTEGER NOT NULL DEFAULT -1")
             }
         }

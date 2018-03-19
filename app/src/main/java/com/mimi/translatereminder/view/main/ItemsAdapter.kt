@@ -35,6 +35,7 @@ open class ItemsAdapter<T : ItemsAdapter.BaseHolder>(val context: Context,
         this.shouldShowState = shouldShowState
         notifyDataSetChanged()
     }
+    fun getFilteredItems() = filteredItems
 
     override fun isInSelectableMode() = selectableMode
     override fun changeSelectedCount(count: Int) {

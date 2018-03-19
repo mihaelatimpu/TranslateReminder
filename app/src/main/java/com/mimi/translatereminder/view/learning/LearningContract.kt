@@ -17,6 +17,7 @@ interface LearningContract {
         val TYPE_REVIEW_ITEMS = 3234
         val TYPE_LISTENING = 567
     }
+
     interface Activity : BaseView<Presenter> {
         fun getRepository(): TranslationRepository
         fun getContext(): Context
@@ -24,16 +25,19 @@ interface LearningContract {
         fun moveToFragment(position: Int)
         fun getCurrentFragmentPosition(): Int
         fun finishActivity()
-        fun spellText(text:String, onFinish:()->Unit)
+        fun spellText(text: String, onFinish: () -> Unit)
+        fun spellInNativeLanguage(text: String, onFinish: () -> Unit)
+        fun setSpellCheckboxVisibility(visible: Boolean)
     }
 
     interface Presenter : BasePresenter<Activity> {
         var type: Int
         var itemIds: List<Int>
-        val repo:TranslationRepository
+        val repo: TranslationRepository
         fun onFragmentResult(addedScore: Int = 0, entityId: Int? = null, correct: Boolean = true)
-        fun onFragmentVisible(position:Int)
-        fun spell(text:String, onFinish:()->Unit = {})
+        fun onFragmentVisible(position: Int)
+        fun spell(text: String, onFinish: () -> Unit = {})
+        fun onSpellNativeChanged(activated: Boolean)
     }
 
     interface FragmentPresenter {

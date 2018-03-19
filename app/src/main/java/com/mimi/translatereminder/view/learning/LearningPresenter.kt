@@ -30,6 +30,7 @@ class LearningPresenter : LearningContract.Presenter {
     private val fragmentGen = LearningFragmentsGenerator()
     private val fragments = ArrayList<Progress>()
     private val stateUtil = StateUtil()
+    private var spellTranslation = false
 
     private var shouldSpellItems = true
     override val repo: TranslationRepository
@@ -43,7 +44,12 @@ class LearningPresenter : LearningContract.Presenter {
 
     override fun start() {
         view.init()
+        view.setSpellCheckboxVisibility((type == TYPE_LISTENING))
         loadItems()
+    }
+
+    override fun onSpellNativeChanged(activated: Boolean) {
+        spellTranslation = activated
     }
 
     private fun loadItems() {
@@ -88,14 +94,14 @@ class LearningPresenter : LearningContract.Presenter {
     }
 
     override fun onFragmentVisible(position: Int) {
-        Log.d("LearningPresenter","OnFragmentVisible: $position")
+        Log.d("LearningPresenter", "OnFragmentVisible: $position")
         val item = fragments[position]
         if (type == TYPE_LISTENING) {
             val spelledText = item.entity?.germanWord ?: ""
 
-            Log.d("LearningPresenter","spellingText: $position $spelledText")
-            view.spellText(spelledText) {
-                Log.d("LearningPresenter","delayToNextFragment: $position $spelledText")
+            Log.d("LearningPresenter", "spellingText: $position $spelledText")
+            spellEntity(item.entity!!) {
+                Log.d("LearningPresenter", "delayToNextFragment: $position $spelledText")
                 delayToNextFragment(spelledText)
             }
             return
@@ -114,7 +120,7 @@ class LearningPresenter : LearningContract.Presenter {
             delay = 1000
         }
         delay(delay.toLong()) {
-            Log.d("LearningPresenter","moveToNextFragment from: $spelledText")
+            Log.d("LearningPresenter", "moveToNextFragment from: $spelledText")
             moveToNextFragment()
         }
     }
@@ -122,6 +128,16 @@ class LearningPresenter : LearningContract.Presenter {
     private fun delay(delay: Long, function: () -> Unit) {
         val timer = Timer()
         timer.schedule(delay) { function() }
+    }
+
+    private fun spellEntity(entity: Entity, onFinish: () -> Unit) {
+        view.spellText(entity.germanWord) {
+            if (spellTranslation) {
+                view.spellInNativeLanguage(entity.translation, onFinish)
+            } else {
+                onFinish()
+            }
+        }
     }
 
     override fun spell(text: String, onFinish: () -> Unit) {

@@ -25,10 +25,12 @@ abstract class AbstractFragmentPresenter : MainFragmentContract.Presenter {
 
     override lateinit var mainPresenter: MainContract.Presenter
     override lateinit var view: MainFragmentContract.View
+    private var totalItems = 0
     private var learningItems = 0
     private var reviewItems = 0
     private var wrongItems = 0
     private var mainOptionType = TYPE_LEARN
+
 
     private val exceptionHandler: (Throwable) -> Unit = {
         it.printStackTrace()
@@ -72,6 +74,7 @@ abstract class AbstractFragmentPresenter : MainFragmentContract.Presenter {
         view.showLoadingDialog()
         doAsync(exceptionHandler) {
             val items = retrieveItemsFromDB()
+            totalItems = items.size
             learningItems = items.filter { it.isLearning() }.size
             wrongItems = items.filter { it.isWrong() }.size
             reviewItems = items.filter {
@@ -115,7 +118,7 @@ abstract class AbstractFragmentPresenter : MainFragmentContract.Presenter {
     }
 
     override fun onReviewButtonClicked() {
-        mainPresenter.reviewItems()
+        mainPresenter.reviewItems(view.getFilteredItems())
     }
 
     override fun onWrongButtonClicked() {
@@ -123,12 +126,12 @@ abstract class AbstractFragmentPresenter : MainFragmentContract.Presenter {
     }
 
     override fun onOtherOptionsClicked() {
-        view.showOtherOptionsDialog(learningItems,
+        view.showOtherOptionsDialog(totalItems, learningItems,
                 reviewItems, wrongItems)
     }
 
     override fun onListeningButtonClicked() {
-        mainPresenter.startListeningActivity()
+        mainPresenter.listenItems(view.getFilteredItems())
     }
 
     override fun onMainOptionClicked() {

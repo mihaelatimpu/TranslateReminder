@@ -87,6 +87,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             R.id.archive_action -> presenter.onArchiveActionSelected()
             R.id.review_action -> presenter.onReviewActionSelected()
             R.id.listen_action -> presenter.onListenActionSelected()
+            R.id.star_action -> presenter.onStarActionSelected()
             else -> return false
         }
         return true

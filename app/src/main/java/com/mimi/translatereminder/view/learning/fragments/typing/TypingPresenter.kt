@@ -26,6 +26,7 @@ class TypingPresenter(override var view: TypingContract.View,
     }
 
     override fun setEntityId(id: Int) {
+        view.refreshSaveButton(false)
         view.showLoadingDialog()
         doAsync(exceptionHandler) {
             entity = masterPresenter.repo.selectItemById(id)
@@ -36,6 +37,7 @@ class TypingPresenter(override var view: TypingContract.View,
                         view.setHint(hint = entity!!.germanWord)
                     }
                     view.refreshWord(entity!!.translation)
+                    view.refreshSaveButton(true)
                 }
             }
         }
@@ -45,9 +47,15 @@ class TypingPresenter(override var view: TypingContract.View,
     }
 
     override fun onAnswered(answer: String) {
+        view.refreshSaveButton(false)
         val myEntity = entity ?: return
-        if (type == Progress.TYPE_TYPING)
-            masterPresenter.spell(myEntity.germanWord)
+        if (type == Progress.TYPE_TYPING) {
+            masterPresenter.spell(myEntity.germanWord) { onFinishedSpelling(answer, myEntity) }
+        }else {
+            onFinishedSpelling(answer, myEntity)
+        }
+    }
+    private fun onFinishedSpelling(answer: String, myEntity:Entity){
         if (answer.toLowerCase() == myEntity.germanWord.toLowerCase())
             masterPresenter.onFragmentResult(addedScore = 20, entityId = myEntity.id, correct = true)
         else
@@ -55,6 +63,7 @@ class TypingPresenter(override var view: TypingContract.View,
                     answer = answer, correctAnswer = myEntity.germanWord) {
                 masterPresenter.onFragmentResult(entityId = myEntity.id, correct = false)
             }
+
     }
 
 }

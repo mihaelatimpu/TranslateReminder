@@ -1,6 +1,7 @@
 package com.mimi.translatereminder.view.learning.fragments.form
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -52,7 +53,17 @@ class FormFragment : BaseFragment(), FormContract.View {
         optionsList.layoutManager = getLayoutManager()
         resultList.adapter = resultAdapter
         optionsList.adapter = optionAdapter
-        finishButton.setOnClickListener { presenter.onFinishClicked() }
+    }
+
+    override fun refreshSaveButton(active: Boolean) {
+        if(active){
+            finishButton.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.colorAccent))
+            finishButton.setOnClickListener { presenter.onFinishClicked() }
+        } else {
+            finishButton.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.grey))
+            finishButton.setOnClickListener {  }
+
+        }
     }
     private fun getLayoutManager():RecyclerView.LayoutManager{
         val flowLayoutManager = FlowLayoutManager()

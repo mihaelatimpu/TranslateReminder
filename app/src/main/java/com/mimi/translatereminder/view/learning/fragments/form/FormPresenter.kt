@@ -24,6 +24,7 @@ class FormPresenter(override var view: FormContract.View,
 
     override fun setEntityId(id: Int) {
         view.showLoadingDialog()
+        view.refreshSaveButton(false)
         doAsync(exceptionHandler) {
             val word = masterPresenter.repo.selectItemById(id)
                     ?: throw UnsupportedOperationException("Unknown word")
@@ -39,6 +40,7 @@ class FormPresenter(override var view: FormContract.View,
                 view.hideLoadingDialog()
                 view.refreshTranslation(word.translation)
                 view.refreshOptions(optionsList)
+                view.refreshSaveButton(true)
             }
         }
     }
@@ -63,6 +65,7 @@ class FormPresenter(override var view: FormContract.View,
     }
 
     override fun onFinishClicked() {
+        view.refreshSaveButton(false)
         val resultList = view.getFinalResult()
         var resultWord = ""
         val space = if (initialWord?.type == TYPE_SENTENCE) " " else ""

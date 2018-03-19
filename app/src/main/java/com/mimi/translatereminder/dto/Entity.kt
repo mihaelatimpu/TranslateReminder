@@ -23,12 +23,15 @@ open class Entity(
         var stateBeforeBeingWrong: Int = firstLearningState,
         var state: Int = firstLearningState,
         var type: Int = TYPE_WORD,
-        var parentId: Int = -1) {
+        var parentId: Int = -1,
+        var isStarred: Int = DISABLED) {
     fun isLearning() = isLearningState(state)
     fun isWrong() = isWrongState(state)
     fun isReviewing() = isReviewingState(state)
 
     companion object {
+        const val ENABLED = 1
+        const val DISABLED = -1
         const val TYPE_WORD = 1
         const val TYPE_SENTENCE = 0
         const val STATE_LEARNING_1 = 1 // learning stage 1

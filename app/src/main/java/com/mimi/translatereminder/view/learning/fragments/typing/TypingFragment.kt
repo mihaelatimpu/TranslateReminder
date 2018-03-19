@@ -1,6 +1,7 @@
 package com.mimi.translatereminder.view.learning.fragments.typing
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,7 +60,17 @@ class TypingFragment : BaseFragment(), TypingContract.View {
         val id = arguments?.getInt(Progress.ENTITY_ID, 0)?:0
         if (id != 0)
             presenter.setEntityId(id)
-        fab.setOnClickListener { presenter.onAnswered(answer.text.toString()) }
+    }
+
+    override fun refreshSaveButton(active: Boolean) {
+        if(active){
+            fab.setBackgroundColor(ContextCompat.getColor(activity!!,R.color.colorAccent))
+            fab.setOnClickListener { presenter.onAnswered(answer.text.toString()) }
+        } else {
+            fab.setBackgroundColor(ContextCompat.getColor(activity!!,R.color.grey))
+            fab.setOnClickListener {  }
+
+        }
     }
 
     override fun showIncorrectDialog(translation: String, answer: String,

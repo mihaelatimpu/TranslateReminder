@@ -15,7 +15,7 @@ import android.os.Bundle
  * Created by Mimi on 20/12/2017.
  *
  */
-class Speaker(context: Context) : TextToSpeech.OnInitListener {
+class Speaker(context: Context, private val language:Locale) : TextToSpeech.OnInitListener {
     private val tts: TextToSpeech = TextToSpeech(context, this)
     private var ready = false
     var allowed = true
@@ -25,7 +25,7 @@ class Speaker(context: Context) : TextToSpeech.OnInitListener {
         Log.d("Speaker", "Initialising speaker")
         if (status == TextToSpeech.SUCCESS) {
             Log.d("Speaker", "Speaker ready")
-            tts.language = Locale.GERMANY
+            tts.language = language
             tts.setPitch(0.5f)
             ready = true
             if (delayedWord != null)

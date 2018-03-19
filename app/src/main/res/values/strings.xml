@@ -106,6 +106,9 @@
     <string name="menu_favourites">Favourites</string>
     <string name="menu_archive">Archived items</string>
     <string name="this_will_move_the_items_to_archive">The selected items will be archived. You can restore them later.</string>
+    <string name="spell_translation">Spell translation</string>
+    <string name="mark_as_favourite">Mark as favourite</string>
+    <string name="added_items">%d added items</string>
     <string-array name="review_items_per_session">
         <item>5</item>
         <item>10</item>

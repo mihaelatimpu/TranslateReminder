@@ -153,6 +153,23 @@ class MainPresenter : MainContract.Presenter {
         }
     }
 
+    override fun onStarActionSelected() {
+
+        val items = getSelectedItems()
+        onMultiSelectChange(false)
+        view.showLoadingDialog()
+        doAsync(exceptionHandler) {
+            items.forEach {
+                it.isStarred = Entity.ENABLED
+                getRepository().saveEntity(it)
+            }
+            onComplete {
+                view.hideLoadingDialog()
+                reloadData()
+            }
+        }
+    }
+
     override fun onCancelActionSelected() {
         onMultiSelectChange(false)
     }
