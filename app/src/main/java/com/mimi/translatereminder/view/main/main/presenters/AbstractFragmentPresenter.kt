@@ -118,7 +118,8 @@ abstract class AbstractFragmentPresenter : MainFragmentContract.Presenter {
     }
 
     override fun onReviewButtonClicked() {
-        mainPresenter.reviewItems(view.getFilteredItems())
+        mainPresenter.reviewItems(view.getFilteredItems()
+                .filter { it.isReviewing() && it.nextReview < Calendar.getInstance().timeInMillis })
     }
 
     override fun onWrongButtonClicked() {

@@ -29,7 +29,7 @@ class FormPresenter(override var view: FormContract.View,
             val word = masterPresenter.repo.selectItemById(id)
                     ?: throw UnsupportedOperationException("Unknown word")
             val options =
-                    if (word.type == Entity.TYPE_SENTENCE)
+                    if (word.type == Entity.TYPE_SENTENCE || word.germanWord.length > 10)
                         TextUtils.split(word.germanWord, " ").map { it.toString() }
                     else
                         word.germanWord.toCharArray().toList().map { it.toString() }

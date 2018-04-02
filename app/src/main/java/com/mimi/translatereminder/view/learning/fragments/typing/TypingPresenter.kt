@@ -49,21 +49,22 @@ class TypingPresenter(override var view: TypingContract.View,
     override fun onAnswered(answer: String) {
         view.refreshSaveButton(false)
         val myEntity = entity ?: return
-        if (type == Progress.TYPE_TYPING) {
-            masterPresenter.spell(myEntity.germanWord) { onFinishedSpelling(answer, myEntity) }
-        }else {
-            onFinishedSpelling(answer, myEntity)
-        }
-    }
-    private fun onFinishedSpelling(answer: String, myEntity:Entity){
-        if (answer.toLowerCase() == myEntity.germanWord.toLowerCase())
-            masterPresenter.onFragmentResult(addedScore = 20, entityId = myEntity.id, correct = true)
-        else
+        if (answer.toLowerCase().trim() == myEntity.germanWord.toLowerCase().trim()){
+
+            if (type == Progress.TYPE_TYPING) {
+                masterPresenter.spell(myEntity.germanWord) {
+                    masterPresenter.onFragmentResult(addedScore = 20, entityId = myEntity.id, correct = true)
+                }
+            }else {
+                masterPresenter.onFragmentResult(addedScore = 20, entityId = myEntity.id, correct = true)
+            }
+        } else{
+            masterPresenter.spell(myEntity.germanWord)
             view.showIncorrectDialog(translation = myEntity.translation,
                     answer = answer, correctAnswer = myEntity.germanWord) {
                 masterPresenter.onFragmentResult(entityId = myEntity.id, correct = false)
             }
-
+        }
     }
 
 }
