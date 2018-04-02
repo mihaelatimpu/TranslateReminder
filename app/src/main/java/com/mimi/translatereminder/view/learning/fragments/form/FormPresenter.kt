@@ -29,7 +29,7 @@ class FormPresenter(override var view: FormContract.View,
             val word = masterPresenter.repo.selectItemById(id)
                     ?: throw UnsupportedOperationException("Unknown word")
             val options =
-                    if (word.type == Entity.TYPE_SENTENCE || word.germanWord.length > 10)
+                    if (isSplit(word))
                         TextUtils.split(word.germanWord, " ").map { it.toString() }
                     else
                         word.germanWord.toCharArray().toList().map { it.toString() }
@@ -44,6 +44,8 @@ class FormPresenter(override var view: FormContract.View,
             }
         }
     }
+
+    private fun isSplit(word: Entity?) = word != null && (word.type == Entity.TYPE_SENTENCE || word.germanWord.length > 10)
 
     override fun start() {
         view.init()
@@ -68,9 +70,9 @@ class FormPresenter(override var view: FormContract.View,
         view.refreshSaveButton(false)
         val resultList = view.getFinalResult()
         var resultWord = ""
-        val space = if (initialWord?.type == TYPE_SENTENCE) " " else ""
-        resultList.forEach { resultWord += it.word + space }
-        if (resultWord.isNotEmpty() && (initialWord?.type == TYPE_SENTENCE)) {
+        val separator = if (isSplit(initialWord)) " " else ""
+        resultList.forEach { resultWord += it.word + separator }
+        if (resultWord.isNotEmpty() && (isSplit(initialWord))) {
             resultWord = resultWord.dropLast(1)
         }
         val success = initialWord != null && initialWord?.germanWord == resultWord
